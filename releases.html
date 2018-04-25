@@ -1,0 +1,1360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Releases</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="./css/callout.css" rel="stylesheet" />
+    <link href="./css/doc.css" rel="stylesheet" />
+    <link href="./css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="./css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="./css/syntax.css" />
+    <link rel="shortcut icon" href="./diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="./">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="./">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="./download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="./tutorials.html">Tutorials</a></li>
+		<li><a href="./doc/manual.html">User manual</a></li>
+                <li><a href="./haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="./doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="./releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="./gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="./sightings.html">Sightings</a></li>
+		<li><a href="./community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="./blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <h1 id="diagrams-1.4-27-october-2016">diagrams 1.4: 27 October, 2016</h1>
+<p><a href="http://hackage.haskell.org/package/diagrams-core-1.4">diagrams-core-1.4</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New <code>eachName</code> traversal, for traversing over parts of a <code>Name</code> that match a given type</p></li>
+<li><p>More documentation explaining <code>HasOrigin</code> and <code>Transformable</code> instances for <code>Envelope</code></p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>lens-4.15</code></li>
+<li>Many other upper bounds bumped; see minor release changelogs below.</li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><p><code>Transformable</code> instance for <code>Measured</code></p></li>
+<li><p>A bunch more instances for <code>Query</code> (<code>Distributive</code>, <code>Representable</code>, <code>Profunctor</code>, <code>Coseive</code>, <code>Closed</code>, <code>Costrong</code>, <code>Corepresentable</code>)</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p>Move some <code>Query</code>-related functions to <code>diagrams-lib</code> (<code>sample</code>, <code>value</code>, <code>resetValue</code>, <code>clearValue</code>)</p></li>
+<li><p>Remove some redundant constraints in type signatures (should not actually affect API)</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-lib-1.4">diagrams-lib-1.4</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New <code>mkText'</code> function, which allows making a text primitive without recommending a fill colour or font size so users can recommend their own (<em>e.g.</em> using the <code>recommendFontSize</code> function).</p></li>
+<li><p>New functions <code>reflectXY</code> and <code>reflectionXY</code></p></li>
+<li><p>New <code>composeAligned</code> combinator for doing composition under an alignment while leaving the local origin unaffected.</p></li>
+<li><p>Add <code>_LocLoop</code> and <code>_LocLine</code> prisms</p></li>
+<li><p>New <code>bspline</code> function for creating uniform cubic B-splines</p></li>
+<li>New 3D features:
+<ul>
+<li>New <code>Skinned</code> class</li>
+<li>Improved handling of 3D primitives</li>
+<li>CSG</li>
+</ul></li>
+<li><p>New standard attributes for separate fill and stroke opacity (see <a href="https://github.com/diagrams/diagrams-lib/issues/248">#248</a>).</p></li>
+<li><p>New <code>HasQuery</code> class for things which can be spatially queried for values from some monoid.</p></li>
+<li><p>New function <code>inquire</code> for testing whether a given point is inside a diagram.</p></li>
+<li><p>New font weights: <code>bolder</code>, <code>lighter</code>, <code>thinWeight</code>, <code>ultraLight</code>, <code>light</code>, <code>mediumWeight</code>, <code>heavy</code>, <code>semiBold</code>, <code>ultraBold</code>. Note that currently only the SVG backend deals with the new weights.</p></li>
+<li><p>Export <code>GetSegmentCodomain</code> and update documentation</p></li>
+<li><p>Improved performance of 2D rotations</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><p><code>Alignable</code> instance for <code>Located</code></p></li>
+<li><p><code>ToPath</code> instances for lines and loops</p></li>
+<li><p><code>Serialize</code> instances for <code>Trail</code>, <code>Path</code>, <code>Located</code>, <code>SegTree</code>, <code>Segment</code></p></li>
+<li><p><code>Generic</code> instances for <code>Path</code>, <code>Located</code></p></li>
+<li><p><code>Action</code> instance for <code>Angle</code>: angles act by rotation.</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><code>snugBL</code>, <code>snugBR</code>, <code>snugTR</code> and <code>snugBR</code> are deprecated. These functions were unintuitive, ad-hoc, and not particularly useful, especially since e.g. <code>snugL</code> and <code>snugB</code> do not commute. You can use something like <code>snugB . snugL</code> directly, or use <code>snug</code> with a direction vector. See <a href="https://github.com/diagrams/diagrams-lib/issues/250">#250</a> for more details.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>upgrade <code>fsnotify</code> and drop dependency on deprecated <code>system-filepath</code></li>
+<li>Allow <code>lens-4.15</code></li>
+<li>Many other bumped upper bounds, see release notes for minor releases below</li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><p>fix <code>orientPoints</code> function, which was previously generating NaN values with lists of only one or two points. (<a href="https://github.com/diagrams/diagrams-lib/issues/210">#210</a>)</p></li>
+<li><p>Broken offset joins with non-vertices in loops (<a href="https://github.com/diagrams/diagrams-lib/issues/263">#263</a>)</p></li>
+<li><p>Properly transform arrow shaft styles (<a href="https://github.com/diagrams/diagrams-lib/issues/274">#274</a>)</p></li>
+<li><p>Fix sign error in <code>reflectionAbout</code></p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/SVGFonts-1.6.0.0">SVGFonts-1.6</a></p>
+<ul>
+<li>Performance improvement: port <code>ReadPath</code> to use <code>attoparsec</code></li>
+<li>New <code>loadFont'</code> function, to read font data from an <code>XmlSource</code></li>
+<li>Export <code>Kern(..)</code> from <code>Graphics.SVGFonts.ReadFont</code></li>
+<li>New <code>Serialize</code> instances for <code>FontData</code> and <code>Kern</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-contrib-1.4">diagrams-contrib-1.4</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New modules:</p>
+<ul>
+<li><p><code>Diagrams.TwoD.Path.LSystem</code>: module for generating L-system fractals</p></li>
+<li><p><code>Diagrams.TwoD.Path.Boolean</code>: boolean operations on paths</p></li>
+<li><p><code>Diagrams.Color.XKCD</code>: Common names for the 949 most common RGB monitor colors, as determined by the xkcd color name survey.</p></li>
+<li><p><code>Diagrams.TwoD.Layout.Constrained</code>: 2D layout via relative constraint specifications</p></li>
+<li><p><code>Diagrams.Anchors</code>: layout via specified anchor points</p></li>
+<li><p><code>Diagrams.TwoD.Path.Follow</code>: monoid for trails which matches tangent vectors at endpoints</p></li>
+</ul></li>
+<li><p><code>Diagrams.TwoD.Path.IteratedSubset</code> is greatly expanded, with more tools, examples, and documentation</p></li>
+<li><p>New radial layout algorithm for rose trees, <code>radialLayout</code> function in <code>Diagrams.TwoD.Layout.Tree</code></p></li>
+<li><p>Code in <code>Diagrams.TwoD.Apollonian</code> cleaned up and generalized</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><code>Diagrams.TwoD.Path.Turtle</code>: pen width is now a <code>Measure n</code> instead of <code>n</code></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-cairo-1.4">diagrams-cairo-1.4</a></p>
+<p>No changes.</p>
+<p><a href="http://hackage.haskell.org/package/diagrams-gtk-1.4">diagrams-gtk-1.4</a></p>
+<p>No changes.</p>
+<p><a href="http://hackage.haskell.org/package/diagrams-postscript-1.4">diagrams-postscript-1.4</a></p>
+<p>No changes.</p>
+<p><a href="http://hackage.haskell.org/package/diagrams-rasterific-1.4">diagrams-rasterific-1.4</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Can now output PDFs.</p></li>
+<li><p>Font files are now embedded with <code>file-embed</code>.</p></li>
+<li><p>Various functions for better GIF support.</p></li>
+<li><p>Support for group opacity.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>ToResult</code> instance for animated GIFs.</li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-svg-1.4.1">diagrams-svg-1.4.1</a></p>
+<ul>
+<li>Handle wider range of font weight specifications</li>
+<li>Changes for <code>svg-builder</code></li>
+<li>Deprecate <code>svgId</code> and <code>svgClass</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-canvas-1.4">diagrams-canvas-1.4</a></p>
+<p>No changes.</p>
+<p><a href="http://hackage.haskell.org/package/diagrams-html5-1.4">diagrams-html5-1.4</a></p>
+<p>No changes.</p>
+<p><a href="http://hackage.haskell.org/package/diagrams-builder-0.8">diagrams-builder-0.8</a></p>
+<ul>
+<li>Require <code>haskell-src-exts-1.18</code> and <code>haskell-src-exts-simple</code></li>
+<li><code>diagrams-builder-pgf</code>: add catch-all case for file extension</li>
+<li>Better defaults (<a href="https://github.com/diagrams/diagrams-builder/issues/29">#29</a>):
+<ul>
+<li>default extension will be chosen based on backend</li>
+<li><code>input</code> option automatically selected when using <code>pgf</code> backend</li>
+<li><code>diagrams</code> is now default output directory</li>
+</ul></li>
+<li>Modules <a href="https://github.com/diagrams/diagrams-builder/pull/17">can now be imported qualified</a></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-haddock-0.4">diagrams-haddock-0.4</a></p>
+<ul>
+<li>Build with <code>ghc-8.0</code></li>
+<li>Improved error message when <code>setup-config</code> can’t be read</li>
+<li>Replace <code>lucid-svg</code> with <code>svg-builder</code></li>
+</ul>
+<h1 id="diagrams-1.3-19-april-2015">diagrams 1.3: 19 April, 2015</h1>
+<p><a href="http://hackage.haskell.org/package/monoid-extras-0.4.0.0">monoid-extras-0.4.0.0</a></p>
+<ul>
+<li>add derived instances where possible: <code>Typeable</code>, <code>Data</code>, <code>Read</code>, <code>Eq</code>, <code>Ord</code>, <code>Functor</code>, <code>Foldable</code>, <code>Traversable</code></li>
+<li>allow <code>base-4.8</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/dual-tree-0.2.0.6">dual-tree-0.2.0.6</a></p>
+<ul>
+<li>Allow <code>base-4.8</code></li>
+<li>Allow <code>monoid-extras-0.4</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/active-0.2.0.0">active-0.2.0.0</a></p>
+<ul>
+<li>switch from <code>vector-space</code> to <code>linear</code></li>
+<li>allow <code>lens-4.9</code></li>
+<li>allow <code>base-4.8</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-core-1.3">diagrams-core-1.3</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Update for ghc-7.10.</p></li>
+<li><p>Switch from <code>vector-space</code> to <code>linear</code> for linear algebra.</p></li>
+<li><p><code>OpacityGroup</code> annotation for setting the opacity of diagrams as a group. Opacity groups can be applied with the <code>opacityGroup</code> or <code>groupOpacity</code> functions.</p></li>
+<li><p>Added <code>atAttr</code>, <code>atMAttr</code> and <code>atTAttr</code> lenses onto the attributes of styles.</p></li>
+<li><p><code>InSpace</code> and <code>SameSpace</code> synonyms.</p></li>
+<li><p><code>size</code> function for computing the range of an enveloped object in the basis vectors.</p></li>
+<li><p>“Grouping” for transparent things <a href="https://github.com/diagrams/diagrams-core/issues/21">#21</a></p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>base-4.8</code></li>
+<li>Allow <code>lens-4.9</code></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>Show</code> instances for <code>Attribute</code> and <code>Style</code>.</li>
+<li><code>Each</code>, <code>Ixed</code> and <code>At</code> instances for and <code>Style</code>.</li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p><code>Measure</code> has a new internal representation. <code>Local</code>, <code>Global</code>, <code>Normalized</code>, and <code>Output</code> have been renamed to <code>local</code>, <code>global</code>, <code>normalized</code> and <code>output</code> respectivly. <code>Measure</code> is now defined in <code>Diagrams.Core.Measure</code>.</p></li>
+<li><p><code>GTAttribute</code> has been removed. <code>MAttribute</code> now holds measured attributes and no longer requires a <code>Data</code> instance.</p></li>
+<li><p><code>V</code> is now a <code>* -&gt; *</code> kind type family.</p></li>
+<li><p>New type family <code>N</code> for the number type of an object, <code>Scalar</code> type family no longer exists.</p></li>
+<li><p><code>(|&gt;)</code> has moved to <code>(.&gt;&gt;)</code> to make room for lens’s snoc operator.</p></li>
+<li><p><code>Style</code>’s internal representation now uses a hashmap of the <code>TypeRep</code>.</p></li>
+</ul></li>
+<li><p><strong>Merged pull requests:</strong></p>
+<ul>
+<li><p>Pre 1.3 <a href="https://github.com/diagrams/diagrams-core/pull/82">#82</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>update for GHC-7.10, -Wall <a href="https://github.com/diagrams/diagrams-core/pull/81">#81</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+<li><p>Style lenses <a href="https://github.com/diagrams/diagrams-core/pull/80">#80</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Add isReflection <a href="https://github.com/diagrams/diagrams-core/pull/79">#79</a> (<a href="https://github.com/byorgey">byorgey</a>)</p></li>
+<li><p>Linear update <a href="https://github.com/diagrams/diagrams-core/pull/77">#77</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Bump lens upper version bounds <a href="https://github.com/diagrams/diagrams-core/pull/74">#74</a> (<a href="https://github.com/RyanGlScott">RyanGlScott</a>)</p></li>
+<li><p>Add Diagram B synonym for Diagram b v n <a href="https://github.com/diagrams/diagrams-core/pull/73">#73</a> (<a href="https://github.com/jeffreyrosenbluth">jeffreyrosenbluth</a>)</p></li>
+<li><p>New stuff <a href="https://github.com/diagrams/diagrams-core/pull/72">#72</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Linear <a href="https://github.com/diagrams/diagrams-core/pull/71">#71</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Bump linear upper version bounds <a href="https://github.com/diagrams/diagrams-core/pull/75">#75</a> (<a href="https://github.com/RyanGlScott">RyanGlScott</a>)</p></li>
+<li><p>Change Measure back to not using Scalar v <a href="https://github.com/diagrams/diagrams-core/pull/65">#65</a> (<a href="https://github.com/Mathnerd314">Mathnerd314</a>)</p></li>
+<li><p>Remove gratuitous Data constraints <a href="https://github.com/diagrams/diagrams-core/pull/69">#69</a> (<a href="https://github.com/Mathnerd314">Mathnerd314</a>)</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-solve-0.1">diagrams-solve-0.1</a></p>
+<p><em>Initial release</em></p>
+<p><a href="http://hackage.haskell.org/package/diagrams-lib-1.3">diagrams-lib-1.3</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Native image type that backends can specify.</p></li>
+<li><p>Affine maps between spaces for path-like objects. A new <code>Diagrams.ThreeD.Projections</code> has some helper functions for orthographic and perspective projections.</p></li>
+<li><p>Intersections for path-like objects using Bézier clipping.</p></li>
+<li><p>Helper functions in <code>Diagrams.Matrix</code> for converting between transforms and matrices.</p></li>
+<li><p>New <code>Diagrams</code> module that only exports functions defined in diagrams.</p></li>
+<li><p>New <code>Direction</code> type. <code>Direction</code> is a vector that’s forgot it’s magnitude. Some functions have changed their type from <code>R2</code> to <code>Direction V2 n</code> to make it clear that magnitude has no effect.</p></li>
+<li><p>Use the <a href="https://hackage.haskell.org/package/fsnotify"><code>fsnotify</code></a> package for command line looping. Command line looping now works on Windows.</p></li>
+<li><p><code>groupOpacity</code> function added for lowering the opacity of a diagram as a whole.</p></li>
+<li><p>New <code>ToPath</code> class for converting path-like things to a <code>Path</code>.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><p><code>Each</code> instances for <code>BoundingBox</code>, <code>Offset</code>, <code>Segment</code>, <code>FixedSegment</code> and <code>Path</code>.</p></li>
+<li><p><code>Reversing</code> instances for <code>Offset</code>, <code>Segment</code>, <code>FixedSegment</code>, <code>Trail</code> and <code>Path</code>.</p></li>
+<li><p><code>AsEmpty</code> instances for <code>BoundingBox</code>, <code>Trail</code> and <code>Path</code>.</p></li>
+<li><p><code>Cons</code> and <code>Snoc</code> instances for <code>Path</code> and <code>Line</code>.</p></li>
+<li><p>New <code>Show</code> instances for <code>Angle</code>, <code>Segment</code>, <code>SomeColor</code>, <code>Trail'</code> and <code>at</code>.</p></li>
+<li><p><code>Tangent</code> instance for <code>(FixedSegment v n)</code>.</p></li>
+<li><p><code>Ord</code> instances for <code>LineMiterLimit</code>, <code>LineJoin</code> and <code>LineCap</code>.</p></li>
+</ul></li>
+<li><p><strong>New helper functions</strong></p>
+<ul>
+<li><p><code>_Line</code> and <code>_Loop</code> prisms.</p></li>
+<li><p>Style lenses: <code>_fontSize</code>, <code>_lineWidth</code>, <code>_fillTexture</code>, <code>_lineTexture</code>, <code>_opacity</code>, <code>_font</code>, <code>_lineCap</code>, <code>_lineJoin</code> <code>_dashing</code>.</p></li>
+<li><p><code>_SomeColor</code> iso and <code>_AC</code> prism onto an <code>AlphaColour</code>.</p></li>
+<li><p><code>atPoints</code> function to zip points with diagrams.</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p><code>Diagram</code> type synonym now only takes a backend token: <code>Diagram B</code></p></li>
+<li><p>Types that previously had a <code>v</code> variable now have <code>v</code> and <code>n</code>.</p></li>
+<li><p><code>Control.Lens</code> and <code>Data.Default.Class</code> are now exported from from <code>Diagrams.Prelude</code></p></li>
+<li><p><code>Measure</code> has a new internal representation. <code>Local</code>, <code>Global</code>, <code>Normalized</code>, and <code>Output</code> have been renamed to <code>local</code>, <code>global</code>, <code>normalized</code> and <code>output</code> respectivly.</p></li>
+<li><p><code>SizeSpec2D</code> has moved to <code>SizeSpec v n</code> in <code>Diagrams.SizeSpec</code>. <code>Dims, Height, Width and</code>Absolute<code>have moved to</code>dims2D<code>,</code>mkHeight<code>,</code>mkWidth<code>and</code>absolute` respectively.</p></li>
+<li><p><code>Color</code> instances for <code>Colour</code> and <code>AlphaColour</code> are limited to <code>Double</code> for better type inference.</p></li>
+<li><p><code>under</code> has been renamed to <code>underT</code>. New <code>transformed</code>, <code>translated</code>, <code>movedTo</code>, <code>movedFrom</code> and <code>rotated</code> isomorphisms to use with lens’s <code>under</code> function.</p></li>
+<li><p><code>stroke</code> is now polymorphic. Use <code>strokePath</code> or <code>strokeP</code> to get old <code>stroke</code> behaviour.</p></li>
+<li><p><code>angleBetween</code> now works for any vector space, which means the angle is always positive. The old behaviour can be retrieved from <code>signedAngleBetween</code></p></li>
+<li><p><code>arc</code> now takes a starting <code>Direction</code> and a sweep <code>Angle</code>. <code>arcCW</code> and <code>arcCCW</code> take a start and finish <code>Direction</code>.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>use <code>linear</code> instead of <code>vector-space</code></li>
+</ul></li>
+<li><p><strong>Closed issues:</strong></p>
+<ul>
+<li><p>Perspective deformation of square vertices yields extra point <a href="https://github.com/diagrams/diagrams-lib/issues/244">#244</a></p></li>
+<li><p>Local fontsize renders inconsistentl on diffrent backends <a href="https://github.com/diagrams/diagrams-lib/issues/243">#243</a></p></li>
+<li><p>Factor out Diagrams.Solve into a package? <a href="https://github.com/diagrams/diagrams-lib/issues/235">#235</a></p></li>
+</ul></li>
+<li><p><strong>Merged pull requests:</strong></p>
+<ul>
+<li><p>add pathPoints and pathVertices’ functions <a href="https://github.com/diagrams/diagrams-lib/pull/245">#245</a> (<a href="https://github.com/byorgey">byorgey</a>)</p></li>
+<li><p>New loop <a href="https://github.com/diagrams/diagrams-lib/pull/242">#242</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Pre 1.3 <a href="https://github.com/diagrams/diagrams-lib/pull/241">#241</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Update CubicSpline.hs <a href="https://github.com/diagrams/diagrams-lib/pull/240">#240</a> (<a href="https://github.com/fryguybob">fryguybob</a>)</p></li>
+<li><p>updated changes for GHC-7.10 <a href="https://github.com/diagrams/diagrams-lib/pull/239">#239</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+<li><p>split out new package diagrams-solve <a href="https://github.com/diagrams/diagrams-lib/pull/237">#237</a> (<a href="https://github.com/byorgey">byorgey</a>)</p></li>
+<li><p>Lens style <a href="https://github.com/diagrams/diagrams-lib/pull/236">#236</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Half-dart arrowheads <a href="https://github.com/diagrams/diagrams-lib/pull/234">#234</a> (<a href="https://github.com/byorgey">byorgey</a>)</p></li>
+<li><p>TwoD.Points: Needs TypeFamilies <a href="https://github.com/diagrams/diagrams-lib/pull/233">#233</a> (<a href="https://github.com/bgamari">bgamari</a>)</p></li>
+<li><p>Projections <a href="https://github.com/diagrams/diagrams-lib/pull/229">#229</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/SVGFonts-1.5.0.0">SVGFonts-1.5.0.0</a></p>
+<ul>
+<li>Split functionality out of <code>ReadFont</code>, into <code>Fonts</code> (built-in fonts) and <code>Text</code> (rendering text to Diagrams).</li>
+<li><code>textSVG'</code> and <code>textSVG_</code> now have the text as a separate argument, distinct from <code>TextOptions</code>.</li>
+<li><code>ReadFont</code> does not use <code>unsafePerformIO</code> any more. <code>unsafePerformIO</code> is now only used to load built-in fonts.</li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-contrib-1.3.0">diagrams-contrib-1.3.0</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>Generalized <code>Diagrams.TwoD.IteratedSubset</code> and added more examples.</li>
+<li>New module <code>Diagrams.TwoD.Layout.Grid</code>.</li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><code>Diagrams.Lens</code> has had a lot of its lenses removed because they’re either invalid lenses or are now in diagrams-lib.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>diagrams-core-1.3</code></li>
+<li>Allow <code>diarams-lib-1.3</code></li>
+<li>use <code>linear</code> instead of <code>vector-space</code></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-cairo-1.3">diagrams-cairo-1.3</a></p>
+<ul>
+<li><p><strong>Fixed bugs:</strong></p>
+<ul>
+<li><p>loop when rendering text <a href="https://github.com/diagrams/diagrams-cairo/issues/59">#59</a></p></li>
+<li><p>loop disables generating multiple files <a href="https://github.com/diagrams/diagrams-cairo/issues/50">#50</a></p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>allow <code>lens-4.9</code></li>
+</ul></li>
+<li><p><strong>Merged pull requests:</strong></p>
+<ul>
+<li><p>remove Text module <a href="https://github.com/diagrams/diagrams-cairo/pull/60">#60</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+<li><p>Bump lens upper version bounds <a href="https://github.com/diagrams/diagrams-cairo/pull/58">#58</a> (<a href="https://github.com/RyanGlScott">RyanGlScott</a>)</p></li>
+<li><p>Update for new measure and size spec. <a href="https://github.com/diagrams/diagrams-cairo/pull/57">#57</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Diagram B <a href="https://github.com/diagrams/diagrams-cairo/pull/56">#56</a> (<a href="https://github.com/jeffreyrosenbluth">jeffreyrosenbluth</a>)</p></li>
+<li><p>port to linear instead of vector-space <a href="https://github.com/diagrams/diagrams-cairo/pull/54">#54</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+<li><p>loop using fsnotify <a href="https://github.com/diagrams/diagrams-cairo/pull/53">#53</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+</ul></li>
+<li><p><strong>Closed issues:</strong></p>
+<ul>
+<li><p>expose gifRender <a href="https://github.com/diagrams/diagrams-cairo/issues/55">#55</a></p></li>
+<li><p>Problems with yellow color in gif animation <a href="https://github.com/diagrams/diagrams-cairo/issues/51">#51</a></p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-gtk-1.3">diagrams-gtk-1.3</a></p>
+<ul>
+<li>Updates for diagrams 1.3:</li>
+<li>allow <code>base-4.8</code></li>
+<li>require <code>diagrams-lib-1.3</code></li>
+<li>require <code>diagrams-cairo-1.3</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-postscript-1.3.0.0">diagrams-postscript-1.3.0.0</a></p>
+<ul>
+<li>Require <code>diagrams-core-1.3</code> and <code>diagrams-lib-1.3</code></li>
+<li>allow <code>lens-4.9</code></li>
+<li>Allow <code>semigroups-0.16</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-rasterific-1.3.0.0">diagrams-rasterific-1.3.0.0</a></p>
+<ul>
+<li><p><strong>Merged pull requests:</strong></p>
+<ul>
+<li><p>Generalise float <a href="https://github.com/diagrams/diagrams-rasterific/pull/26">#26</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Twinside master <a href="https://github.com/diagrams/diagrams-rasterific/pull/25">#25</a> (<a href="https://github.com/jeffreyrosenbluth">jeffreyrosenbluth</a>)</p></li>
+<li><p>Preparing for float text size and PointSize new type in FontyFruity. <a href="https://github.com/diagrams/diagrams-rasterific/pull/24">#24</a> (<a href="https://github.com/Twinside">Twinside</a>)</p></li>
+<li><p>Lower bound on hashable. <a href="https://github.com/diagrams/diagrams-rasterific/pull/19">#19</a> (<a href="https://github.com/fryguybob">fryguybob</a>)</p></li>
+<li><p>Hashable instance for Options. <a href="https://github.com/diagrams/diagrams-rasterific/pull/18">#18</a> (<a href="https://github.com/acowley">acowley</a>)</p></li>
+<li><p>Bump lens upper version bounds <a href="https://github.com/diagrams/diagrams-rasterific/pull/14">#14</a> (<a href="https://github.com/RyanGlScott">RyanGlScott</a>)</p></li>
+<li><p>New stuff <a href="https://github.com/diagrams/diagrams-rasterific/pull/13">#13</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Diagram B <a href="https://github.com/diagrams/diagrams-rasterific/pull/12">#12</a> (<a href="https://github.com/jeffreyrosenbluth">jeffreyrosenbluth</a>)</p></li>
+<li><p>Linear <a href="https://github.com/diagrams/diagrams-rasterific/pull/10">#10</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>use defaultLoopRender for looping <a href="https://github.com/diagrams/diagrams-rasterific/pull/9">#9</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+<li><p>call defaultAnimMainRender with ASetter for loop options <a href="https://github.com/diagrams/diagrams-rasterific/pull/8">#8</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-svg-1.3">diagrams-svg-1.3</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>User settable ID prefixes</p></li>
+<li><p>Support opacity group</p></li>
+<li><p>Fix clipping bug (Issue #70)</p></li>
+</ul></li>
+<li><p><strong>Internal Changes</strong></p>
+<ul>
+<li><p>Switch rendering engine from <code>blaze-svg</code> to <code>lucid-svg</code></p></li>
+<li><p>Use <code>fsnotify</code> for looping</p></li>
+<li><p>Add defs tags for clips and gradients</p></li>
+</ul></li>
+<li><p><strong>Bug Fixes</strong></p>
+<ul>
+<li><p>Clipping broken <a href="https://github.com/diagrams/diagrams-svg/issues/70">#70</a></p></li>
+<li><p>Font size not applied properly in composite diagram <a href="https://github.com/diagrams/diagrams-svg/issues/66">#66</a></p></li>
+</ul></li>
+<li><p><strong>Implemented enhancements</strong></p>
+<ul>
+<li>Put <code>clip path</code>, <code>gradients</code>, etc in defs tag. <a href="https://github.com/diagrams/diagrams-svg/issues/73">#73</a></li>
+</ul></li>
+<li><p><strong>Merged pull requests:</strong></p>
+<ul>
+<li><p>State <a href="https://github.com/diagrams/diagrams-svg/pull/74">#74</a> (<a href="https://github.com/cchalmers">cchalmers</a>)</p></li>
+<li><p>Bump base upper bound <a href="https://github.com/diagrams/diagrams-svg/pull/72">#72</a> (<a href="https://github.com/bgamari">bgamari</a>)</p></li>
+<li><p>Allow user to set ID prefixes <a href="https://github.com/diagrams/diagrams-svg/pull/71">#71</a> (<a href="https://github.com/mightybyte">mightybyte</a>)</p></li>
+<li><p>Lucid <a href="https://github.com/diagrams/diagrams-svg/pull/69">#69</a> (<a href="https://github.com/jeffreyrosenbluth">jeffreyrosenbluth</a>)</p></li>
+<li><p>Use fsnotify for looping, via diagrams-lib <a href="https://github.com/diagrams/diagrams-svg/pull/67">#67</a> (<a href="https://github.com/bergey">bergey</a>)</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-canvas-1.3">diagrams-canvas-1.3</a></p>
+<p><em>Initial (official) release</em></p>
+<p><a href="http://hackage.haskell.org/package/diagrams-builder-0.7.0.0">diagrams-builder-0.7.0.0</a></p>
+<ul>
+<li>Update to <code>diagrams-lib-1.3</code>.</li>
+<li>Add <code>diagrams-rasterific</code> support.</li>
+<li>Add support for <code>DIAGRAMS_SANDBOX</code> environment variable.</li>
+<li>Allow <code>exceptions-0.8</code></li>
+<li>Fix <code>diagrams-latex</code> directory creation on Windows</li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-haddock-0.3">diagrams-haddock-0.3</a></p>
+<ul>
+<li>Allow <code>diagrams-builder-0.7</code>, <code>diagrams-lib-1.3</code>, and <code>diagrams-svg-1.3</code></li>
+</ul>
+<h1 id="diagrams-1.2-2-june-2014">diagrams 1.2: 2 June 2014</h1>
+<p><a href="http://hackage.haskell.org/package/diagrams-core-1.2">diagrams-core-1.2</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New function <code>matrixHomRep</code> to convert a transformation to a homogeneous matrix representation.</p></li>
+<li><p>New function <code>dropTransl</code> to drop the translation component from a transformation.</p></li>
+<li><p>A mini-DSL for Measures.</p></li>
+<li><p>New <code>extent</code> function, used in <code>diameter</code>.</p></li>
+<li><p>New <code>dimension</code> function to return the dimension of a vector space.</p></li>
+<li><p>New <code>_relative</code> iso between points and vectors.</p></li>
+<li><p><code>avgScale</code> function (for computing the average scaling factor of a transformation) has been moved from <code>diagrams-lib</code> to <code>diagrams-core</code> and generalized to work over any vector space.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>semigroups-0.14</code></li>
+<li>Allow <code>lens-4.1</code></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p>Major refactoring which removes <code>freeze</code> (and hence <code>Split</code> transforms, etc.) and adds units of <code>Measure</code>.</p></li>
+<li><p>Refactoring and simplification of the <code>Backend</code> class.</p></li>
+<li><p>Remove <code>Multibackend</code>.</p></li>
+<li><p>Remove <code>nullPrim</code>, <code>IsPrim</code> and simplify <code>RPrim</code> so that it does not carry a transformation.</p></li>
+<li><p>Update <code>adjustDia</code> to return a transformation, not just a scale factor. Add <code>renderDiaT</code> which returns a transformation (for use by end users, e.g. to convert output coordinates back into local coordinates).</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-lib-1.2">diagrams-lib-1.2</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Several attributes (such as line width, dashing size, arrowhead size, and font size) that formerly had a value of type <code>Double</code> now have the more general type <code>Measure R2</code>. This allows the attributes to be specified relative to one of four measurement frames: <code>Local</code>, <code>Global</code>, <code>Normalized</code>, and <code>Output</code>.</p></li>
+<li><p>New DSL for specifying measurements.</p></li>
+<li><p>New synonyms for specifying measurements, <em>e.g.</em> <code>thin</code>, <code>thick</code>, and <code>medium</code>, <code>large</code>.</p></li>
+<li><p>Support for radial and linear gradients for fills and strokes.</p></li>
+<li><p>New <code>DImage</code> type that supports both embedded and external images in Backends that support them.</p></li>
+<li><p>New <code>lengths</code> Traversal for setting <code>headLength</code> and <code>tailLength</code> simultaneously.</p></li>
+<li><p><code>Frustrum</code> and <code>Box</code> shapes added to <code>Diagrams.ThreeD.Shapes</code>.</p></li>
+<li><p>New function <code>quartForm</code> to find roots of quartic polynomials.</p></li>
+<li><p>New Lenses for polar coordinates.</p></li>
+<li><p>New trig functions, <code>sinA</code>, <code>atanA</code>, etc. which take <code>Angle</code> as input or output.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>Transformable</code> instances for <code>LineWidth</code>, <code>Dashing</code>, <code>LineTexture</code>, and <code>FillTexture</code>.</li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p><code>FillColor</code> and <code>LineColor</code> attributes have been replaced with the more general <code>FillTexture</code> and <code>LineTexture</code>. Use the <code>solid</code> function to convert a color to a texture.</p></li>
+<li><p>The size of arrow heads and tails is now specified in terms of length instead of the radius of their circumcircle.</p></li>
+<li><p>Gaps at the ends of arrows are now specified using <code>Measure R2</code>.</p></li>
+<li><p>The <code>gap</code> traversal has been replaced by <code>gaps</code> for consistency in naming, though <code>gap</code> is still provided for backwards compatibility.</p></li>
+<li><p><code>fontSize</code> now takes a value of type <code>Measure R2</code>.</p></li>
+<li><p>Get rid of (bitrotted) <code>Show</code> backend.</p></li>
+<li><p>Functions in <code>TwoD.Adjust</code> now return the adjustment transformation itself in addition to the resized <code>Diagram</code> and <code>Options</code> record; this can be used, <em>e.g.</em> to convert screen coordinates back into diagram coordinates.</p></li>
+<li><p>Export <code>pathLocSegments</code>.</p></li>
+<li><p>The <code>avgScale</code> function has been moved to <code>Diagrams.Core</code>.</p></li>
+<li><p>The <code>Angle</code> definition and related functions (<em>e.g.</em> <code>angleBetween</code>) have moved to a separate module, <code>Diagrams.Angle</code>.</p></li>
+<li><p>A separate <code>Diagrams.TwoD.Attributes</code> module now contains most of the attributes that require 2D transformation instances.</p></li>
+<li><p>The <code>splitColorFills</code> function has been replaced by <code>splitTextureFills</code>.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>semigroups-0.15</code></li>
+<li>Allow <code>optparse-applicative-0.9.0</code></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-cairo-1.2">diagrams-cairo-1.2</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Much improved text support using the <code>pango</code> library instead of cairo’s “toy” text API.</p></li>
+<li><p>Support for linear and radial gradients on strokes and fills.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>opt-parse-applicative-0.9</code></li>
+<li>Allow <code>lens-4.2</code></li>
+<li>Allow <code>mtl-2.2</code></li>
+<li>Allow <code>transformers-0.4</code></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-postscript-1.1">diagrams-postscript-1.1</a></p>
+<ul>
+<li>Changes to reflect <code>Measure</code> refactoring.</li>
+<li>Allow <code>diagrams-core-1.2</code> and <code>diagrams-lib-1.2</code></li>
+<li>Allow <code>semigroups-0.15</code></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-svg-1.1">diagrams-svg-1.1</a></p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Support for radial and linear gradients.</p></li>
+<li><p>Support for embedded images in <code>.png</code> format.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>Renderable</code> instances for <code>DImage Embedded</code>.</li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p>Updates to work with <code>Measure</code> units.</p></li>
+<li><p>Substantial refactoring of <code>Backend</code> instance to support changes in <code>Diagrams.Core</code>.</p></li>
+</ul></li>
+</ul>
+<p><a href="http://hackage.haskell.org/package/diagrams-rasterific-0.1">diagrams-rasterific-0.1</a></p>
+<p><em>Initial release</em></p>
+<p><a href="http://hackage.haskell.org/package/diagrams-builder-0.5.0.10">diagrams-builder 0.5.0.10</a></p>
+<ul>
+<li>Module parse error messages now include the error location (thanks to Yiding Jia)</li>
+</ul>
+<h1 id="diagrams-1.1-8-march-2014">diagrams 1.1: 8 March 2014</h1>
+<h2 id="diagrams-core-1.1"><a href="http://hackage.haskell.org/package/diagrams-core-1.1">diagrams-core-1.1</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>New <code>basis</code> function</li>
+<li>New <code>determinant</code> function for computing the determinant of a <code>Transformation</code></li>
+<li>Add <code>Typeable</code> constraint on <code>Prim</code>s, making it possible to extract things back out of a <code>Prim</code> wrapper using <code>cast</code></li>
+<li>Raw <code>Trace</code>s now return a <em>sorted list</em> of intersections, instead of only the smallest. This is used to implement a new family of functions <code>rayTraceV</code>, <code>rayTraceP</code>, <code>maxRayTraceV</code>, <code>maxRayTraceP</code>, which work similarly to the parallel versions without <code>Ray</code>, but return the first intersection in the <em>positive</em> direction from the given point, rather than the smallest in absolute terms.</li>
+<li>New <code>Annotation</code> type and corresponding <code>applyAnnotation</code> function, for attaching uninterpreted annotations at specific points in a diagram tree. Currently this is used for hyperlinks; more annotation types will be added in the future.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Require <code>lens-4.0</code></li>
+<li>Allow <code>vector-space-points-0.2</code></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>Looking up a subdiagram by name now results in a diagram which still has that name (#43)</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-lib-1.1"><a href="http://hackage.haskell.org/package/diagrams-lib-1.1">diagrams-lib-1.1</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Support for <code>Deformation</code>s, arbitrary (non-affine) transformations on objects such as points, paths, and located trails (though not on diagrams).</p></li>
+<li><p>New functions <code>clipTo</code>, which clips a diagram’s envelope and trace along with its visual representation, and <code>clipped</code>, which clips the diagram’s visual representation but replaces its envelope and trace with those of the clipping path.</p></li>
+<li><p>New <code>arrowV</code> function, for creating an arrow with the direction and magnitude of a given vector.</p></li>
+<li><p><code>gap</code> traversal, for setting the head and tail gaps of an arrow simultaneously.</p></li>
+<li><p>Generalized types for <code>centerXY</code> and <code>snugXY</code>, based on new <code>basis</code> function from `diagrams-core</p></li>
+<li><p>New 3D <code>Transform</code>s, alignment, and 3D-specific <code>Prelude</code>.</p></li>
+<li><p>New <code>frame</code> function similar to <code>pad</code>, but increases the envelope of a diagram by an amount specified in local units in every direction irrespective of the local origin.</p></li>
+<li><p>New <code>splitFills</code> function for pushing fill attributes down to subtrees containing only loops (mostly of relevance only to backend implementors).</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>Typeable</code> instances for all data types that are used as diagram primitives.</li>
+<li><code>Sectionable</code> instance for <code>FixedSegment</code>.</li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p><code>Angle</code> is now a type, rather than a class. It uses a single internal representation for angles, and lenses <code>turn</code>, <code>rad,</code> and <code>deg</code> are supplied for constructing (using <code>@@</code>) and viewing (using <code>^.</code>) <code>Angle</code>s in various units. In addition, the <code>Num</code> instance for <code>Angle</code> has been removed, eliminating a class of errors where a bare number is interpreted in units other than what you expect.</p></li>
+<li><p>Removed <code>Num</code> instance for angles.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Require <code>lens &gt;= 4.0</code>.</li>
+<li>Allow <code>array-0.5</code>.</li>
+<li>Allow <code>hashable-1.1</code>.</li>
+<li>Remove <code>NumInstances</code> dependency.</li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>Exclude joins in offsets on close segments (#160).</li>
+<li>Exclude extra segment when joining loops in offset (#155).</li>
+</ul></li>
+<li><p><strong>Performance improvements</strong></p>
+<ul>
+<li><code>colorToSRGBA</code> function now avoids expensive matrix operations, offering dramatic speedups in rendering diagrams with many color attributes.</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-cairo-1.1"><a href="http://hackage.haskell.org/package/diagrams-cairo-1.1">diagrams-cairo-1.1</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>It is now possible to directly output animated GIFs, using the <code>gifMain</code> function.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>allow <code>diagrams-core-1.1</code> and <code>diagrams-lib-1.1</code></li>
+<li>allow <code>unix-2.7</code></li>
+<li>allow <code>vector-0.10</code></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>Don’t explicitly draw final segment of a loop if it is straight (<a href="https://github.com/diagrams/diagrams-cairo/issues/38">#38</a>)</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-gtk-1.0.1"><a href="http://hackage.haskell.org/package/diagrams-gtk-1.0.1">diagrams-gtk-1.0.1</a></h2>
+<ul>
+<li>Use double buffering.</li>
+</ul>
+<h2 id="diagrams-postscript-1.0.2"><a href="http://hackage.haskell.org/package/diagrams-postscript-1.0.2">diagrams-postscript-1.0.2</a></h2>
+<ul>
+<li><p><strong>New features</strong></p></li>
+<li><p>Experimental support for raw CMYK colors.</p></li>
+<li><p><strong>Dependency/version changes</strong></p></li>
+<li><p>Allow <code>diagrams-core-1.1</code> and <code>diagrams-lib-1.1</code>.</p></li>
+</ul>
+<h2 id="diagrams-svg-1.0.2"><a href="http://hackage.haskell.org/package/diagrams-svg-1.0.2">diagrams-svg-1.0.2</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>Support for including hyperlinks.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>diagrams-core-1.1</code> and <code>diagrams-lib-1.1</code></li>
+<li>Allow <code>lens-4.0</code></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><p>Use <code>splitFills</code> to properly render certain diagrams with mixed lines and filled loops. Previously, in certain situations loops that should have been filled were not. (<a href="https://github.com/diagrams/diagrams-svg/issues/43">#43</a>)</p></li>
+<li><p>Don’t emit last segment of a loop if it is linear.</p></li>
+</ul>
+<p>See <a href="http://github.com/diagrams/diagrams-cairo/issues/38">diagrams-cairo#38</a>. This wasn’t actually causing any observable problems in the SVG backend output, but this seems a better/more robust way to do things in any case.</p></li>
+</ul>
+<h1 id="diagrams-builder-0.4.2"><a href="http://hackage.haskell.org/package/diagrams-builder-0.4.2">diagrams-builder 0.4.2</a></h1>
+<ul>
+<li>Build expressions of type <code>Diagram b v</code> <em>or</em> <code>IO (Diagram b v)</code>. This means that expressions interpreted by <code>diagrams-builder</code> (via <em>e.g.</em> <code>diagrams-haddock</code> or <code>BlogLiterately-diagrams</code>) can do some <code>IO</code> to build a diagram.</li>
+</ul>
+<h1 id="diagrams-1.0-25-november-2013">diagrams 1.0: 25 November 2013</h1>
+<h2 id="dual-tree-0.2"><a href="http://hackage.haskell.org/package/dual-tree-0.2">dual-tree 0.2</a></h2>
+<ul>
+<li>Expose internal d-annotations via <code>foldDUAL</code>.</li>
+</ul>
+<h2 id="diagrams-core-1.0"><a href="http://hackage.haskell.org/package/diagrams-core-1.0">diagrams-core 1.0</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Delayed subtrees: instead of a primitive, one can now also have a delayed subtree at a leaf, containing a continuation which generates a <code>QDiagram</code> when given the accumulated d-annotation at that point in the tree. Useful for things which need to know the final transformation applied to them before deciding what diagram to generate. The prototypical use case is arrows: see https://github.com/diagrams/diagrams-lib/issues/112 . However, this may be useful for other things as well: for example, diagrams which scale normally until hitting some maximum or minimum size, at which point they refuse to scale any further (or more generally diagrams which scale as some non-linear function of the transformation applied to them).</p>
+<p>The only downside is that the u-annotation must be fixed ahead of time—doing otherwise requires a more general solution for constraint solving.</p></li>
+<li><p>New function <code>lookupName</code> for doing a simple lookup of a named subdiagram</p></li>
+<li><p>New module <code>Diagrams.Core.Compile</code>, containing a framework for compiling <code>QDiagrams</code> into a simpler tree type <code>RTree</code>, which may be used by backends for rendering.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><p><code>Qualifiable</code> instances for <code>(,)</code>, <code>(,,)</code>, <code>[]</code>, <code>Set</code>, <code>Map k</code>, and <code>(-&gt;) e</code>.</p></li>
+<li><p><code>(-&gt;) e</code> instance for <code>Juxtaposable</code> (thanks to Carlos Scheidegger)</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p>Export <code>pointDiagram</code> function, which creates an otherwise empty diagram with a point (not empty) envelope</p></li>
+<li>A bunch of stuff now uses machinery from the <code>lens</code> library.
+<ul>
+<li><code>envelope</code>, <code>trace</code>, and <code>subMap</code> are now <code>Lens'</code>es</li>
+<li><code>Wrapped</code> instances for <code>Trace</code>, <code>TransInv</code>, <code>QDiagram</code>, <code>SubMap</code>, <code>Envelope</code>, <code>Style</code>, <code>Query</code>, and <code>Name</code> (replaces <code>Newtype</code> instances)</li>
+<li><code>Iso</code>s for <code>Query</code>, <code>Envelope</code>, <code>QDiagram</code>, <code>SubMap</code>, <code>TransInv</code></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="diagrams-lib-1.0"><a href="http://hackage.haskell.org/package/diagrams-lib-1.0">diagrams-lib 1.0</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>New modules <code>Diagrams.TwoD.Arrow</code> and <code>Diagrams.TwoD.Arrowheads</code> for creating arrows.</li>
+<li>New module <code>Diagrams.Backend.CmdLine</code>, providing a flexible framework for creating command-line-driven diagram rendering executables.</li>
+<li>New functions in <code>Diagrams.Offset</code>: <code>offsetTrail</code> and <code>offsetPath</code> for one-sided offsets of trails and paths; <code>expandTrail</code> and <code>expandPath</code> for “stroking” trails and paths, computing a path whose fill corresponds to the stroke of the given trail or path.</li>
+<li>New module <code>Diagrams.Tangent</code> for computing tangent and normal vectors of segments, trails, and paths.</li>
+<li>New functions in <code>Diagrams.Align</code> to allow diagrams to be aligned by <code>Trace</code> called <code>snug</code>, <code>snugBy</code> and <code>snugCenter</code> and the ability to define other boundary functions for alignment. Functions <code>snugL</code>, <code>snugR</code>, etc. are included in <code>TwoD.Align</code>.</li>
+<li>Lenses from <code>Control.Lens</code> are now used consistently for record fields throughout the library.</li>
+<li>New function <code>angleRatio</code> for calculating the ratio between two angles.</li>
+<li>Restricted identity functions <code>asTurn</code>, <code>asRad</code>, and <code>asDeg</code> for resolving type ambiguity</li>
+<li>New miter limit attribute.</li>
+<li>New function <code>annularWedge</code> in <code>TwoD.Arc</code></li>
+<li>New <code>avgScale</code> utility in <code>TwoD.Transform</code>, for backends which cannot fully implement freezing of line width</li>
+<li>New function <code>heptagon</code>, a vast improvement over the linguistic frankenstein <code>septagon</code>.</li>
+<li>New function <code>lookupName</code> (re-exported from <code>diagrams-core</code>) for simple lookups of named subdiagrams</li>
+<li>New function <code>angleBetween</code> to calculate the angle between two vectors.</li>
+<li>New function <code>arcBetween</code> to draw an arc between two given points.</li>
+<li>A bunch of new modules containing types, primitives and utilities for constructing 3D diagrams: <code>Diagrams.ThreeD.Align</code>, <code>.Camera</code>, <code>.Light</code>, <code>.Shapes</code>, <code>.Transform</code>, <code>.Types</code>, and <code>.Vector</code>. This is still a “feature preview” (in particular, appropriate 3D backends are still under construction).</li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>AdditiveGroup</code> and <code>VectorSpace</code> instances for <code>Turn</code>, <code>Rad</code>, <code>Deg</code></li>
+<li><code>Alignable</code> instance for <code>(-&gt;) e</code></li>
+<li><code>Default</code> instances for <code>FillRule</code>, <code>FillRuleA</code>, <code>LineJoin</code>, <code>LineCap</code>, <code>FillColor</code></li>
+<li><code>Show</code> instances for <code>FillRule</code>, <code>FillRuleA</code></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><code>e</code> no longer exported from <code>Diagrams.Prelude</code>.</li>
+<li><code>Diagrams.BoundingBox</code> is no longer exported from <code>Diagrams.Prelude</code>.</li>
+<li>Re-export <code>Diagrams.Core.pointDiagram</code> from <code>Diagrams.Prelude</code>.</li>
+<li>Added <code>fromAlphaColour</code> method to <code>Color</code> class.</li>
+<li><code>&amp;</code> renamed to <code>^&amp;</code></li>
+<li>Stop re-exporting <code>tan</code>, <code>over</code>, and <code>both</code> from <code>Data.Colour</code>.</li>
+<li>New coordinate lenses <code>_x</code>, <code>_y</code>, and <code>_z</code> for <code>R2</code>, <code>P2</code>, <code>R3</code>, <code>P3</code></li>
+<li>Export <code>fullTurn</code> from <code>Diagrams.Prelude</code>.</li>
+<li><code>Codomain (Located a)</code> is now <code>Point (Codomain a)</code> instead of <code>Located (Codomain a)</code>.</li>
+<li>Export <code>domainBounds</code> from <code>Diagrams.Parametric</code>.</li>
+<li>Adjusting functionality moved from <code>Diagrams.Parametric</code> to its own module, <code>Diagrams.Parametric.Adjust</code>.</li>
+<li>Rename <code>strokeT</code> (and primed variant) to <code>strokeTrail</code>; rename <code>strokeLocT</code> to <code>strokeLocTrail</code>.</li>
+<li><code>ScaleInv</code> is now in its own module, <code>Diagrams.TwoD.Transform.ScaleInv</code>.</li>
+<li>Re-export <code>Image</code> type (but not constructor) from <code>Diagrams.TwoD</code></li>
+<li>Removed <code>Floating</code> and <code>RealFloat</code> instances for <code>Turn</code> and <code>Deg</code></li>
+<li><code>offsetSegment</code> now returns a <code>Located</code> instead of a tuple.</li>
+<li>Removed <code>Num</code> and <code>Fractional</code> instances for <code>R2</code>.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Remove <code>newtype</code> dependency</li>
+<li>New dependencies on <code>lens</code>, <code>tagged</code>, <code>optparse-applicative</code>, <code>filepath</code>, <code>safe</code>, <code>vector-space-points</code>, <code>MemoTrie</code></li>
+<li>Depend on <code>intervals &gt;= 0.3 &amp;&amp; &lt; 0.5</code>.</li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>Depend on <code>intervals 0.3</code>, which allows diagrams to build on Windows, by evading a GHCi linker bug which affects the FFI use in previous versions of intervals (<a href="https://github.com/diagrams/diagrams-contrib/issues/14">diagrams-contrib#14</a>)</li>
+<li>Use point envelope at the origin for text objects instead of an empty envelope (<a href="https://github.com/diagrams/diagrams-lib/issues/115">#115</a>, <a href="https://github.com/diagrams/diagrams-lib/issues/116">#116</a>).</li>
+<li>Adjusting the end of a trail now works correctly (<a href="https://github.com/diagrams/diagrams-lib/issues/95">#95</a>).</li>
+<li>Only look for miter join on corners in <code>Diagrams.TwoD.Offset</code> (<a href="https://github.com/diagrams/diagrams-lib/issues/118">#118</a>).</li>
+<li><code>wedge</code> from <code>Diagrams.TwoD.Arc</code> is now a loop (<a href="https://github.com/diagrams/diagrams-lib/issues/99">#99</a>).</li>
+</ul></li>
+<li><p><strong>Performance improvements</strong></p>
+<ul>
+<li><code>R2</code> is now strict and <code>UNPACK</code>ed</li>
+<li>Add strictness to <code>Offset</code>, <code>Segment</code>, <code>OffsetEnvelope</code>, and <code>SizeSpec2D</code>.</li>
+<li>Make <code>getEnvelope</code> calculation for <code>Segment</code> more efficient by floating divisions out of the inner calculation.</li>
+<li>Use a specialized <code>HasTrie</code> instance for <code>R2</code>.</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-svg-1.0"><a href="http://hackage.haskell.org/package/diagrams-svg-1.0">diagrams-svg 1.0</a></h2>
+<ul>
+<li>Re-implement via new backend <code>RTree</code> interface, leading to smaller output files.</li>
+<li>Use new command-line interface from <code>diagrams-lib</code>.</li>
+<li>Export <code>B</code> as an alias for <code>SVG</code> token</li>
+</ul>
+<h2 id="diagrams-cairo-1.0"><a href="http://hackage.haskell.org/package/diagrams-cairo-1.0">diagrams-cairo 1.0</a></h2>
+<ul>
+<li>Re-implement via new backend <code>RTree</code> interface.</li>
+<li>Use new command-line interface from <code>diagrams-lib</code>.</li>
+<li>Export <code>B</code> as an alias for <code>Cairo</code> token.</li>
+</ul>
+<h2 id="diagrams-postscript-1.0"><a href="http://hackage.haskell.org/package/diagrams-postscript-1.0">diagrams-postscript 1.0</a></h2>
+<ul>
+<li>Add support for miter limit attribute.</li>
+<li>Use new command-line interface from <code>diagrams-lib</code>.</li>
+<li>Export <code>B</code> as an alias for <code>Postscript</code> token.</li>
+</ul>
+<h2 id="diagrams-gtk-1.0"><a href="http://hackage.haskell.org/package/diagrams-gtk-1.0">diagrams-gtk 1.0</a></h2>
+<ul>
+<li>Updated to work with diagrams-cairo-1.0.</li>
+</ul>
+<h2 id="diagrams-contrib-1.0"><a href="http://hackage.haskell.org/package/diagrams-contrib-1.0">diagrams-contrib 1.0</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>New module <code>Diagrams.TwoD.Sunburst</code>, for drawing sunburst charts.</li>
+<li>New module <code>Diagrams.TwoD.Path.Metafont</code>, for specifying trails/paths using an API inspired by Metafont. Like <code>cubicSpline</code> but gives you control over things like the tension/curvature or the tangent at a given point.</li>
+<li>New module <code>Diagrams.TwoD.Path.Calligraphic</code> for making simple “calligraphic” strokes.</li>
+<li>New module <code>Diagrams.Lens</code> with lenses for working with diagrams.</li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><code>Diagrams.TwoD.Factorization.primeLayout</code> has been rewritten to avoid iterated transformations, giving a significant performance boost.</li>
+</ul></li>
+</ul>
+<h2 id="monoid-extras-0.3.2.3"><a href="http://hackage.haskell.org/package/monoid-extras-0.3.2.3">monoid-extras 0.3.2.3</a></h2>
+<h2 id="svgfonts-1.4.0.1"><a href="http://hackage.haskell.org/package/SVGFonts-1.4.0.1">SVGFonts 1.4.0.1</a></h2>
+<h2 id="diagrams-builder-0.4.1"><a href="http://hackage.haskell.org/package/diagrams-builder-0.4.1">diagrams-builder 0.4.1</a></h2>
+<h2 id="diagrams-haddock-0.2.1.3"><a href="http://hackage.haskell.org/package/diagrams-haddock-0.2.1.3">diagrams-haddock 0.2.1.3</a></h2>
+<h1 id="diagrams-0.7-9-august-2013">diagrams 0.7: 9 August 2013</h1>
+<h2 id="diagrams-core-0.7"><a href="http://hackage.haskell.org/package/diagrams%2Dcore-0.7">diagrams-core 0.7</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>new function <code>onBasis</code>, to extract the matrix equivalent of a <code>Transformation</code></p></li>
+<li><p><code>SubMap</code>s are now <code>Deletable</code></p></li>
+<li><p>new function <code>localize</code> for hiding/deleting names from scope</p></li>
+<li><p>new <code>IsPrim</code> class, containing <code>transformWithFreeze</code> function. This is primarily intended to support scale-invariant primitives (<em>e.g.</em> arrowheads) but may be useful for other stuff as well. The default implementation of <code>renderDia</code> now uses <code>transformWithFreeze</code>.</p></li>
+<li><p>optimized <code>Transformable</code> instance for <code>TransInv</code></p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><p><code>Eq</code>, <code>Ord</code>, <code>Enveloped</code>, <code>Traced</code>, and <code>Qualifiable</code> instances for <code>TransInv</code></p></li>
+<li><p><code>Transformable</code> instance for functions, which acts by conjugation</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><code>named</code> and <code>namePoint</code> have moved to the <code>diagrams-lib</code> package.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>allow <code>base-4.7</code></li>
+<li>upgrade to <code>monoid-extras-0.3</code></li>
+<li>allow <code>semigroups-0.9</code></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>the <code>diameter</code> and <code>radius</code> functions now work correctly.</li>
+</ul></li>
+</ul>
+<h2 id="active-0.1.0.6"><a href="http://hackage.haskell.org/package/active-0.1.0.6">active 0.1.0.6</a></h2>
+<ul>
+<li>allow <code>semigroupoids-3.1</code></li>
+<li>allow <code>base-4.7</code></li>
+<li>allow <code>QuickCheck-2.6</code></li>
+<li>allow <code>semigroups-0.9</code></li>
+</ul>
+<h2 id="diagrams-lib-0.7"><a href="http://hackage.haskell.org/package/diagrams%2Dlib-0.7">diagrams-lib 0.7</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New module <code>Diagrams.TwoD.Curvature</code>, for computing the curvature of 2D segments at any given point.</p></li>
+<li><p>New module <code>Diagrams.Offset</code>, containing an <code>offsetSegment</code> function that builds a trail a fixed distance from the original segment. This is a precursor to planned functions <code>offsetTrail</code> and <code>offsetPath</code>.</p></li>
+<li><p>New function <code>Diagrams.TwoD.Transform.onBasis</code>, for extracting a matrix representation of a 2D transformation</p></li>
+<li><p>New functions <code>extrudeEnvelope</code> and <code>intrudeEnvelope</code>, for extending or shrinking an envelope only in a certain direction.</p></li>
+<li><p>Generalize the <code>Color</code> class to absolute colors. This addresses concerns raised in issue #66 by letting the backend choose which color space to render <code>Color</code> instances to. Functions are provided for backwards compatibility with the old semantics.</p></li>
+<li><p>New function <code>scaleInvPrim</code> for creating a diagram from a single scale-invariant primitive.</p></li>
+<li><p>New module <code>Diagrams.Parametric</code>, containing a collection of classes abstracting over “parametric” things: <code>Parametric</code>, <code>DomainBounds</code>, <code>EndValues</code>, <code>Sectionable</code>, and <code>HasArcLength</code>, with instances for segments, trails, and related things.</p></li>
+<li>A big refactoring of segments and trails:
+<ul>
+<li>Segments can now be either “closed” or “open”.</li>
+<li>There are now two types of trails: “lines” (which travel from point A to point B) or “loops” (closed curves which end where they started). <code>Trail</code> is now a wrapper type which can contain both loops and lines.</li>
+<li>There is a new <code>Located</code> wrapper type for adding locations to translation-invariant things. <code>Path</code>s now consist of a collection of <code>Located Trail</code>s.</li>
+<li>The <code>PathLike</code> class is now renamed to <code>TrailLike</code>; the <code>trailLike</code> function takes a <code>Located Trail</code> as input.</li>
+</ul></li>
+<li><p>New convenience functions <code>boundaryFrom</code> and <code>boundaryFromMay</code>, for computing boundaries of subdiagrams.</p></li>
+<li><p>Re-export from <code>diagrams-lib</code> a lot of things defined in <code>diagrams-core</code>, to make them easier for users to find. Several new modules have been created as a result: <code>Diagrams.Query</code>, <code>Diagrams.Envelope</code>, <code>Diagrams.Trace</code>, and <code>Diagrams.Names</code>.</p></li>
+<li><p>Export the <code>centroid</code> function from <code>Diagrams.Prelude</code>.</p></li>
+<li><p><code>triangle</code> is now a synonym for <code>eqTriangle</code>.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>IsPrim</code> instances for <code>Path</code>, <code>Ellipsoid</code>, <code>Image</code>, <code>Text</code>, and <code>ScaleInv</code></li>
+<li><code>Eq</code>, <code>Ord</code>, and <code>Show</code> instances for <code>SizeSpec2D</code></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p><code>CircleFrac</code> has been renamed <code>Turn</code> (though <code>CircleFrac</code> is retained as a deprecated synonym).</p></li>
+<li><p><code>Diagrams.Coordinates</code> is no longer exported from <code>Diagrams.Prelude</code>. This is for compatibility with <code>lens</code>, as <code>(&amp;)</code> is a rather important lens operator and clashes with <code>Diagrams.Coordinates</code>. Users who want the <code>Coordinates</code> stuff can import <code>Diagrams.Coordinates</code> explicitly.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>allow <code>base-4.7</code></li>
+<li>allow <code>semigroups-0.9</code></li>
+<li>allow <code>NumInstances-1.3</code></li>
+<li>upgrade to <code>monoid-extras-0.3</code></li>
+<li>depend on <code>data-default-class</code> instead of <code>data-default</code></li>
+<li>Tested with GHC 7.7.</li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><p>Quadratic solver is now more numerically stable, getting rid of some incorrect behavior of <code>juxtapose</code> (<a href="https://github.com/diagrams/diagrams-lib/issues/46">#46</a>)</p></li>
+<li><p>Added a special case that was a not handled properly by the quadratic solver, resulting in bogus envelopes in certain cases (<a href="https://github.com/diagrams/diagrams-lib/issues/88">#88</a>).</p></li>
+<li><p>Import only <code>Data.NumInstances.Tuple</code> instead of <code>Data.NumInstances</code>. Previously, <code>Diagrams.Prelude</code> exported <code>Eq</code>, <code>Show</code>, and <code>Num</code> instances for functions and tuples; now it only exports tuple instances. Users wishing to use <code>Diagrams.CubicSpline</code> with a vector space built over functions (!?) can import <code>Data.NumInstances.Function</code> themselves. (<a href="https://github.com/diagrams/diagrams-lib/issues/48">#48</a>)</p></li>
+<li><p>Do scaling on a <code>Path</code> <em>before</em> constructing a <code>TrailLike</code> in <code>rect</code> (<a href="https://github.com/diagrams/diagrams-lib/issues/43">#43</a>)</p></li>
+</ul></li>
+</ul>
+<h2 id="diagrams-contrib-0.7"><a href="http://hackage.haskell.org/package/diagrams%2Dcontrib-0.7">diagrams-contrib 0.7</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New module <code>Diagrams.Color.HSV</code> with an <code>hsvBlend</code> function for blending colors in HSV space.</p></li>
+<li><p>Diagrams logo code is now in <code>Diagrams.Example.Logo</code>.</p></li>
+<li><p>New symmetric layout algorithm for binary trees in <code>Diagrams.TwoD.Layout.Tree</code>.</p></li>
+<li><p>New <code>Diagrams.TwoD.Path.IteratedSubset</code> module, for constructing paths using an “iterated subset” algorithm (repeatedly replacing segments with a given path).</p></li>
+<li><p>New <code>Diagrams.TwoD.Layout.CirclePacking</code> module for circle-packing layout</p></li>
+<li><p>New <code>Diagrams.TwoD.Factorization</code> module, for creating “factorization diagrams” as seen at http://mathlesstraveled.com/2012/11/05/more-factorization-diagrams/ and on the cover of Hacker Monthly (http://mathlesstraveled.com/2012/10/05/factorization-diagrams/).</p></li>
+<li><p><code>Diagrams.TwoD.Path.Turtle</code>: generalize <code>runTurtle</code> function, and add new functions <code>drawTurtle</code> and <code>sketchTurtle</code>. <code>drawTurtle</code> results in a diagram (like the old <code>runTurtle</code>), and <code>sketchTurtle</code> yields a path (ignoring pen style commands).</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Require <code>lens-3.8</code></li>
+<li>allow <code>QuickCheck-2.6</code></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>Fix a bug in <code>Diagrams.TwoD.Path.Turtle</code> which sometimes caused it to output a doubled path (#13).</li>
+</ul></li>
+<li><p><strong>Documentation</strong></p>
+<ul>
+<li>Added lots of example images using <code>diagrams-haddock</code></li>
+</ul></li>
+</ul>
+<h2 id="diagrams-svg-0.7"><a href="http://hackage.haskell.org/package/diagrams%2Dsvg-0.7">diagrams-svg 0.7</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>New <code>renderToSVG</code> convenience function</li>
+<li>Vastly improved Haddock documentation</li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>Show</code> instance for <code>Options SVG R2</code></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>allow <code>base-4.7</code> and <code>unix-2.7</code></li>
+<li>Upgrade to <code>monoid-extras-0.3</code></li>
+</ul></li>
+</ul>
+<h2 id="diagrams-postscript-0.7"><a href="http://hackage.haskell.org/package/diagrams%2Dpostscript-0.7">diagrams-postscript 0.7</a></h2>
+<p>First release as an officially supported diagrams backend, generating Postscript via native Haskell. Supports all features except transparency.</p>
+<h2 id="diagrams-cairo-0.7"><a href="http://hackage.haskell.org/package/diagrams%2Dcairo-0.7">diagrams-cairo 0.7</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li>New <code>renderCairo</code> function for more convenient use of the cairo backend.</li>
+<li>Lots of Haddock documentation improvements.</li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><code>Show</code> instance for <code>Options Cairo R2</code>.</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-gtk-0.6.0.1"><a href="http://hackage.haskell.org/package/diagrams%2Dgtk-0.6.0.1">diagrams-gtk 0.6.0.1</a></h2>
+<p>The <code>diagrams-gtk</code> package continues to work with no changes; <code>0.6.0.1</code> has been released simply to allow the dependency versions <code>base-4.7</code>, <code>diagrams-lib-0.7</code>, and <code>diagrams-cairo-0.7</code>.</p>
+<h2 id="diagrams-builder-0.4"><a href="http://hackage.haskell.org/package/diagrams%2Dbuilder-0.4">diagrams-builder 0.4</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Add <code>hsenv</code> compatibility.</p></li>
+<li>Big improvements in the way rebuilding is handled:
+<ul>
+<li>Strip comments before deciding whether to rebuild, so changing only comments does not trigger a rebuild</li>
+<li>Take local imports into account: if a diagram has an import which corresponds to a local file, rebuild if that file has changed</li>
+<li>Rebuild when options (<em>e.g.</em> size) change</li>
+</ul></li>
+<li><p>new <code>diagrams-builder-postscript</code> tool</p></li>
+<li><p>miscellaneous improvements to <code>diagrams-latex.sty</code></p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>depend on <code>cryptohash &gt;= 0.8 &amp;&amp; &lt; 0.10</code> (use new unified API)</li>
+<li>remove <code>base16-bytestring</code> dependency</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-haddock-0.1.1.1"><a href="http://hackage.haskell.org/package/diagrams%2Dhaddock-0.1.1.1">diagrams-haddock 0.1.1.1</a></h2>
+<p><code>diagrams-haddock</code> is a new tool for embedding automatically-generated diagrams in Haddock documentation. It has been released for a while, but <code>0.1.1.1</code> is the first version officially included in a major diagrams release.</p>
+<h2 id="svgfonts-1.3"><a href="http://hackage.haskell.org/package/SVGFonts-1.3">SVGFonts 1.3</a></h2>
+<p>First release as an officially supported diagrams package, adding nice support to diagrams for text using fonts in SVG format.</p>
+<h1 id="diagrams-0.6-11-december-2012">diagrams 0.6: 11 December 2012</h1>
+<h2 id="diagrams-core-0.6"><a href="http://hackage.haskell.org/package/diagrams%2Dcore-0.6">diagrams-core 0.6</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>Proper support for subdiagrams: previous versions of diagrams-core had a mechanism for associating names with a pair of a location and an envelope. Now, names are associated with actual subdiagrams (including their location and envelope, along with all the other information stored by a diagram).</p>
+<p>See <a href="https://github.com/diagrams/diagrams-core/blob/27b275f45cad514caefcd3035e4e261f1b4adf6f/src/Diagrams/Core/Types.hs#L493"><code>Diagrams.Core.Types</code></a>.</p></li>
+<li><p>Traces: in addition to an envelope, each diagram now stores a “trace”, which is like an embedded raytracer: given any ray (represented by a base point and a vector), the trace computes the closest point of intersection with the diagram along the ray. This is useful for determining points on the boundary of a diagram, <em>e.g.</em> when drawing arrows between diagrams.</p>
+<p>See <a href="https://github.com/diagrams/diagrams-core/blob/2f8727fdfa60cdf46456a23f358c8a771b2cd90d/src/Diagrams/Core/Trace.hs"><code>Diagrams.Core.Trace</code></a>.</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p>The modules have all been renamed to be more consistent with the module naming scheme in the rest of the diagrams universe. In particular:</p>
+<p><code>Graphics.Rendering.Diagrams</code> –&gt; <code>Diagrams.Core</code> <code>Grahpics.Rendering.Diagrams.Core</code> –&gt; <code>Diagrams.Core.Types</code> <code>Graphics.Rendering.Diagrams.*</code> –&gt; <code>Diagrams.Core.*</code></p></li>
+<li><p><code>Graphics.Rendering.Diagrams.UDTree</code> has been split out into a separate <a href="http://hackage.haskell.org/package/dual%2Dtree"><code>dual-tree</code></a> package (which has also been substantially rewritten).</p></li>
+<li><p><code>Graphics.Rendering.Diagrams.{Monoids,MList}</code> have been split out into a separate <a href="http://hackage.haskell.org/package/monoid%2Dextras"><code>monoid-extras</code></a> package.</p></li>
+<li><p>The <code>names</code> function now returns a list of names and their associated locations, instead of the associated subdiagrams. In particular the output is suitable to be rendered to a <code>String</code> using <code>show</code>.</p></li>
+<li><p>The new <code>subMap</code> function fills a similar role that <code>names</code> used to play, returning the entire mapping from names to subdiagrams.</p></li>
+<li><p>New functions <code>envelope[VP]May</code></p>
+<p><code>envelopeV</code> and <code>envelopeP</code> return the zero vector and origin, respectively, when called on an empty envelope. However, sometimes it’s useful to actually know whether the envelope was empty or not (the zero vector and the origin are legitimate outputs from non-empty envelopes). The new functions have their return type wrapped in <code>Maybe</code> for this purpose.</p></li>
+<li><p>New functions <code>envelopeS</code> and <code>envelopeSMay</code></p>
+<p>Like <code>envelope[VP](May)</code>, but returning a scalar multiple of the input vector.</p></li>
+<li><p>The <code>Graphics.Rendering.Diagrams.Util</code> module has been removed, along with the <code>withLength</code> function. Calls to <code>withLength</code> can be replaced using</p>
+<p><code>withLength s v = s *^ normalized v</code></p></li>
+<li><p>Add needed constraints <code>(InnerSpace v, OrderedField (Scalar v),   Monoid' m)</code> to the type of the <code>renderDias</code> method in the <code>MultiBackend</code> class.</p></li>
+<li><p>Generalized <code>Transformable</code> instances for pairs and tuples</p>
+<pre><code>    Previously, the components of the tuples were required to have
+    the same type; but everything still works as long as they all
+    share the same vector space.  This is actually useful in
+    practice: say, if we wanted to pair a diagram with a path and
+    then apply the same transformation to both.</code></pre></li>
+</ul></li>
+<li><p><strong>Improvements</strong></p>
+<ul>
+<li>More efficient implementation of <code>diameter</code></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Tested with GHC 7.6.1</li>
+<li>allow <code>base-4.6</code></li>
+<li>allow <code>containers-0.5.*</code></li>
+<li>allow <code>MemoTrie-0.6.1</code></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><p>juxtaposeDefault now correctly handles empty envelopes (#37)</p>
+<p><code>juxtaposeDefault</code> is now the identity on the second object if either one has an empty envelope. In particular this means that <code>mempty</code> is now an identity element for <code>beside</code> and friends.</p></li>
+</ul></li>
+</ul>
+<h2 id="active-0.1.0.2"><a href="http://hackage.haskell.org/package/active-0.1.0.2">active 0.1.0.2</a></h2>
+<p>Bump dependency upper bounds:</p>
+<ul>
+<li><code>semigroupoids</code> &lt; 3.1</li>
+<li><code>base</code> &lt; 4.7</li>
+<li><code>QuickCheck</code> &lt; 2.6</li>
+</ul>
+<h2 id="diagrams-lib-0.6"><a href="http://hackage.haskell.org/package/diagrams%2Dlib-0.6">diagrams-lib 0.6</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p><code>boundingRect</code> function for constructing a bounding rectangle</p></li>
+<li><p><code>bg</code> function for “setting the background color” (<em>i.e.</em> placing atop a colored bounding rectangle)</p></li>
+<li><p>New functions <code>setDefault2DAttributes</code> and <code>adjustDiaSize2D</code>. <code>adjustDia2D</code> does both — so the behavior of <code>adjustDia2D</code> has not changed, but it is now possible to apply just one of the two adjustments using the new functions.</p></li>
+<li><p><code>Diagrams.TwoD.Transform</code> now exports a <code>ScaleInv</code> type for creating scale-invariant objects, which are only affected by rotational and translational components of transformations.</p></li>
+<li><p>The new <code>Diagrams.Coordinates</code> module provides nicer syntax for constructing and pattern-matching point and vector literals.</p></li>
+<li><p>New <code>fromFixedSeg</code> function in <code>Diagrams.Segment</code>, which decomposes a <code>FixedSegment</code> into a starting point and a <code>Segment</code>.</p></li>
+<li><p>New <code>withTrace</code> function for setting the <code>Trace</code> of a diagram.</p></li>
+<li><p>Three new size-related functions:</p>
+<ul>
+<li><p>New <code>sized</code> function for scaling an object to a particular size. One particularly nice use of this is to obviate the need to keep fiddling with the line width to get diagrams to “look right”; just set the line width relative to some arbitrary scale (<em>e.g.</em> assuming the final diagram will fit into a 1x1 box) and then apply <code>sized</code> to the final diagram to make it that given arbitrary size. It can also be used for easily making something (a diagram, path, trail, …) the same size as something else, with the help of the new <code>sizeSpec2D</code> function.</p></li>
+<li><p>New <code>sizedAs</code> function, for setting the size of some object to be “the same as” some other object.</p></li>
+<li><p>New <code>sizeSpec2D</code> function for conveniently calculating the size of an object as a <code>SizeSpec2D</code> value (for use with the new <code>sized</code> funtion).</p></li>
+</ul></li>
+<li><p>New <code>extrudeEnvelope</code> and <code>intrudeEnvelope</code> functions for modifying envelopes in a single direction only, as well as new functions <code>extrude{Left,Right,Bottom,Top}</code> specializing <code>extrudeEnvelope</code> to 2D.</p></li>
+<li><p><code>arcCW</code> draws clockwise arcs; <code>arc'</code> draws arcs counterclockwise or clockwise as the radius is positive or negative, respectively.</p></li>
+<li><p>fill color attribute is generalized to support “recommended” and “committed” colors; text objects use a recommended fill color of black.</p></li>
+</ul></li>
+<li><p><strong>New instances</strong></p>
+<ul>
+<li><p>The <code>Show</code> instance for <code>R2</code> now produces something like <code>2 &amp; 6</code> instead of <code>R2 { unR2 = (2,6) }</code>. The <code>Read</code> instance has also been changed to match, so <code>read . show = id</code>.</p></li>
+<li><p><code>Enveloped</code> instance for <code>FixedSegment</code></p></li>
+<li><p><code>Traced</code> instances for <code>Segment</code>, <code>FixedSegment</code>, <code>Trail</code>, and <code>Path</code></p></li>
+<li><p>New derived <code>Eq</code> instances for <code>LineCapA</code>, <code>LineJoinA</code>, <code>Dashing</code>, <code>DashingA</code>, <code>FillRule</code>, <code>Font</code>, <code>FontSize</code>, <code>FontSlant</code>, <code>FontSlantA</code>, <code>FontWeight</code>, and <code>FontWeightA</code></p></li>
+<li><p><code>Renderable Ellipsoid NullBackend</code> instance</p></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p><code>Data.Colour</code> (minus <code>atop</code> and <code>AffineSpace</code>) is now re-exported from Diagrams.Prelude for convenience.</p></li>
+<li><p>The <code>beneath</code> function is now infixl 6.</p></li>
+<li><p>The <code>BoundingBox</code> module has had a complete overhaul. There is now a special empty bounding box, and bounding boxes are an instance of <code>Monoid</code>.</p></li>
+<li><p>The type of <code>withEnvelope</code> has been slightly generalized.</p></li>
+<li><p><code>Diagrams.TwoD.Adjust.adjustSize</code> is now deprecated; it has been renamed and moved to <code>Diagrams.TwoD.Size.requiredScaleT</code>.</p></li>
+<li><p><code>expandPath</code> has been renamed to <code>scalePath</code>.</p></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Allow <code>data-default</code> 0.4 and 0.5</li>
+<li>Allow <code>base</code>-4.6</li>
+<li>Allow <code>containers</code>-0.5</li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><code>arc</code> and <code>arcT</code> functions now always produce counterclockwise arcs, as claimed.</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-contrib-0.6"><a href="http://hackage.haskell.org/package/diagrams-contrib-0.6">diagrams-contrib 0.6</a></h2>
+<p>Version bumped to 0.6 to match other diagrams packages.</p>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New pure implementation of Turtle library, in <code>Turtle.Internals</code></p></li>
+<li><p><code>Diagrams.TwoD.Layout.Tree</code>:</p>
+<ul>
+<li><p>New <code>renderTree'</code> function which gives the edge-drawing function access to the values stored at the nodes instead of just the node positions.</p></li>
+<li><p>The type of <code>renderTree</code> is generalized to work with any <code>QDiagram b R2 m</code>.</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li>Tiling generation code in <code>Diagrams.TwoD.Tilings</code> wasn’t actually checking whether vertexes had been already visited.</li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li>Switch from <code>fclabels</code> to <code>lens</code></li>
+</ul></li>
+</ul>
+<h2 id="diagrams-cairo-0.6"><a href="http://hackage.haskell.org/package/diagrams-cairo-0.6">diagrams-cairo 0.6</a></h2>
+<ul>
+<li><p><strong>New features</strong></p>
+<ul>
+<li><p>New <code>--list</code> option for <code>multiMain</code> to list all available diagrams</p></li>
+<li><p>Major documentation improvements</p></li>
+<li><p>New modules:</p>
+<ul>
+<li><p><code>Diagrams.Backend.Cairo.Ptr</code>, for rendering directly to buffers in memory</p></li>
+<li><p><code>Diagrams.Backend.Cairo.List</code>, for rendering to a list of lists of pixels.</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>API changes</strong></p>
+<ul>
+<li><p>Removal of <code>StyleParam</code> from <code>Diagrams.Backend.Cairo.Text</code>, change functions in that module to accept <code>Style R2</code>. Usage can be fixed by applying these style functions to <code>mempty</code>.</p></li>
+<li><p>GTK rendering has been split out into a new package, diagrams-gtk.</p>
+<ul>
+<li><p>The <code>Diagrams.Backend.Cairo.Gtk</code> module is now <code>Diagrams.Backend.Gtk</code> in the <code>diagrams-gtk</code> package.</p></li>
+<li><p>The <code>CairoOptions</code> record has a new boolean <code>cairoBypassAdjust</code> option; when set, the backend should bypass calling <code>adjustDia2D</code>.</p></li>
+<li><p>The GTK output type is gone.</p></li>
+<li><p>There is a new <code>RenderOnly</code> output type, for when you don’t care about the <code>IO</code> action but only want the cairo <code>Render</code> action.</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Dependency/version changes</strong></p>
+<ul>
+<li><p>Upper bounds relaxed to allow <code>base</code>-4.6, <code>unix</code>-2.6, <code>cmdargs</code>-0.10, <code>split</code>-0.2.*, <code>mtl</code>-2.1</p></li>
+<li><p>Add a dependency on <code>time</code>, and conditional compilation to use either ClockTime or UTCTime depending on the version of the <code>directory</code> package</p></li>
+<li><p>Add dependency on <code>colour</code></p></li>
+<li><p>Lower bound on <code>cairo</code> raised to 0.12.4</p></li>
+</ul></li>
+<li><p><strong>Bug fixes</strong></p>
+<ul>
+<li><p>Fixed looped compile mode, which was repeatedly trying to compile when the code contained errors, instead of trying once and then waiting for a change.</p></li>
+<li><p>Fix a bug where default attributes were not being set when using the “bypass” mode used by the gtk backend. (<a href="https://github.com/diagrams/diagrams-cairo/pull/16">#16</a>)</p></li>
+</ul></li>
+</ul>
+<h2 id="diagrams-gtk-0.6"><a href="http://hackage.haskell.org/package/diagrams-gtk-0.6">diagrams-gtk 0.6</a></h2>
+<p>Initial release. Split out into a separate package from <code>diagrams-cairo</code>.</p>
+<h2 id="diagrams-svg-0.6"><a href="http://hackage.haskell.org/package/diagrams-svg-0.6">diagrams-svg 0.6</a></h2>
+<p>First “officially supported” release.</p>
+<p>Features still not implemented:</p>
+<ul>
+<li>text alignment</li>
+<li>inline images</li>
+</ul>
+<p>As of this release everything else Should Work (tm).</p>
+<h2 id="diagrams-builder-0.2.1.0"><a href="http://hackage.haskell.org/package/diagrams-builder-0.2.1.0">diagrams-builder 0.2.1.0</a></h2>
+<ul>
+<li>new <code>diagrams-builder-svg</code> tool</li>
+<li>deal properly with an empty list of sources (<a href="https://github.com/diagrams/diagrams-builder/issues/2">#2</a>)</li>
+<li>put cached diagrams in <code>.diagrams_cache</code> instead of <code>diagrams</code> by default</li>
+<li>bug fix: cached files should use same extension as requested output, not “png”</li>
+<li>bug fix: create output directory for cached images if it doesn’t exist</li>
+<li>new module <code>Diagrams.Builder.CmdLine</code>; factor out common utilities for command-line tools</li>
+<li>depend on 0.6 versions of diagrams libs</li>
+</ul>
+<h1 id="diagrams-0.5-9-march-2012">diagrams 0.5: 9 March 2012</h1>
+<h2 id="diagrams-core-0.5"><a href="http://hackage.haskell.org/package/diagrams-core-0.5">diagrams-core 0.5</a></h2>
+<ul>
+<li>New features:
+<ul>
+<li>New <code>Juxtaposable</code> class</li>
+<li>New <code>NullBackend</code> and <code>D</code> types, for conveniently giving a monomorphic type to diagrams when we don’t care which one it is.</li>
+<li><a href="http://code.google.com/p/diagrams/issues/detail?id=27">#27</a>: Change type of <code>adjustDia</code> to return a new options record (with an explicitly filled-in size)</li>
+</ul></li>
+<li>New instances:
+<ul>
+<li><code>Enveloped</code>, <code>HasOrigin</code>, <code>Juxtaposable</code>, <code>HasStyle</code>, and <code>Transformable</code> instances for <code>Set</code>s and tuples</li>
+<li><code>V Double = Double</code></li>
+<li><code>Juxtaposable</code> and <code>Boundable</code> instances for <code>Map</code></li>
+</ul></li>
+<li>API changes
+<ul>
+<li><code>AnnDiagram</code> renamed to <code>QDiagram</code></li>
+<li><a href="http://code.google.com/p/diagrams/issues/detail?id=61">#61</a>: terminology change from “bounds” to “envelope”
+<ul>
+<li><code>boundary</code> -&gt; <code>envelopeP</code></li>
+<li>“bounding region” -&gt; “envelope”</li>
+<li><code>Bounds</code> -&gt; <code>Envelope</code></li>
+<li><code>Boundable</code> -&gt; <code>Enveloped</code></li>
+<li><code>getBounds</code> -&gt; <code>getEnvelope</code></li>
+<li><em>etc.</em></li>
+</ul></li>
+<li>Split out definition of <code>Point</code> into separate package (<a href="http://hackage.haskell.org/package/vector%2Dspace%2Dpoints"><code>vector-space-points</code></a>)</li>
+<li>The <code>Point</code> constructor <code>P</code> is no longer exported from <code>Graphics.Rendering.Diagrams</code>. See the <code>Diagrams.TwoD.Types</code> module from <code>diagrams-lib</code> for new tools for working with abstract 2D points. If you really need the <code>P</code> constructor, import <code>Graphics.Rendering.Diagrams.Points</code>.</li>
+<li>Name-related functions now return “located bounding functions” instead of pairs of points and bounds, to allow for future expansion.</li>
+</ul></li>
+<li>Dependency/version changes:
+<ul>
+<li><code>vector-space</code> 0.8 is now required.</li>
+<li>Bump base upper bound to allow 4.5; now tested with GHC 7.4.1.</li>
+</ul></li>
+<li>Bug fixes:
+<ul>
+<li>Bug fix related to empty envelopes</li>
+</ul></li>
+</ul>
+<h2 id="active-0.1.0.0"><a href="http://hackage.haskell.org/package/active-0.1.0.0">active 0.1.0.0</a></h2>
+<ul>
+<li>Initial release</li>
+</ul>
+<h2 id="diagrams-lib-0.5"><a href="http://hackage.haskell.org/package/diagrams-lib-0.5">diagrams-lib 0.5</a></h2>
+<ul>
+<li>New features:
+<ul>
+<li><code>mkSizeSpec</code> function for constructing a <code>SizeSpec2D</code> from two <code>Maybe Double</code>s</li>
+<li><code>beneath</code> as convenient synonym for <code>flip atop</code></li>
+<li>Improvements and extensions to rounded rectangles by Peter Hall:
+<ul>
+<li><code>roundedRect'</code> allows rounded rectangles with a different radius specified for each corner</li>
+<li>both <code>roundedRect'</code> and <code>roundedRect</code> now allow negative radii, resulting in “inverted” circular corners</li>
+</ul></li>
+<li><a href="http://code.google.com/p/diagrams/issues/detail?id=64">#64</a>: New <code>Alignable</code> class for things that can be aligned.</li>
+<li><code>explodeTrail</code> and <code>explodePath</code> have been generalized to return any <code>PathLike</code> type.</li>
+<li>New path functions <code>pathCentroid</code> (compute the centroid of a path’s vertices) and <code>expandPath</code> (scale a path about its centroid).</li>
+<li>Generalized <code>centroid</code> function now exported from new module <code>Diagrams.Points</code>.</li>
+<li>Initial (experimental) support for animation:
+<ul>
+<li><code>Animation</code> and <code>QAnimation</code> defined as synonyms for <code>Active</code> diagrams (see <code>active</code> package)</li>
+<li>Instances for <code>Active</code>: <code>V</code>, <code>HasOrigin</code>, <code>Transformable</code>, <code>HasStyle</code>, <code>PathLike</code>, <code>Juxtaposable</code>, <code>Alignable</code></li>
+<li><code>animEnvelope</code> and <code>animRect</code> functions for automatic bounding of animations</li>
+</ul></li>
+<li><code>addClosingSegment</code> function for making the implicit closing segment of a closed trail explicit</li>
+<li>Improvements to <code>BoundingBox</code> module from Michael Sloan: querying of <code>BoundingBox</code> bounds, corners, extents, and transformation of objects to fit within a given box.</li>
+<li>Text alignment options from Michael Sloan</li>
+<li><code>view</code> function for restricting a diagram’s envelope to a rectangular region.</li>
+<li><code>iterateN</code> function for iterating a finite number of times</li>
+<li><code>atAngle</code> for placing two diagrams next to each other along a specified angle.</li>
+<li><code>padX</code> and <code>padY</code> functions for padding in the X- and Y-directions independently.</li>
+<li>generalized <code>showOrigin</code> function from Ian Ross</li>
+<li><a href="http://code.google.com/p/diagrams/issues/detail?id=40">#40</a>: add shears to <code>Diagrams.TwoD.Transform</code></li>
+</ul></li>
+<li>Performance improvements
+<ul>
+<li>Use a balanced folding scheme for <code>cat'</code>, reducing time in some cases from \(O(n^2)\) to \(O(n \log n)\)</li>
+<li>More efficient implementation of <code>beside</code></li>
+</ul></li>
+<li>New instances:
+<ul>
+<li><code>Alignable</code> instances for <code>QDiagram</code>, <code>Path</code>, <code>Envelope</code>, <code>Active</code>, <code>Set</code>, <code>Map</code>, <code>[]</code></li>
+<li><code>Renderable</code> instances for <code>NullBackend</code> (<code>Trail</code>, <code>Path</code>, <code>Segment</code>, <code>Image</code>, <code>Text</code>)</li>
+<li>Instances for <code>Active</code>: <code>V</code>, <code>HasOrigin</code>, <code>Transformable</code>, <code>HasStyle</code>, <code>PathLike</code>, <code>Juxtaposable</code>, <code>Alignable</code></li>
+</ul></li>
+<li>API changes
+<ul>
+<li><code>R2</code> used to be a synonym for <code>(Double, Double)</code> but is now abstract. To convert between pairs of <code>Doubles</code> and <code>R2</code>, use the new functions <code>r2</code> and <code>unr2</code>. There are two reasons for this change:
+<ol style="list-style-type: decimal">
+<li>to allow for future changes to the implementation of <code>R2</code>;</li>
+<li><code>(Double, Double)</code> was an awkward special case getting in the way of useful tuple instances for classes like <code>HasOrigin</code>, <code>Enveloped</code>, and so on.</li>
+</ol></li>
+<li><code>circlePath</code> has been removed; its functionality has been subsumed by <code>circle</code>.</li>
+<li><code>adjustSegment</code> now takes an extra tolerance option.</li>
+<li>Ellipses are now represented using Bezier approximations rather than a separate special type.</li>
+<li><code>BoundingBox</code> no longer has a <code>Transformable</code> instance; the old instance was misleading at best.</li>
+<li>Change semantics of <code>beside</code> (hence also <code>(|||)</code> and <code>(===)</code>) so the result’s origin is the same as that of the first argument.</li>
+<li><code>adjustDia2D</code> now takes a <code>SizeSpec2D</code>.</li>
+<li><code>beside</code> and related functions are now implemented in terms of <code>juxtapose</code>.</li>
+<li>Instead of taking an <code>R2</code>, <code>roundedRect</code> now takes a pair of <code>Double</code>s, to be more consistent with <code>rect</code>.</li>
+</ul></li>
+<li>Dependency/version changes
+<ul>
+<li>Support for GHC 7.4.1:
+<ul>
+<li>depend on <code>colour</code> &gt;= 2.3.2</li>
+<li>update <code>base</code> and <code>array</code> upper bounds</li>
+</ul></li>
+<li>bump <code>vector-space</code> upper bound</li>
+</ul></li>
+<li>Bug fixes
+<ul>
+<li>Avoid scale by zero error in <code>showOrigin</code>.</li>
+<li>Base <code>adjustDia2D</code> translation on output size rather than diagram size.</li>
+</ul></li>
+</ul>
+<h2 id="diagrams-contrib-0.1.0.0"><a href="http://hackage.haskell.org/package/diagrams-contrib-0.1.0.0">diagrams-contrib 0.1.0.0</a></h2>
+<ul>
+<li>Initial release</li>
+</ul>
+<h2 id="diagrams-cairo-0.5"><a href="http://hackage.haskell.org/package/diagrams-cairo-0.5">diagrams-cairo 0.5</a></h2>
+<ul>
+<li>New features
+<ul>
+<li>New <code>Diagrams.Backend.Cairo.Text</code> module by Michael Sloan, with functions for creating appropriately sized text objects by querying cairo for the size, and related supporting functions.</li>
+<li>Basic support for animation with <code>animMain</code> function, by generating frames sampled at regular intervals.</li>
+<li>Proper vertical alignment of default text based on font parameters (Michael Sloan).</li>
+<li>Requesting just a width or height now causes the other to be computed appropriately.</li>
+</ul></li>
+<li>API changes
+<ul>
+<li>Move <code>Diagrams.Backend.Cairo</code> to <code>Diagrams.Backend.Cairo.Internal</code> and export everything. <code>Diagrams.Backend.Cairo</code> now just re-exports selected functions from <code>Internal</code>. This allows anyone who wants access to the helper/utility functions to import <code>Internal</code>.</li>
+</ul></li>
+<li>Dependency/version changes
+<ul>
+<li>relax <code>cmdargs</code> upper bound</li>
+<li>GHC 7.4.1 compatibility: update <code>base</code>, <code>filepath</code>, and <code>old-time</code> upper bounds</li>
+</ul></li>
+<li>Bug fixes
+<ul>
+<li><a href="http://code.google.com/p/diagrams/issues/detail?id=54">#54</a>: Generate warning for missing image files (Ian Ross).</li>
+</ul></li>
+</ul>
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-docs-application.js"></script>
+    <script src="./js/hoogle-search.js"></script>
+  </body>
+</html>

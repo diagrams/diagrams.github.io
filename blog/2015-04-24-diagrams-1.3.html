@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Diagrams 1.3</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div class="blog-header">
+    <p>by <em>Brent Yorgey</em> on <strong>April 25, 2015</strong></p>
+    <p>Tagged as: <a href="../tags/release.html">release</a>, <a href="../tags/features.html">features</a>, <a href="../tags/announcement.html">announcement</a>, <a href="../tags/1.3.html">1.3</a>.</p>
+</div>
+
+<div>
+    <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"></div></div><div class="col-md-9"><h1 class="title">Diagrams 1.3</h1><p>The diagrams team is very pleased to announce the release of diagrams
+1.3.  The actual release to Hackage happened a week or so ago, and by
+now I think we have most of the little kinks ironed out.  This is an
+exciting release that represents a great deal of effort from a lot of
+people (see the list of contributors at the end of this post).  Here's
+a quick rundown of some of the new features.  If you're just looking
+for help porting your diagrams code to work with 1.3, see the
+<a class="reference external" href="https://wiki.haskell.org/Diagrams/Dev/Migrate1.3">migration guide</a>.</p><div class="section" id="path-intersection"><h1>Path intersection</h1><p>Using the functions <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:intersectPointsP">intersectPointsP</a></code> and <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:intersectPointsT">intersectPointsT</a></code>, it is
+now possible to find the points of intersection between two paths or
+two trails, respectively.  This is not so hard for paths with straight
+segments, but for cubic Bezier curves, finding intersection points is
+nontrivial!</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/53b7dfdadc9debac.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="ot">{-# LANGUAGE TupleSections #-}</span>
+<span class="ot">></span>
+<span class="ot">> example ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">B</span>
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a> (map (place pt) points) <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a> ellipses
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     ell <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:scaleX">scaleX</a> <span class="dv">2</span>
+<span class="ot">></span>     pt  <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.05</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:blue">blue</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lw">lw</a> none
+<span class="ot">></span>     ellipses <span class="fu">=</span> [ ell <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#v:rotateBy">rotateBy</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:r">r</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:translateX">translateX</a> (<span class="dv">2</span><span class="fu">*</span>r) <span class="fu">|</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:r">r</a> <span class="ot"><-</span> [<span class="dv">0</span>, <span class="dv">1</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">..</span> <span class="dv">5</span><span class="fu">/</span><span class="dv">12</span>] ]
+<span class="ot">></span>     points <span class="fu">=</span> allPairs ellipses <span class="fu">>>=</span> uncurry <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:intersectPoints">(intersectPointsP</a>' 1e<span class="fu">-</span><span class="dv">8</span>)
+<span class="ot">></span>     allPairs [] <span class="fu">=</span> []
+<span class="ot">></span>     allPairs (x<span class="fu">:</span>xs) <span class="fu">=</span> map (x,) xs <span class="fu">++</span> allPairs xs</code></pre></div></div></div><p>Note that this feature is something of a "technology preview" in
+diagrams 1.3: the API will probably change and grow in the next
+release (for example, giving a way to find the <em>parameters</em> of
+intersection points).</p></div><div class="section" id="affine-maps-and-projections"><h1>Affine maps and projections</h1><p>Affine maps have been added to <span class="module"><a href="../haddock/diagrams-lib/Diagrams-LinearMap.html"><code>Diagrams.LinearMap</code></a></span> that can map
+between <em>different</em> vector spaces. The <span class="module"><a href="../haddock/Deformable.html"><code>Deformable</code></a></span> class has
+also been generalised to map between spaces. Helper functions have
+been added to <span class="module"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Projection.html"><code>Diagrams.ThreeD.Projection</code></a></span> for basic orthographic
+and perspective projections.</p><p>In the below example, we construct a 3-dimensional path representing
+the wireframe of a simple house, and then project it into 2 dimensions
+using perspective, orthographic, and isometric projections.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/7c1f2b73130edf93.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.ThreeD.Transform</span>  (translateZ)
+<span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.ThreeD.Projection</span>
+<span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.LinearMap</span>         (amap)
+<span class="ot">></span> <span class="kw">import </span><span class="dt">Linear.Matrix</span>              ((!*!))
+<span class="ot">></span>
+<span class="ot">> box ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Path.html#t:Path">Path</a></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#t:V3">V3</a></span> <span class="dt">Double</span>
+<span class="ot">></span> box <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Path.html#t:Path">Path</a></span> [f p1 <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> f <a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#v:p2">p2</a> <span class="fu">|</span> p1 <span class="ot"><-</span> ps, <a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#v:p2">p2</a> <span class="ot"><-</span> ps, <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:quadrance">quadrance</a> (p1 <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--45--46-">.-.</a></span> p2) <span class="fu">==</span> <span class="dv">4</span>]
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a> <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-BoundingBox.html#v:getAllCorners">getAllCorners</a> <span class="fu">$</span> <a href="../haddock/diagrams-lib/Diagrams-BoundingBox.html#v:fromCorners">fromCorners</a> (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span>
+<span class="ot">></span>     f  <span class="fu">=</span> fmap fromIntegral
+<span class="ot">></span>
+<span class="ot">> roof ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Path.html#t:Path">Path</a></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#t:V3">V3</a></span> <span class="dt">Double</span>
+<span class="ot">></span> roof <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Path.html#t:Path">Path</a></span>
+<span class="ot">></span>   [ <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span>       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> <span class="dv">0</span> <span class="fl">1.4</span>
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span>    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> <span class="dv">0</span> <span class="fl">1.4</span>
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> <span class="dv">0</span> <span class="fl">1.4</span>     <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">0</span> <span class="fl">1.4</span>
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span> <span class="dv">1</span>    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">0</span> <span class="fl">1.4</span>
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> (<span class="fu">-</span><span class="dv">1</span>) (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> (<span class="fu">-</span><span class="dv">1</span>) <span class="dv">0</span> <span class="fl">1.4</span>
+<span class="ot">></span>   ]
+<span class="ot">></span>
+<span class="ot">> door ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Path.html#t:Path">Path</a></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#t:V3">V3</a></span> <span class="dt">Double</span>
+<span class="ot">></span> door <span class="fu">=</span> fromVertices
+<span class="ot">></span>   [ <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> (<span class="fu">-</span><span class="fl">0.2</span>) (<span class="fu">-</span><span class="dv">1</span>)
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> (<span class="fu">-</span><span class="fl">0.2</span>) (<span class="fu">-</span><span class="fl">0.4</span>)
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> (<span class="fl">0.2</span>) (<span class="fu">-</span><span class="fl">0.4</span>)
+<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#v:mkP3">mkP3</a> <span class="dv">1</span> (<span class="fl">0.2</span>) (<span class="fu">-</span><span class="dv">1</span>)
+<span class="ot">></span>   ]
+<span class="ot">></span>
+<span class="ot">></span> house <span class="fu">=</span> door <span class="fu"><></span> roof <span class="fu"><></span> box
+<span class="ot">></span>
+<span class="ot">></span> <span class="co">-- Perspective projection</span>
+<span class="ot">></span> <span class="co">-- these bits are <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:from">from</a> Linear.Projection</span>
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:m">m</a>  <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Projection.html#v:lookAt">lookAt</a> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#t:V3">V3</a></span> <span class="fl">3.4</span> <span class="dv">4</span> <span class="fl">2.2</span>) <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:zero">zero</a> unitZ
+<span class="ot">></span> pm <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Projection.html#v:perspective">perspective</a> (pi<span class="fu">/</span><span class="dv">3</span>) <span class="fl">0.8</span> <span class="dv">1</span> <span class="dv">3</span> <span class="fu">!*!</span> m
+<span class="ot">></span>
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Turtle-Aliases.html#v:pd">pd</a> <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Projection.html#v:m44Deformation">m44Deformation</a> pm
+<span class="ot">></span> perspectiveHouse <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:stroke">stroke</a> <span class="fu">$</span> <a href="../haddock/diagrams-lib/Diagrams-Deform.html#v:deform">deform</a> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Turtle-Aliases.html#v:pd">pd</a> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:translate">(translateZ</a> (<span class="fu">-</span><span class="dv">1</span>) house)
+<span class="ot">></span>
+<span class="ot">></span> <span class="co">-- Orthogonal projection</span>
+<span class="ot">></span> am <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Projection.html#v:lookingAt">lookingAt</a> (mkP3 <span class="fl">3.4</span> <span class="dv">4</span> <span class="fl">2.2</span>) <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:zero">zero</a> zDir
+<span class="ot">></span> orthogonalHouse <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:stroke">stroke</a> <span class="fu">$</span> <a href="../haddock/diagrams-lib/Diagrams-LinearMap.html#v:amap">amap</a> am house
+<span class="ot">></span>
+<span class="ot">></span> <span class="co">-- Isometric projection (specialised orthogonal)</span>
+<span class="ot">></span> isometricHouse <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:stroke">stroke</a> <span class="fu">$</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Projection.html#v:isometricApply">isometricApply</a> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Vector.html#v:zDir">zDir</a> house
+<span class="ot">></span>
+<span class="ot">> example ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">B</span>
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="dv">1</span> <span class="fu">.</span> map <a href="../haddock/diagrams-core/Diagrams-Core.html#v:size">(sized</a> (mkHeight <span class="dv">3</span>) <span class="fu">.</span> centerXY) <span class="fu">$</span>
+<span class="ot">></span>   [ perspectiveHouse, orthogonalHouse, isometricHouse ]</code></pre></div></div></div><p>Note that this should also be considered a "technology preview".
+Future releases of diagrams will likely include higher-level ways to
+do projections.</p></div><div class="section" id="grouping-for-opacity"><h1>Grouping for opacity</h1><p>A few backends (<span class="package"><a href="http://hackage.haskell.org/package/diagrams-svg"><code>diagrams-svg</code></a></span>, <span class="package"><a href="http://hackage.haskell.org/package/diagrams-pgf"><code>diagrams-pgf</code></a></span>, and
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-rasterific"><code>diagrams-rasterific</code></a></span> as of version 1.3.1) support <em>grouped
+transparency</em>.  The idea is that transparency can be applied to <em>a
+group of diagrams as a whole</em> rather than to individual diagrams.  The
+difference is in what happens when diagrams overlap: if they are
+individually transparent, the overlapping section will be darker, as
+if two pieces of colored cellophane were overlapped.  If transparency
+is applied to a group instead, the transparency is uniformly applied
+to the rendered output of the group of diagrams, as if a single piece
+of colored cellophane were cut out in the shape of the group of
+diagrams.</p><p>An example should help make this clear.  In the example to the left
+below, the section where the two transparent circles overlap is
+darker.  On the right, the call to <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:groupOpacity">groupOpacity</a></code> means that the
+entire shape formed form the union of the two circles is given a
+uniform opacity; there is no darker region where the circles overlap.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/1e4dc4eb4637abc7.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> cir <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lw">lw</a> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:none">none</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> red
+<span class="ot">></span> overlap <span class="fu">=</span> (cir <span class="fu"><></span> cir <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:translateX">translateX</a> <span class="dv">1</span>)
+<span class="ot">></span>
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="dv">1</span> [ overlap <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:opacity">opacity</a> <span class="fl">0.3</span>, overlap <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:opacityGroup">opacityGroup</a> <span class="fl">0.3</span> ]
+<span class="ot">></span>           <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> centerX
+<span class="ot">></span>        <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:rect">rect</a> <span class="dv">9</span> <span class="fl">0.1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:lightblue">lightblue</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lw">lw</a> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:none">none</a></code></pre></div></div></div></div><div class="section" id="visualizing-envelopes-and-traces"><h1>Visualizing envelopes and traces</h1><p>Some new functions have been added to help visualize (approximations
+of) the <a class="reference external" href="../doc/manual.html#envelopes-and-local-vector-spaces">envelope</a> and <a class="reference external" href="../doc/manual.html#traces">trace</a> of a diagram.  For example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/3244e52088b4bb59.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> d1,<span class="ot"> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:d2">d2</a> ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">B</span>
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:d1">d1</a> <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span>
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:d2">d2</a> <span class="fu">=</span> (pentagon <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:-61--61--61-">===</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:roundedRect">roundedRect</a> <span class="fl">1.5</span> <span class="fl">0.7</span> <span class="fl">0.3</span>)
+<span class="ot">></span>
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="dv">1</span>
+<span class="ot">></span>   [ <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">(d1</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:-124--124--124-">|||</a></span> d2)          <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:showEnvelope">showEnvelope</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:ePoints">ePoints</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="dv">360</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> showOrigin
+<span class="ot">></span>   , <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">(d1</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:-124--124--124-">|||</a></span> d2) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Align.html#v:center">center</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:showEnvelope">showEnvelope</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:ePoints">ePoints</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="dv">360</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> showOrigin
+<span class="ot">></span>   , <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">(d1</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:-124--124--124-">|||</a></span> d2) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Align.html#v:center">center</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:showTrace">showTrace</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:tPoints">tPoints</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="dv">20</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> showOrigin
+<span class="ot">></span>   ]</code></pre></div></div></div></div><div class="section" id="better-command-line-looping"><h1>Better command-line looping</h1><p>For some time, many diagrams backends have had a "looped compilation
+mode", where the diagram-rendering executables produced take a
+<code>--loop</code> option, causing them to watch for changes to a source file,
+recompile and relaunch themselves.  Support for this feature is now
+greatly improved. We have switched to use <span class="package"><a href="http://hackage.haskell.org/package/fsnotify"><code>fsnotify</code></a></span>, which
+eliminates polling and allows the feature to work on Windows for the
+first time (previous versions depended on the <span class="package"><a href="http://hackage.haskell.org/package/unix"><code>unix</code></a></span> package).
+The output of the <code>--loop</code> mode has also been improved.</p></div><div class="section" id="new-backends"><h1>New backends</h1><p>The <span class="package"><a href="http://hackage.haskell.org/package/diagrams-postscript"><code>diagrams-postscript</code></a></span>, <span class="package"><a href="http://hackage.haskell.org/package/diagrams-svg"><code>diagrams-svg</code></a></span>,
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-cairo"><code>diagrams-cairo</code></a></span>, <span class="package"><a href="http://hackage.haskell.org/package/diagrams-gtk"><code>diagrams-gtk</code></a></span>, and
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-rasterific"><code>diagrams-rasterific</code></a></span> backends are all still going strong and
+fully supported.  We now have several new backends as well:
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-html5"><code>diagrams-html5</code></a></span> generates Javascript which sets up an HTML5
+canvas containing the diagram; <span class="package"><a href="http://hackage.haskell.org/package/diagrams-canvas"><code>diagrams-canvas</code></a></span> also targets
+HTML5 canvas, but uses the <span class="package"><a href="http://hackage.haskell.org/package/blank-canvas"><code>blank-canvas</code></a></span> package to interact
+directly with an HTML5 canvas, enabling various sorts of
+interactivity.  We also have a new backend <span class="package"><a href="http://hackage.haskell.org/package/diagrams-pgf"><code>diagrams-pgf</code></a></span> which
+generates PGF/TikZ code suitable for including in \(\TeX\)
+documents—one can even have embedded text in diagrams typeset by
+\(\TeX\), allowing <em>e.g.</em> mathematical formulas as labels for
+things in your diagram.</p></div><div class="section" id="generalized-numerics"><h1>Generalized numerics</h1><p>It used to be that diagrams were hard-coded to use <code>Double</code>.  As of
+version 1.3, <code>Double</code> is no longer baked in: diagrams are now
+parameterized by a suitable numeric type.  It's too early to tell what
+the full implications of this will be, but in theory it opens up
+opportunities for things like automatic differentiation, constraint
+solving, and using diagrams in conjunction with deeply embedded DSLs.</p><p>This feature in particular was a tough nut to crack and is the fruit
+of a lot of labor.  I want to especially highlight the work of Jan
+Bracker, Allan Gardner, and Frank Staals, all of whom did a lot of
+work attempting to generalize diagrams in this way.  Although their
+code ultimately did not get merged, we learned a lot from their
+attempts!  The fourth attempt, by Chris Chalmers, actually stuck. A
+big factor in his success was to simultaneously replace the
+<span class="package"><a href="http://hackage.haskell.org/package/vector-space"><code>vector-space</code></a></span> package with <span class="package"><a href="http://hackage.haskell.org/package/linear"><code>linear</code></a></span>, which turns out to
+work very nicely with diagrams and with generalized numeric types in
+particular.</p><p>Note that this is a Very Breaking Change as the types of almost
+everything changed.  Anything which used to take a single type
+representing a vector space (such as <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Types.html#t:R2">R2</a></span></code>) as an argument now takes
+two arguments, one for the structure/dimension of the vector space
+(<em>e.g.</em> <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span></code>) and one for the numeric/scalar type.  See the <a class="reference external" href="https://wiki.haskell.org/Diagrams/Dev/Migrate1.3">migration
+guide</a> for more specific information and help upgrading!</p></div><div class="section" id="and-lots-more"><h1>And lots more...</h1><p>Of course, there are lots of other miscellaneous improvements, added
+type class instances, new lenses and prisms, bug fixes, and the like.
+For a full rundown see the <a class="reference external" href="http://projects.haskell.org/diagrams/releases.html">release notes</a>.  There is also lots more
+exciting stuff in the pipeline!</p></div><div class="section" id="contributors"><h1>Contributors</h1><p>We now have a team of 5 people working very actively on diagrams
+(Chris Chalmers, Daniel Bergey, Jeff Rosenbluth, Ryan Yates, and
+myself), with many, many more contributing here and there.  As a way
+to say thank you for all the great contributions and hard work by many
+in the community, below is a (probably incomplete) list of people who
+have contributed to diagrams in some way — all 67 of them!  We
+<a class="reference external" href="../community.html">welcome involvement</a> from anyone, regardless of experience.  If you'd
+like to get involved, come chat with us on the <a class="reference external" href="http://webchat.freenode.net/?channels=diagrams">#diagrams IRC channel</a>
+on freenode, or send a message to the <a class="reference external" href="http://groups.google.com/group/diagrams-discuss">mailing list</a>.</p><p>Diagrams contributors:</p><p>Alexis Praga /
+Allan Gardner /
+Andy Gill /
+Anthony Cowley /
+Bartosz Nitka /
+Ben Gamari /
+Brent Yorgey /
+Carlos Scheidegger /
+Carter Tazio Schonwald /
+Chris Mears /
+Christopher Chalmers /
+Claude Heiland-Allen /
+Conal Elliott /
+Daniel Bergey /
+Daniel Kröni /
+Daniel Wagner /
+Daniil Frumin /
+Deepak Jois /
+Denys Duchier /
+Dominic Steinitz /
+Doug Beardsley /
+Felipe Lessa /
+Florent Becker /
+Gabor Greif /
+Hans Höglund /
+Heinrich Apfelmus /
+Ian Ross /
+Jan Bracker /
+Jeffrey Rosenbluth /
+Jeremy Gibbons /
+Jeroen Bransen /
+Jim Snavely /
+Joachim Breitner /
+Joel Burget /
+John Lato /
+John Tromp /
+Jonas Haag /
+Kanchalai Suveepattananont /
+Kaspar Emanuel /
+Konrad Madej /
+Konstantin Zudov /
+Luite Stegeman /
+Michael Sloan /
+Michael Thompson /
+Moiman /
+Niklas Haas /
+Peter Hall /
+Pontus Granström /
+Robbie Gleichman /
+Robert Vollmert /
+Ryan Scott /
+Ryan Yates /
+Sam Griffin /
+Scott Walck /
+Sergei Trofimovich /
+sleepyMonad /
+soapie /
+Steve Sprang /
+Steven Smith /
+Tad Doxsee /
+Taneb /
+Taru Karttunen /
+Tillmann Vogt /
+Tim Docker /
+Vilhelm Sjöberg /
+Vincent Berthoux /
+Yiding Jia</p></div></div></div></div>
+
+</div>
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

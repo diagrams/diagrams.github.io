@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Diagrams Core Library Reference</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"><ul class="nav"><li><a class="reference internal" href="#introduction">Introduction</a></li><li><a class="reference internal" href="#diagrams-core">Diagrams.Core</a></li><li><a class="reference internal" href="#diagrams-core-v">Diagrams.Core.V</a></li><li><a class="reference internal" href="#diagrams-core-points">Diagrams.Core.Points</a></li><li><a class="reference internal" href="#diagrams-core-names">Diagrams.Core.Names</a></li><li><a class="reference internal" href="#diagrams-core-hasorigin">Diagrams.Core.HasOrigin</a></li><li><a class="reference internal" href="#diagrams-core-transform">Diagrams.Core.Transform</a></li><li><a class="reference internal" href="#diagrams-core-envelope">Diagrams.Core.Envelope</a></li><li><a class="reference internal" href="#diagrams-core-juxtapose">Diagrams.Core.Juxtapose</a></li><li><a class="reference internal" href="#diagrams-core-measure">Diagrams.Core.Measure</a></li><li><a class="reference internal" href="#diagrams-core-trace">Diagrams.Core.Trace</a></li><li><a class="reference internal" href="#diagrams-core-query">Diagrams.Core.Query</a></li><li><a class="reference internal" href="#diagrams-core-style">Diagrams.Core.Style</a><ul class="nav"><li><a class="reference internal" href="#attributes">Attributes</a></li><li><a class="reference internal" href="#styles">Styles</a></li></ul></li><li><a class="reference internal" href="#diagrams-core-types">Diagrams.Core.Types</a><ul class="nav"><li><a class="reference internal" href="#qdiagram">QDiagram</a><ul class="nav"><li><a class="reference internal" href="#qdialeaf">QDiaLeaf</a></li><li><a class="reference internal" href="#annotation">Annotation</a></li><li><a class="reference internal" href="#upannots">UpAnnots</a></li><li><a class="reference internal" href="#downannots">DownAnnots</a></li></ul></li><li><a class="reference internal" href="#subdiagrams">Subdiagrams</a></li><li><a class="reference internal" href="#backends">Backends</a></li></ul></li><li><a class="reference internal" href="#diagrams-core-compile">Diagrams.Core.Compile</a></li></ul></div></div><div class="col-md-9"><div class="section" id="introduction"><h1>Introduction</h1><p>This document explains the low-level inner workings of
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-core"><code>diagrams-core</code></a></span>.  Casual users of <code>diagrams</code> should not need to
+read this (although a quick skim may well turn up something
+interesting).  It is intended more for developers and power users who
+want to learn how <code>diagrams</code> actually works under the hood; there is
+quite a lot that goes on behind the scenes to enable the powerful
+tools provided in <span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span>.</p><p>Chris Mears has written <a class="reference external" href="http://www.cmears.id.au/articles/diagrams-internals.html">an article giving a quick walkthrough of some
+of the internals</a> which is
+useful for getting started.</p><p>The remainder of this document is organized around the modules in
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-core"><code>diagrams-core</code></a></span>.  At some level, there is no substitute for just
+diving in and reading the source code (see the <span class="repo"><a href="http://github.com/diagrams/diagrams-core"><code>diagrams-core</code></a></span>
+repository), which is generally well-commented, but the hope is that
+this document can serve to orient you and supply useful commentary.</p></div><div class="section" id="diagrams-core"><h1>Diagrams.Core</h1><p>This module simply re-exports many things from the other modules for
+convenience.</p></div><div class="section" id="diagrams-core-v"><h1>Diagrams.Core.V</h1><p><span class="module"><a href="../haddock/diagrams-core/Diagrams-Core-V.html"><code>Diagrams.Core.V</code></a></span> contains the definition of the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:V">V</a></span></code> type family,
+which maps from types to their associated vector space.
+(See the <a class="reference external" href="manual.html#v">relevant section from the user manual</a>) along with some
+basic instances.</p></div><div class="section" id="diagrams-core-points"><h1>Diagrams.Core.Points</h1><p>The <span class="package"><a href="http://hackage.haskell.org/package/linear"><code>linear</code></a></span> package defines a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Point">Point</a></span></code> type in <span class="module"><a href="../haddock/Linear-Affine.html"><code>Linear.Affine</code></a></span>
+along with some functions for working with points.</p><p>The <span class="module"><a href="../haddock/diagrams-core/Diagrams-Core-Points.html"><code>Diagrams.Core.Points</code></a></span> module simply re-exports a few things
+from <span class="package"><a href="http://hackage.haskell.org/package/linear"><code>linear</code></a></span>, defines an instance of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:V">V</a></span></code> and <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:N">N</a></span></code> for <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Point">Point</a></span></code>,
+and adds a few utility functions for points.</p></div><div class="section" id="diagrams-core-names"><h1>Diagrams.Core.Names</h1><p><span class="module"><a href="../haddock/diagrams-core/Diagrams-Core-Names.html"><code>Diagrams.Core.Names</code></a></span> defines the infrastructure for names which
+can be used to identify subdiagrams.</p><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AName">AName</a></span></code>, representing <em>atomic names</em>, is an existential wrapper,
+allowing (almost) any type to be used for names, as the user finds
+convenient.  Strings may be used of course, but also numbers,
+characters, even user-defined types.  The only restriction is that the
+wrapped type must be an instance of the following three classes:</p><ul><li><p><code class="sourceCode"><span class="dt">Typeable</span></code> (so values can be pulled back out of the wrappers in a
+type-safe way),</p></li><li><p><code class="sourceCode"><span class="dt">Show</span></code> (so names can be displayed, for debugging purposes), and</p></li><li><p><code class="sourceCode"><span class="dt">Ord</span></code> (in order to be able to create a <code class="sourceCode"><span class="dt">Map</span></code> from names to
+subdiagrams).</p></li></ul><p>Equality on atomic names works as expected: two names are equal if their
+types match and their values are equal.</p><p>The <code class="sourceCode"><span class="dt">Ord</span></code> instance for atomic names works by first ordering names
+according to (a <code class="sourceCode"><span class="dt">String</span></code> representation of) their type, and then by
+value for equal types (using the required <code class="sourceCode"><span class="dt">Ord</span></code> instance).</p><p>A <em>qualified name</em> (<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Name">Name</a></span></code>) is a list of atomic names.  The <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:IsName">IsName</a></span></code>
+class covers things which can be used as a name, including many
+standard base types as well as <code class="sourceCode"><span class="dt">ANames</span></code> and <code class="sourceCode"><span class="dt">Names</span></code>.  Most user-facing
+functions which take a name as an argument actually take any type with
+an <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:IsName">IsName</a></span></code> constraint, so the user can just pass in a <code class="sourceCode"><span class="dt">String</span></code> or an
+<code class="sourceCode"><span class="dt">Int</span></code> or whatever they want.</p><p>The motivation for having names consist of <em>lists</em> of atomic names is
+that it is not always convenient or even feasible to have globally
+unique names (especially when multiple modules by different authors
+are involved).  In such a situation it is possible to <em>qualify</em> all
+the names in a particular diagram by some prefix.  This operation
+governed by the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Qualifiable">Qualifiable</a></span></code> class, containing the function <code>(|>) ::
+IsName a => a -> q -> q</code> for performing qualification.</p></div><div class="section" id="diagrams-core-hasorigin"><h1>Diagrams.Core.HasOrigin</h1><p>This module defines the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasOrigin">HasOrigin</a></span></code> class (containing the
+<code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:moveOriginTo">moveOriginTo</a></code> method) as well as related functions like
+<code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:moveOriginBy">moveOriginBy</a></code>, <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:moveTo">moveTo</a></code>, and <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:place">place</a></code>.  It also defines instances of
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasOrigin">HasOrigin</a></span></code> for a number of types, including <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Point">Point</a></span></code>s, tuples, lists,
+sets, and maps.</p><p>See the <a class="reference external" href="manual.html#hasorigin">section of the type class reference on HasOrigin</a> for more
+information.</p></div><div class="section" id="diagrams-core-transform"><h1>Diagrams.Core.Transform</h1><p>This module defines a type of generic affine transformations
+parameterized over any vector space, along with a large number of
+methods for working with transformations.</p><p>First, the <code class="sourceCode">(<span class="fu"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:-58--45--58-">:-:</a></span>)</code> type consists of a pair of functions, which are
+assumed to be linear and inverse to each other.</p><p>A <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformation">Transformation</a></span></code> type is then defined to contain three components:</p><ul><li><p>a linear map and its inverse (stored using <code class="sourceCode">(<span class="fu"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:-58--45--58-">:-:</a></span>)</code>)</p></li><li><p>the transpose of the linear map, with <em>its</em> inverse (again stored using <code class="sourceCode">(<span class="fu"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:-58--45--58-">:-:</a></span>)</code>)</p></li><li><p>a vector, representing a translation</p></li></ul><p>The point is that we need transposes and inverses when transforming
+things like <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code>s and <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Trace">Trace</a></span></code>s.  While it would be possible in
+theory to simply store a transformation as a matrix and compute its
+transpose or inverse whenever required, this would be computationally
+wasteful (especially computing inverses).  Instead, we simply package
+up a transformation along with its inverse, transpose, and inverse
+transpose (which we can think of as a little 2x2 matrix of functions).
+Such a representation is closed under composition, and we can compute
+its inverse or transpose by just flipping the matrix along the
+appropriate axis.</p><p>Along with the definition of the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformation">Transformation</a></span></code> type itself, this
+module exports many functions for generically creating, transforming,
+querying, and applying <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformation">Transformation</a></span></code> values.  For example, in
+addition to straightforward things like composing and applying
+transformations, this is where you can find code to convert a
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformation">Transformation</a></span></code> to a matrix representation or to compute its
+determinant.  (On the other hand, converting a matrix to a
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformation">Transformation</a></span></code> is only implemented specifically for 2 or 3
+dimensions, and can be found in the <span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span> package, in
+<span class="module"><a href="../haddock/diagrams-lib/Diagrams-Transform-Matrix.html"><code>Diagrams.Transform.Matrix</code></a></span>.)</p><p>This module also defines the important <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformable">Transformable</a></span></code> class of things
+to which <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformation">Transformation</a></span></code>s can be applied, along with many generic
+instances.</p><p>Finally, the module defines a few specific transformations which are
+polymorphic over the vector space, namely, translation and scaling.
+Other specific transformations (<em>e.g.</em> <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:scaleX">scaleX</a></code> and so on) are defined
+in <span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span>.</p></div><div class="section" id="diagrams-core-envelope"><h1>Diagrams.Core.Envelope</h1><p>This module defines the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code> type; see the <a class="reference external" href="manual.html#envelopes">user manual section
+on envelopes</a> for a general overview of what envelopes are and how
+to use them.</p><p>For an explanation of the specific way that <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code> is defined, see
+<a class="reference external" href="http://ozark.hendrix.edu/~yorgey/pub/monoid-pearl.pdf">Brent Yorgey's paper on diagrams and monoids</a>.</p><p>The real meat of this module consists of the definitions of
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasOrigin">HasOrigin</a></span></code> and <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformable">Transformable</a></span></code> instances for the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code> type.
+The fact that packaging transformations together with their transpose
+and inverse makes it possible to correctly compute the affine
+transformation of an envelope is one of the key insights making the
+diagrams framework possible.  The source code has <a class="reference external" href="https://github.com/diagrams/diagrams-core/blob/master/src/Diagrams/Core/Envelope.hs#L181">extensive comments
+explaining the instances</a>; consult those if you want to understand
+how they actually work.</p><p>Finally, this module defines the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Enveloped">Enveloped</a></span></code> class for things with
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code>s, a number of functions like <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:envelopeV">envelopeV</a></code>, <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:envelopePMay">envelopePMay</a></code>,
+and so on for querying envelopes, and size-related functions like
+<code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:diameter">diameter</a></code>, <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core-Envelope.html#v:extent">extent</a></code>, and <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:size">size</a></code> that are defined in terms of
+envelopes.</p></div><div class="section" id="diagrams-core-juxtapose"><h1>Diagrams.Core.Juxtapose</h1><p>This module defines the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Juxtaposable">Juxtaposable</a></span></code> class, the default
+implementation <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:juxtaposeDefault">juxtaposeDefault</a></code> for instances of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Enveloped">Enveloped</a></span></code> and
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasOrigin">HasOrigin</a></span></code>, and generic instances for <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code>, pairs, lists, maps,
+sets, and functions.</p><p>See the <a class="reference external" href="manual.html#juxtaposable">type class reference section on Juxtaposable</a> for more
+information.</p></div><div class="section" id="diagrams-core-measure"><h1>Diagrams.Core.Measure</h1><p>This module defines the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Measured">Measured</a></span></code> type along with a number of utility
+functions and instances for working with it.  See the <a class="reference external" href="manual.html#measurement-units">user manual
+section on measurement units</a>.</p><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Measured">Measured</a></span></code> values are implemented as functions from a triple of
+scaling factors to a final value: the local scaling factor, global
+scaling factor, and normalized scaling factor.  XXX write about how
+these are computed</p></div><div class="section" id="diagrams-core-trace"><h1>Diagrams.Core.Trace</h1><p>This module implements the <a class="reference external" href="manual.html#traces">trace</a> which is associated with every
+diagram.  A trace is essentially an "embedded raytracer" which can
+compute an intersection with a diagram in any direction from any given
+base point.  Note that a trace needs to be able to answer a trace
+query from <em>any</em> given base point, not just from some chosen
+particular base point (<em>e.g.</em> the origin), since we need to be able to
+apply affine transformations, including translations.</p><p>Often when one thinks about raytracing the basic idea is that you
+follow a ray and return the <em>first</em> intersection that occurs.
+However, to allow for also computing the <em>last</em> intersection and other
+generalizations, the base framework in this module actually computes a
+<em>sorted list</em> of <em>all</em> the intersection points.  Hence this module
+defines a small abstraction for sorted lists, as well as the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Trace">Trace</a></span></code>
+abstraction itself.  A number of functions for querying <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Trace">Trace</a></span></code> values
+are defined here, as well as the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Traced">Traced</a></span></code> class for things which have
+a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Trace">Trace</a></span></code>.</p></div><div class="section" id="diagrams-core-query"><h1>Diagrams.Core.Query</h1><p>A <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Query">Query</a></span></code> is a function that associates a value of some (monoidal)
+type to each point in a diagram; see <a class="reference external" href="manual.html#using-queries">the user manual section on
+queries</a>.  There is not much in this module besides a great many
+type class instances for the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Query">Query</a></span></code> type.</p></div><div class="section" id="diagrams-core-style"><h1>Diagrams.Core.Style</h1><p>This module implements <em>styles</em>, which are collections of <em>attributes</em>
+(such as line color, fill color, opacity, ...) that can be applied to
+diagrams.  Diagrams takes a <em>dynamically typed</em> approach to attributes
+and styles.  This is in contrast to the approach with backends and
+primitives, where the type of a diagram tells you what backend it is
+to be rendered with—or, if it is polymorphic in the backend, there
+are type class constraints that say what primitives the backend must
+be able to render.  But the type of a diagram never says anything
+about what attributes a backend must support; indeed, by looking only
+at the type of a diagram it is impossible to tell what types of
+attributes it contains.  In general, backends pick out the attributes
+they can handle and simply ignore any others.</p><div class="section" id="attributes"><h2>Attributes</h2><p>Attributes are the primitive values out of which styles are built.
+Almost any type can be used as an attribute, with only a few
+restrictions: attributes must be <code class="sourceCode"><span class="dt">Typeable</span></code>, to support the use of
+dynamic typing, and a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Semigroup">Semigroup</a></span></code>, so there is some sensible notion of
+combining multiple attributes of the same type (which is used to
+combine attributes applied within the same scope; as we will see, for
+many standard attributes the semigroup is simply the one which keeps
+one attribute and discards the other).  <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AttributeClass">AttributeClass</a></span></code> is defined as
+a synonym for the combination of <code class="sourceCode"><span class="dt">Typeable</span></code> and <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Semigroup">Semigroup</a></span></code>.</p><p>The <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> type is then defined as an existential wrapper around
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AttributeClass">AttributeClass</a></span></code> types.  In a simpler world <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> would be
+defined like this:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">data</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span> <span class="kw">where</span>
+<span class="ot">></span>   <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span><span class="ot"> ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AttributeClass">AttributeClass</a></span> a <span class="ot">=></span> a <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code></pre></div></div><p>Historically, it did indeed start life defined this way.  However, as
+you can see if you look at the source, by now the actual definition is
+more complicated:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">data</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span> (<span class="ot">v ::</span> <span class="fu">*</span> <span class="ot">-></span> <span class="fu">*</span>)<span class="ot"> n ::</span> <span class="fu">*</span> <span class="kw">where</span>
+<span class="ot">></span>   <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span><span class="ot">  ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AttributeClass">AttributeClass</a></span> a <span class="ot">=></span> a <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span> v n
+<span class="ot">></span>   <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:MAttribute">MAttribute</a></span><span class="ot"> ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AttributeClass">AttributeClass</a></span> a <span class="ot">=></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Measured">Measured</a></span> n a <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span> v n
+<span class="ot">></span>   <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:TAttribute">TAttribute</a></span><span class="ot"> ::</span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:AttributeClass">AttributeClass</a></span> a, <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformable">Transformable</a></span> a, <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:V">V</a></span> a <span class="fu">~</span> v, <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:N">N</a></span> a <span class="fu">~</span> n) <span class="ot">=></span> a <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span> v n</code></pre></div></div><p>This looks like the simpler definition if you ignore the type
+parameters and consider only the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> constructor.  So let's
+consider each of the other constructors.</p><ul><li><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:MAttribute">MAttribute</a></span></code> is for attributes that are <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Measured">Measured</a></span></code>, <em>i.e.</em> whose
+values depend on the size of the final diagram and/or the requested
+output size; the primary examples are <em>line width</em> and <em>font size</em>.
+Recall that a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Measured">Measured</a></span> n a</code> is actually a function that can produce
+a value of type <code class="sourceCode">a</code> once it is provided some measurement factors of
+type <code class="sourceCode">n</code>.  The <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core-Style.html#v:unmeasureAttribute">unmeasureAttribute</a></code> function is provided to turn
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:MAttribute">MAttribute</a></span></code> constructors into <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> constructors; this is
+typically used when preparing a diagram for rendering.</p></li><li><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:TAttribute">TAttribute</a></span></code> is for attributes that are <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformable">Transformable</a></span></code>, <em>i.e.</em>
+which are affected by transformations applied to the objects to
+which they are attached.  The primary examples are <em>line</em> and <em>fill
+texture</em> (<em>e.g.</em> gradients), and <em>clipping paths</em>.  (Note that
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:MAttribute">MAttribute</a></span></code>s can actually be affected by transformations too, in
+the case of <code class="sourceCode"><span class="dt">Local</span></code> units.)</p></li></ul><p>The <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> type has instances of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Semigroup">Semigroup</a></span></code> (combine attributes
+of the same type, otherwise take the rightmost) and <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformable">Transformable</a></span></code>
+(ignore <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> constructors and do the appropriate thing for the
+other constructors).  There are also various lenses/prisms for
+accessing them.</p><p>Note that one does not typically construct an <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Attribute">Attribute</a></span></code> value directly
+using the constructors; instead, the functions <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:applyAttr">applyAttr</a></code>,
+<code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:applyMAttr">applyMAttr</a></code>, and <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:applyTAttr">applyTAttr</a></code> are provided for applying an attribute
+directly to any instance of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasStyle">HasStyle</a></span></code>.</p></div><div class="section" id="styles"><h2>Styles</h2><p>A <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code> is just a dynamically-typed, heterogeneous collection of
+attributes.  The attributes are actually stored as values in a hash
+table, keyed by their type (specifically, a <code class="sourceCode"><span class="dt">TypeRep</span></code>), so at most one
+attribute of any given type can be stored in a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code>.</p><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code> is an instance of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Semigroup">Semigroup</a></span></code>, with union as a combining
+operation.  If the two styles both have an attribute of a given type,
+those attributes are combined according to the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Semigroup">Semigroup</a></span></code> instance
+for that attribute type.</p><p>There are a number of other functions for creating <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code> values and
+extracting attributes from them, which are mostly self-explanatory.
+One function worth mentioning is <code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core-Style.html#v:unmeasureAttrs">unmeasureAttrs</a></code>, which maps over a
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code> and changes all <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:MAttribute">MAttribute</a></span></code>s into <code class="sourceCode"><span class="dt">Attributes</span></code> (based on the
+provided scaling factors).  This is typically done as a final step
+before rendering.</p><p>Finally, the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasStyle">HasStyle</a></span></code> class governs types which "have a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code>",
+specifically, types to which a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code> can be applied.  <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code> itself
+has an instance of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:HasStyle">HasStyle</a></span></code>, corresponding to the semigroup
+operation on <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Style">Style</a></span></code>.  This module also defines a number of other
+instances for applying styles to entire data structures such as lists,
+tuples, functions, maps, and sets.</p></div></div><div class="section" id="diagrams-core-types"><h1>Diagrams.Core.Types</h1><p>This is an unfortunately large module which contains definitions and
+utility functions for many of the core data structures of diagrams.
+In principle, it would be nice to break it up into smaller pieces, but
+in fact a lot of things in this module end up cyclically depending on
+one another, so easier said than done.</p><div class="section" id="qdiagram"><h2>QDiagram</h2><p>The central type in diagrams is the definition of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span></code>:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">newtype</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span> b v n m
+<span class="ot">></span>   <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:QD">QD</a></span> (<span class="dt">D.DUALTree</span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DownAnnots">DownAnnots</a></span> v n) (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:UpAnnots">UpAnnots</a></span> b v n m) <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:Annotation">Annotation</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:QDiaLeaf">QDiaLeaf</a></span> b v n m))</code></pre></div></div><p><code class="sourceCode"><span class="dt">DUALTree</span></code> is defined in the <span class="package"><a href="http://hackage.haskell.org/package/dual-tree"><code>dual-tree</code></a></span> package.  A value of
+type <code class="sourceCode"><span class="dt">DUALTree</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> u a l</code> consists of an n-ary (rose) tree, with:</p><ul><li><p>Values of type <code class="sourceCode">l</code> at the leaves.</p></li><li><p>Monoidal annotations of type <code class="sourceCode">u</code> which "travel up" the tree.  Each
+leaf of type <code class="sourceCode">l</code> has a corresponding value of type <code class="sourceCode">u</code>, and the <code class="sourceCode">u</code>
+values are combined as one travels up the tree, so that the root
+would contain the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a></code> of the <code class="sourceCode">u</code> values in all the leaves.  We
+think of each tree (and subtree) as intrinsically posessing a <code class="sourceCode">u</code>
+value, which is often some kind of "summary" or "measurement".</p></li><li><p>There are also values of another monoid, of type <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code>, which can be
+<em>applied</em> to a tree at the root and accumulate as one travels down
+any path from the root to a leaf.  These <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> values may <em>act on</em> the <code class="sourceCode">u</code>
+values, that is, there is a function <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> u <span class="ot">-></span> u</code> satisfying
+certain coherence properties with respect to the monoid structures
+of <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> and <code class="sourceCode">u</code> (though for a particular <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> and <code class="sourceCode">u</code> the action may
+be trivial, <em>i.e.</em> <code class="sourceCode">const id</code>).</p></li><li><p>Finally, there are values of type <code class="sourceCode">a</code> which can be stored at
+internal nodes. They are simply "along for the ride": they do not
+have associated <code class="sourceCode">u</code> values nor are they affected by <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> values.  <code class="sourceCode">a</code>
+values will never be moved (on the other hand, it is permissible to
+push <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> values up or down the tree in a way that preserves all
+monoid compositions).</p></li></ul><p>The <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span></code> type specifically instantiates these types as follows:</p><ul><li><p><code class="sourceCode">l</code> values at leaves are <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:QDiaLeaf">QDiaLeaf</a></span></code> values.  One might think these
+consist simply of primitives, but actually they are a bit more
+complicated, because they also handle the case of "delayed" diagrams
+that need to know something about their context before they can be
+generated; this is explained in more detail below.</p></li><li><p>The inert internal <code class="sourceCode">a</code> values are of type <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:Annotation">Annotation</a></span></code>.  Currently
+these consist solely of information about hrefs (for backends that
+support hyperlinks) and opacity grouping.</p></li><li><p>The upwards-traveling <code class="sourceCode">u</code> values are of type <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:UpAnnots">UpAnnots</a></span></code>, explained
+in more detail below, which record various summary information about
+a diagram (envelope, trace, named subdiagrams, <em>etc.</em>).</p></li><li><p>The downwards-traveling <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> values are of type <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DownAnnots">DownAnnots</a></span></code>,
+explained in more detail below, which record information imposed on
+a diagram (affine transformations, attributes, <em>etc.</em>).</p></li></ul><div class="section" id="qdialeaf"><h3>QDiaLeaf</h3><p>The <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:QDiaLeaf">QDiaLeaf</a></span></code> type has two cases:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">data</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:QDiaLeaf">QDiaLeaf</a></span> b v n m
+<span class="ot">></span>   <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:PrimLeaf">PrimLeaf</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Prim">Prim</a></span> b v n)
+<span class="ot">></span>   <span class="fu">|</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DelayedLeaf">DelayedLeaf</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DownAnnots">DownAnnots</a></span> v n <span class="ot">-></span> n <span class="ot">-></span> n <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span> b v n m)</code></pre></div></div><p>The first case, <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:PrimLeaf">PrimLeaf</a></span></code>, is simple enough: it contains a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Prim">Prim</a></span></code>
+(also defined in this module), which is simply an existential wrapper
+around a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Transformable">Transformable</a></span></code>, <code class="sourceCode"><span class="dt">Typeable</span></code>, <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Renderable">Renderable</a></span></code> thing.</p><p>The second case is trickier.  It represents a diagram which needs to
+know its <em>global context</em>, represented by the accumulated <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DownAnnots">DownAnnots</a></span></code>
+values along the path from the root to this delayed leaf, together
+with the normal-to-output scaling factor and the global-to-output
+scaling factor.  Note that we cannot possibly know this information
+until just before the diagram is to be rendered, at which point it
+becomes fixed and we know we are not going to insert this diagram into
+a yet bigger diagram, and we know the requested output size and hence
+can compute the scaling factors.  So just before rendering, delayed
+leaves are recursively expanded into <code class="sourceCode"><span class="dt">QDiagrams</span></code>.  For an example of
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DelayedLeaf">DelayedLeaf</a></span></code> in action, see <span class="module"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Arrow.html"><code>Diagrams.TwoD.Arrow</code></a></span> in
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span>, where it is needed since arrowhead sizes can
+depend on this global context.</p></div><div class="section" id="annotation"><h3>Annotation</h3><p>The <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:Annotation">Annotation</a></span></code> type has two constructors, one for hyperlinks
+(<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:Href">Href</a></span></code>) and one for opacity groups.  In both of these cases, it's
+important that these annotations stay exactly where the user places
+them in the tree, and they are unaffected by transformations and the
+like.</p></div><div class="section" id="upannots"><h3>UpAnnots</h3><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:UpAnnots">UpAnnots</a></span></code> is a heterogeneous list of monoidal values (with an
+elementwise monoidal operation; see <span class="module"><a href="../haddock/monoid-extras/Data-Monoid-MList.html"><code>Data.Monoid.MList</code></a></span> in the
+<span class="package"><a href="http://hackage.haskell.org/package/monoid-extras"><code>monoid-extras</code></a></span> package) which serves as the "upwards-traveling"
+monoid in a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span></code>.  That is, every primitive diagram at a leaf
+has an intrinsic associated <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:UpAnnots">UpAnnots</a></span></code> value, and these get combined
+as one moves up the tree.  An <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:UpAnnots">UpAnnots</a></span></code> value consists of the
+following components:</p><ul><li><p>An <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Envelope">Envelope</a></span></code> (in a <code class="sourceCode"><span class="dt"><a href="../haddock/monoid-extras/Data-Monoid-Deletable.html#t:Deletable">Deletable</a></span></code> wrapper so we can implement
+<code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:setEnvelope">setEnvelope</a></code> monoidally; see <span class="module"><a href="../haddock/monoid-extras/Data-Monoid-Deletable.html"><code>Data.Monoid.Deletable</code></a></span> in
+<span class="package"><a href="http://hackage.haskell.org/package/monoid-extras"><code>monoid-extras</code></a></span>),</p></li><li><p>a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Trace">Trace</a></span></code> (similarly <code class="sourceCode"><span class="dt"><a href="../haddock/monoid-extras/Data-Monoid-Deletable.html#t:Deletable">Deletable</a></span></code>),</p></li><li><p>a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:SubMap">SubMap</a></span></code> (also <code class="sourceCode"><span class="dt"><a href="../haddock/monoid-extras/Data-Monoid-Deletable.html#t:Deletable">Deletable</a></span></code>) which maps names to subdiagrams (more
+on these later), and</p></li><li><p>a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Query">Query</a></span></code>, which associates a monoidal value of some type <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:m">m</a></code> to
+every point in the diagram.</p></li></ul></div><div class="section" id="downannots"><h3>DownAnnots</h3><p><code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core-Types.html#t:DownAnnots">DownAnnots</a></span></code> is</p></div></div><div class="section" id="subdiagrams"><h2>Subdiagrams</h2></div><div class="section" id="backends"><h2>Backends</h2></div></div><div class="section" id="diagrams-core-compile"><h1>Diagrams.Core.Compile</h1></div></div></div></div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

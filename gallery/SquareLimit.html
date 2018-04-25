@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Square Limit</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>A reconstruction of M C Escher’s print “Square Limit”.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/SquareLimit.big.png" width="400.0" height="400.0" />
+</div>
+Author: <b><a href="https://www.cs.ox.ac.uk/people/jeremy.gibbons/">Jeremy Gibbons</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/SquareLimit.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<p>This is a reconstruction of <a href="http://www.wikipaintings.org/en/m-c-escher/square-limit">M C Escher’s print “Square Limit”</a>. It is based on the classic paper “Functional Geometry” by Peter Henderson (in Lisp and Functional Programming, 1982). But we take a slightly different approach: using lazy evaluation, we construct an infinite diagram, then prune it to some finite depth before writing out as SVG—Henderson’s code hardwired an unrolling to a particular depth.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Prelude</span> <span class="kw">hiding</span> (cycle)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span></code></pre></div>
+<p>The type signatures are more specific than necessary, but perhaps easier to understand this way.</p>
+<p>The diagram is constructed from five basic tiles: four with specific markings on, and a fifth which is blank, all \(16 \times 16\). The actual markings are defined at the end of the file.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; blank ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> blank <span class="fu">=</span> lw none <span class="fu">$</span> square <span class="dv">16</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; makeTile ::</span> [[<span class="dt">P2</span> <span class="dt">Double</span>]] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> makeTile <span class="fu">=</span> showOrigin <span class="fu">.</span> lw thin <span class="fu">.</span> centerXY <span class="fu">.</span> mconcat <span class="fu">.</span> map fromVertices <span class="kw">where</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> markingsP, markingsQ, markingsR,<span class="ot"> markingsS ::</span> [[<span class="dt">P2</span> <span class="dt">Double</span>]]</code></pre></div>
+<p>Here is an algenraic datatype of pictures. Composition is by juxtaposition, which requires bounding boxes. In order to achieve this even with infinite pictures, we make all pictures the same size (\(16 \times 16\)), by scaling.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">data</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span>   <span class="fu">=</span> <span class="dt">Blank</span>
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">Single</span> [[<span class="dt">P2</span> <span class="dt">Double</span>]]
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">Rot</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">Cycle</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">HPair</span> <span class="dt">Picture</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">VPair</span> <span class="dt">Picture</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">Quartet</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span>   <span class="fu">|</span> <span class="dt">SkewQuartet</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="co">-- left column and bottom row half size</span></code></pre></div>
+<p><code>Blank</code> and <code>Single</code> correspond to the basic tiles. <code>Rot</code> rotates by \(90\) degrees, anticlockwise. <code>Cycle</code> puts together four half-size copies of a picture: unrotated at top right, and each one anticlockwise from there rotated by a further quarter turn. <code>HPair</code> puts two pictures side by side, and <code>VPair</code> one above another; each picture is scaled by a half in one dimension. <code>Quartet</code> puts together four pictures at half size. <code>SkewQuartet</code> does similarly, but in a \(2:1\) size ratio: the left column is half the width and the bottom row half the right of the right column and the top row. These maintain the invariant at all pictures are the same size.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> rot p <span class="fu">=</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) p
+<span class="ot">&gt;</span> cycle p <span class="fu">=</span> quartet (rot p) p (rot <span class="fu">$</span> rot p) (rot <span class="fu">$</span> rot <span class="fu">$</span> rot p)
+<span class="ot">&gt;</span> hpair p q <span class="fu">=</span> scaleX (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) <span class="fu">$</span> centerXY (p <span class="fu">|||</span> q)
+<span class="ot">&gt;</span> vpair p q <span class="fu">=</span> scaleY (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) <span class="fu">$</span> centerXY (p <span class="fu">===</span> q)
+<span class="ot">&gt;</span> quartet p q r s <span class="fu">=</span> scale (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) <span class="fu">$</span> centerXY ((p <span class="fu">|||</span> q) <span class="fu">===</span> (r <span class="fu">|||</span> s))
+<span class="ot">&gt;</span> skewquartet p q r s <span class="fu">=</span> scale (<span class="dv">1</span><span class="fu">/</span><span class="dv">3</span>) <span class="fu">$</span> centerXY ((scaleY <span class="dv">2</span> p <span class="fu">|||</span> scale <span class="dv">2</span> q)
+<span class="ot">&gt;</span>                                               <span class="fu">===</span> (r <span class="fu">|||</span> scaleX <span class="dv">2</span> s))</code></pre></div>
+<p>Folding with these operators draws a whole picture.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; drawPicture ::</span> <span class="dt">Picture</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> drawPicture <span class="dt">Blank</span> <span class="fu">=</span> blank
+<span class="ot">&gt;</span> drawPicture (<span class="dt">Single</span> m) <span class="fu">=</span> makeTile m
+<span class="ot">&gt;</span> drawPicture (<span class="dt">Rot</span> p) <span class="fu">=</span> rot (drawPicture p)
+<span class="ot">&gt;</span> drawPicture (<span class="dt">Cycle</span> p) <span class="fu">=</span> cycle (drawPicture p)
+<span class="ot">&gt;</span> drawPicture (<span class="dt">HPair</span> p q) <span class="fu">=</span> hpair (drawPicture p) (drawPicture q)
+<span class="ot">&gt;</span> drawPicture (<span class="dt">VPair</span> p q) <span class="fu">=</span> vpair (drawPicture p) (drawPicture q)
+<span class="ot">&gt;</span> drawPicture (<span class="dt">Quartet</span> p q r s)
+<span class="ot">&gt;</span>   <span class="fu">=</span> quartet (drawPicture p) (drawPicture q) (drawPicture r) (drawPicture s)
+<span class="ot">&gt;</span> drawPicture (<span class="dt">SkewQuartet</span> p q r s)
+<span class="ot">&gt;</span>   <span class="fu">=</span> skewquartet (drawPicture p) (drawPicture q) (drawPicture r) (drawPicture s)</code></pre></div>
+<p>Pruning with <code>prune s p</code> cuts off a picture <code>p</code> when its scale gets below \(1/s\). We keep track of the scale in \(x\) and \(y\) separately, to cope with the non-homogeneous scaling in <code>HPair</code> and <code>VPair</code>. The definition only works properly if <code>Cycles</code> are scaled only homogenously; that is the case in Escher’s picture.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; prune ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Picture</span> <span class="ot">-&gt;</span> <span class="dt">Picture</span>
+<span class="ot">&gt;</span> prune s p <span class="fu">=</span> prune' (s,s) p <span class="kw">where</span>
+<span class="ot">&gt;</span>   prune' (x,y) p <span class="fu">|</span> min x y <span class="fu">&lt;</span> <span class="dv">1</span> <span class="fu">=</span> <span class="dt">Blank</span> <span class="co">-- cut off when either factor &lt;1</span>
+<span class="ot">&gt;</span>   prune' (x,y) <span class="dt">Blank</span> <span class="fu">=</span> <span class="dt">Blank</span>
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">Single</span> m) <span class="fu">=</span> <span class="dt">Single</span> m
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">Rot</span> p) <span class="fu">=</span> <span class="dt">Rot</span> (prune' (y,x) p)
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">Cycle</span> p) <span class="fu">=</span> <span class="dt">Cycle</span> (prune' (x<span class="fu">/</span><span class="dv">2</span>,y<span class="fu">/</span><span class="dv">2</span>) p) <span class="co">-- assumes x==y</span>
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">HPair</span> p q) <span class="fu">=</span> <span class="dt">HPair</span> (prune' (x<span class="fu">/</span><span class="dv">2</span>,y) p) (prune' (x<span class="fu">/</span><span class="dv">2</span>,y) q)
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">VPair</span> p q) <span class="fu">=</span> <span class="dt">VPair</span> (prune' (x,y<span class="fu">/</span><span class="dv">2</span>) p) (prune' (x,y<span class="fu">/</span><span class="dv">2</span>) q)
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">Quartet</span> p q r s)
+<span class="ot">&gt;</span>     <span class="fu">=</span> <span class="dt">Quartet</span> (prune' x2y2 p) (prune' x2y2 q) (prune' x2y2 r) (prune' x2y2 s)
+<span class="ot">&gt;</span>       <span class="kw">where</span> x2y2 <span class="fu">=</span> (x<span class="fu">/</span><span class="dv">2</span>,y<span class="fu">/</span><span class="dv">2</span>)
+<span class="ot">&gt;</span>   prune' (x,y) (<span class="dt">SkewQuartet</span> p q r s)
+<span class="ot">&gt;</span>     <span class="fu">=</span> <span class="dt">SkewQuartet</span> (prune' (x3,y32) p) (prune' (x32,y32) q)
+<span class="ot">&gt;</span>                   (prune' (x3,y3) r) (prune' (x32,y3) s)
+<span class="ot">&gt;</span>       <span class="kw">where</span> (x3,y3,x32,y32) <span class="fu">=</span> (x<span class="fu">/</span><span class="dv">3</span>,y<span class="fu">/</span><span class="dv">3</span>,x3<span class="fu">*</span><span class="dv">2</span>,y3<span class="fu">*</span><span class="dv">2</span>)</code></pre></div>
+<p>Now for the construction of Escher’s Square Limit. The four basic tiles are as follows:</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> fishP <span class="fu">=</span> <span class="dt">Single</span> markingsP
+<span class="ot">&gt;</span> fishQ <span class="fu">=</span> <span class="dt">Single</span> markingsQ
+<span class="ot">&gt;</span> fishR <span class="fu">=</span> <span class="dt">Single</span> markingsR
+<span class="ot">&gt;</span> fishS <span class="fu">=</span> <span class="dt">Single</span> markingsS</code></pre></div>
+<p>Henderson puts them together in a quartet, and cycles this:</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> fishT <span class="fu">=</span> <span class="dt">Quartet</span> fishP fishQ fishR fishS
+<span class="ot">&gt;</span> fishU <span class="fu">=</span> <span class="dt">Cycle</span> (<span class="dt">Rot</span> fishQ)</code></pre></div>
+<p>This is the recursive structure of one corner of Square Limit:</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> corner <span class="fu">=</span> <span class="dt">SkewQuartet</span> p q r s <span class="kw">where</span>
+<span class="ot">&gt;</span>   p <span class="fu">=</span> <span class="dt">VPair</span> p' fishT
+<span class="ot">&gt;</span>   p' <span class="fu">=</span> <span class="dt">HPair</span> (<span class="dt">Rot</span> s) p
+<span class="ot">&gt;</span>   q <span class="fu">=</span> <span class="dt">Quartet</span> p' q fishU s'
+<span class="ot">&gt;</span>   r <span class="fu">=</span> fishQ
+<span class="ot">&gt;</span>   s <span class="fu">=</span> <span class="dt">HPair</span> fishT s'
+<span class="ot">&gt;</span>   s' <span class="fu">=</span> <span class="dt">VPair</span> s (<span class="dt">Rot</span> (<span class="dt">Rot</span> (<span class="dt">Rot</span> p)))</code></pre></div>
+<p>The final picture is a cycle of these corners.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> squarelimit <span class="fu">=</span> <span class="dt">Cycle</span> corner
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> example <span class="fu">=</span> drawPicture (prune <span class="dv">24</span> squarelimit) <span class="ot">`atop`</span> square <span class="fl">14.5</span>
+<span class="ot">&gt;</span>         <span class="fu">#</span> fc darkseagreen
+<span class="ot">&gt;</span>         <span class="fu">#</span> opacity <span class="fl">0.5</span></code></pre></div>
+<p>The markings on the four basic tiles are taken from <a href="http://www.frank-buss.de/lisp/functional.html">a note by Frank Buss</a>.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> markingsP <span class="fu">=</span> [
+<span class="ot">&gt;</span>   [ (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">3</span>), (<span class="dv">3</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">3</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">5</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">11</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">16</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">11</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">2</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">2</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">4</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">9</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">7</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">6</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">9</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">10</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">15</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">12</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">14</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">13</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">15</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">14</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">15</span>) ]
+<span class="ot">&gt;</span>   ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> markingsQ <span class="fu">=</span> [
+<span class="ot">&gt;</span>   [ (<span class="dv">2</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">7</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">7</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">9</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">11</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">7</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">7</span>), (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">6</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">4</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">2</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">11</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">9</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">9</span><span class="fu">^&amp;</span><span class="dv">12</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">15</span>), (<span class="dv">9</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">11</span><span class="fu">^&amp;</span><span class="dv">15</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">15</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">3</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">15</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">16</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">2</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">3</span><span class="fu">^&amp;</span><span class="dv">13</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">5</span><span class="fu">^&amp;</span><span class="dv">14</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">15</span>) ]
+<span class="ot">&gt;</span>   ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> markingsR <span class="fu">=</span> [
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">1</span><span class="fu">^&amp;</span><span class="dv">14</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">2</span><span class="fu">^&amp;</span><span class="dv">12</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">5</span><span class="fu">^&amp;</span><span class="dv">10</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">1</span><span class="fu">^&amp;</span><span class="dv">1</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">2</span><span class="fu">^&amp;</span><span class="dv">2</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">3</span><span class="fu">^&amp;</span><span class="dv">3</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">2</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">5</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">3</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">2</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">4</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">6</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">11</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">6</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">11</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">16</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">10</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">14</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">12</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">15</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">14</span>) ]
+<span class="ot">&gt;</span>   ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> markingsS <span class="fu">=</span> [
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">0</span>), (<span class="dv">4</span><span class="fu">^&amp;</span><span class="dv">2</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">2</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">2</span><span class="fu">^&amp;</span><span class="dv">1</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">4</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">6</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">10</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">12</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">10</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">14</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">13</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">7</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">8</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">0</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">11</span><span class="fu">^&amp;</span><span class="dv">10</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">6</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">4</span>), (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">7</span>), (<span class="dv">10</span><span class="fu">^&amp;</span><span class="dv">6</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">7</span>), (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">5</span>), (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">8</span>), (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">7</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">12</span><span class="fu">^&amp;</span><span class="dv">16</span>), (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">9</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">8</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">13</span><span class="fu">^&amp;</span><span class="dv">13</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">14</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">14</span><span class="fu">^&amp;</span><span class="dv">11</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">12</span>) ],
+<span class="ot">&gt;</span>   [ (<span class="dv">15</span><span class="fu">^&amp;</span><span class="dv">9</span>), (<span class="dv">16</span><span class="fu">^&amp;</span><span class="dv">10</span>) ]
+<span class="ot">&gt;</span>   ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

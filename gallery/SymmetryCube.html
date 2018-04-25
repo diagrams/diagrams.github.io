@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Symmetry Cube</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>Basic diagram with text, boxes and arrows.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/SymmetryCube.big.png" width="600.0" height="400.0" />
+</div>
+Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/SymmetryCube.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List.Split</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Maybe</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.BoundingBox</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Graphics.SVGFonts</span></code></pre></div>
+<p>The diagram is the boxes (the “cube”) and the lines between the boxes.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> <span class="kw">let</span> c <span class="fu">=</span> sCube
+<span class="ot">&gt;</span>           <span class="kw">in</span> pad <span class="fl">1.1</span> <span class="fu">.</span> centerXY <span class="fu">$</span> c <span class="fu">&lt;&gt;</span> drawLines c <span class="fu">&lt;&gt;</span> square <span class="dv">30</span>
+<span class="ot">&gt;</span>                                 <span class="fu">#</span> fc whitesmoke
+<span class="ot">&gt;</span>                                 <span class="fu">#</span> scaleY <span class="fl">0.94</span>
+<span class="ot">&gt;</span>                                 <span class="fu">#</span> translateX <span class="dv">11</span>
+<span class="ot">&gt;</span>                                 <span class="fu">#</span> translateY (<span class="fu">-</span><span class="dv">3</span>)</code></pre></div>
+<p>A “box” is a diagram (the “innards”) surrounded by a rounded rectangle. First the innards are padded by a fixed amount, then we compute its height and width – that’s the size of the surrounding rectangle.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> box innards padding <span class="fu">=</span>
+<span class="ot">&gt;</span>     <span class="kw">let</span> padded <span class="fu">=</span>                  strutY padding
+<span class="ot">&gt;</span>                                        <span class="fu">===</span>
+<span class="ot">&gt;</span>              (strutX padding <span class="fu">|||</span> centerXY innards <span class="fu">|||</span> strutX padding)
+<span class="ot">&gt;</span>                                        <span class="fu">===</span>
+<span class="ot">&gt;</span>                                   strutY padding
+<span class="ot">&gt;</span>         height <span class="fu">=</span> diameter (r2 (<span class="dv">0</span>,<span class="dv">1</span>)) padded
+<span class="ot">&gt;</span>         width  <span class="fu">=</span> diameter (r2 (<span class="dv">1</span>,<span class="dv">0</span>)) padded
+<span class="ot">&gt;</span>     <span class="kw">in</span> centerXY innards <span class="fu">&lt;&gt;</span> roundedRect width height <span class="fl">0.1</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> textOpts n <span class="fu">=</span> <span class="dt">TextOpts</span> lin2 <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> <span class="dv">1</span> n</code></pre></div>
+<p>A single string of text.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; text' ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> text' s n <span class="fu">=</span> textSVG_ (textOpts n) s <span class="fu">#</span> fc white <span class="fu">#</span> lw none</code></pre></div>
+<p>Several lines of text stacked vertically.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> centredText ls n <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span> <span class="fu">&amp;</span> sep <span class="fu">.~</span> n)
+<span class="ot">&gt;</span>                      (map (\l <span class="ot">-&gt;</span> centerX (text' l n)) ls)
+<span class="ot">&gt;</span> centredText' s <span class="fu">=</span> centredText (splitOn <span class="st">&quot;\n&quot;</span> s)</code></pre></div>
+<p>Diagram-specific parameters, including the positioning vectors.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> padAmount <span class="fu">=</span> <span class="fl">0.5</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> down <span class="fu">=</span> r2 (<span class="dv">0</span>, <span class="fu">-</span><span class="dv">10</span>)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> upright <span class="fu">=</span> r2 (<span class="dv">7</span>, <span class="dv">5</span>)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> right <span class="fu">=</span> r2 (<span class="dv">15</span>, <span class="dv">0</span>)</code></pre></div>
+<p>A box with some interior text and a name.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> mybox s n <span class="fu">=</span> (box (centredText' s <span class="dv">1</span>) padAmount) <span class="fu">#</span> named n</code></pre></div>
+<p>The cube is just several boxes superimposed, positioned by adding together some positioning vectors.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; sCube ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> sCube <span class="fu">=</span> fc navy <span class="fu">$</span> mconcat
+<span class="ot">&gt;</span>   [ mybox <span class="st">&quot;Permutation&quot;</span> <span class="st">&quot;perm&quot;</span>
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Permutation\ngroup&quot;</span> <span class="st">&quot;permgroup&quot;</span>                     <span class="fu">#</span> translate right
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Symmetry&quot;</span> <span class="st">&quot;sym&quot;</span>                                     <span class="fu">#</span> translate upright
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\npermutation&quot;</span> <span class="st">&quot;paramperm&quot;</span>             <span class="fu">#</span> translate down
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\npermutation\ngroup&quot;</span> <span class="st">&quot;parampermgroup&quot;</span> <span class="fu">#</span> translate (right <span class="fu">^+^</span> down)
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\nsymmetry&quot;</span> <span class="st">&quot;paramsym&quot;</span>                 <span class="fu">#</span> translate (down <span class="fu">^+^</span> upright)
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Symmetry\ngroup&quot;</span> <span class="st">&quot;symgroup&quot;</span>                         <span class="fu">#</span> translate (upright <span class="fu">^+^</span> right)
+<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\nsymmetry\ngroup&quot;</span> <span class="st">&quot;paramsymgroup&quot;</span>     <span class="fu">#</span> translate (down <span class="fu">^+^</span> right <span class="fu">^+^</span> upright)
+<span class="ot">&gt;</span>                ]</code></pre></div>
+<p>For each pair (a,b) of names, draw an arrow from diagram “a” to diagram “b”.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; drawLines ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> drawLines cube <span class="fu">=</span> foldr (<span class="fu">.</span>) id (map (uncurry
+<span class="ot">&gt;</span>                        (connectOutside' (with
+<span class="ot">&gt;</span>                        <span class="fu">&amp;</span> headLength <span class="fu">.~</span> small
+<span class="ot">&gt;</span>                        <span class="fu">&amp;</span> shaftStyle <span class="fu">%~</span> lw thin))) pairs) cube
+<span class="ot">&gt;</span>   <span class="kw">where</span> pairs <span class="fu">=</span> [ (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;permgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;sym&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;paramperm&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;paramsym&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;symgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)
+<span class="ot">&gt;</span>                 , (<span class="st">&quot;parampermgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)
+<span class="ot">&gt;</span>                 ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

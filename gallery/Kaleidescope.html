@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Kaleidescope</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>A three mirror kaleidescope with random confetti.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/Kaleidescope.big.png" width="400.0" height="400.0" />
+</div>
+Author: <b><a href="https://www.projects.haskell.org/Diagram Bgrams/">Jeffrey Rosenbluth</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/Kaleidescope.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Control.Monad</span>                 (replicateM)
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Control.Monad.Random</span>
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Data.Colour.Palette.ColorSet</span>
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Data.List</span>                     (zipWith, zipWith3)
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">System.Random</span></code></pre></div>
+<p>A helper function like <code>iterate</code> but also takes the list index as a parameter.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; iterateIdx ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> [a]
+<span class="ot">&gt;</span> iterateIdx f t <span class="fu">=</span> go f t <span class="dv">0</span>
+<span class="ot">&gt;</span>   <span class="kw">where</span>
+<span class="ot">&gt;</span>     go f t i <span class="fu">=</span> <span class="kw">let</span> t' <span class="fu">=</span> f i t
+<span class="ot">&gt;</span>                <span class="kw">in</span>  t' <span class="fu">:</span> go f t' (i <span class="fu">+</span> <span class="dv">1</span>)</code></pre></div>
+<p>Take any Diagram and cut out an equilateral triangle of side 1 from the center. This is the triangle inside of the three mirrors that make up a kaleidescope. The image is created by first repeatedly refecting this triangle and assembling the resulting triagles into a hexagon. Then the image plane is tiled with this hexagon.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; kaleidoscope ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> kaleidoscope d <span class="fu">=</span> appends hex hexs
+<span class="ot">&gt;</span>   <span class="kw">where</span>
+<span class="ot">&gt;</span>     hexs   <span class="fu">=</span> zip dirs (replicate <span class="dv">6</span> hex)
+<span class="ot">&gt;</span>     dirs   <span class="fu">=</span> iterate (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>)) (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unitX)
+<span class="ot">&gt;</span>     hex    <span class="fu">=</span> mconcat <span class="fu">.</span> take <span class="dv">6</span> <span class="fu">$</span> iterateIdx next tri
+<span class="ot">&gt;</span>     tri    <span class="fu">=</span> alignBR <span class="fu">$</span> cutTriangle d
+<span class="ot">&gt;</span>     next i <span class="fu">=</span> reflectAbout (<span class="dv">0</span> <span class="fu">^&amp;</span> <span class="dv">0</span>) (rotateBy (<span class="fu">-</span> fromIntegral i <span class="fu">/</span> <span class="dv">6</span>) xDir)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; cutTriangle ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> cutTriangle <span class="fu">=</span> clipped (triangle <span class="dv">1</span>) <span class="fu">#</span> lw none</code></pre></div>
+<p>We pass as arguments the number of pieces of confetti <code>n</code> and a random seed <code>r</code>. Between 10 and 100 pieces seem to work nicely.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; confettiScope ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> confettiScope n r
+<span class="ot">&gt;</span>   <span class="fu">=</span> kaleidoscope (mkConfetti n (mkStdGen r))
+<span class="ot">&gt;</span>   <span class="fu">#</span> centerXY <span class="fu">&lt;&gt;</span> (circle <span class="fl">2.75</span> <span class="fu">#</span> fc black)
+<span class="ot">&gt;</span>   <span class="fu">#</span> pad <span class="fl">1.1</span></code></pre></div>
+<p>To create an image for use in the kadeidescope we generate a bunch of disks with random location, size, color, and opacity. This is the confetti used as the image. Of course using circles is arbitrary, any shapes and sizes will do.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; sizeValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span>
+<span class="ot">&gt;</span> sizeValue <span class="fu">=</span> getRandomR (<span class="fl">0.05</span>, <span class="fl">0.25</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; coordValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span>
+<span class="ot">&gt;</span> coordValue <span class="fu">=</span> getRandomR (<span class="fu">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)</code></pre></div>
+<p>We use monadRandom to hide the plumbing of the many random numbers we need. The colors are choosen from the 330+ <code>webColors</code> defined in the package <code>Data.Colour.Palette.ColorSet</code>.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; confetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Rand</span> <span class="dt">StdGen</span> (<span class="dt">Diagram</span> <span class="dt">B</span>)
+<span class="ot">&gt;</span> confetti n <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">&gt;</span>   ss <span class="ot">&lt;-</span> replicateM n sizeValue   <span class="co">-- radius</span>
+<span class="ot">&gt;</span>   cs <span class="ot">&lt;-</span> replicateM n getRandom   <span class="co">-- color index</span>
+<span class="ot">&gt;</span>   as <span class="ot">&lt;-</span> replicateM n getRandom   <span class="co">-- opacity</span>
+<span class="ot">&gt;</span>   xs <span class="ot">&lt;-</span> replicateM n coordValue  <span class="co">-- x coordinate</span>
+<span class="ot">&gt;</span>   ys <span class="ot">&lt;-</span> replicateM n coordValue  <span class="co">-- y coordinate</span>
+<span class="ot">&gt;</span>   <span class="kw">let</span><span class="ot"> mkCirc ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span>       mkCirc s c a <span class="fu">=</span> circle s <span class="fu">#</span> fc (webColors c) <span class="fu">#</span> lw none <span class="fu">#</span> opacity a
+<span class="ot">&gt;</span>       pos <span class="fu">=</span> zipWith mkP2 xs ys
+<span class="ot">&gt;</span>       conf <span class="fu">=</span> zipWith3 mkCirc ss cs as
+<span class="ot">&gt;</span>   return <span class="fu">$</span> position (zip pos conf)</code></pre></div>
+<p>Make the confetti diagram and extract it from the monad.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; mkConfetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">StdGen</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>)
+<span class="ot">&gt;</span> mkConfetti n <span class="fu">=</span> evalRand <span class="fu">$</span> confetti n</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> confettiScope <span class="dv">39</span> <span class="dv">0</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

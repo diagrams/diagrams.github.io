@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Command-line diagram creation</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"><ul class="nav"><li><a class="reference internal" href="#introduction"><generated classes="sectnum">1   </generated>Introduction</a></li><li><a class="reference internal" href="#standard-options"><generated classes="sectnum">2   </generated>Standard Options</a></li><li><a class="reference internal" href="#abstracting-main"><generated classes="sectnum">3   </generated>Abstracting Main</a></li><li><a class="reference internal" href="#user-extensions"><generated classes="sectnum">4   </generated>User Extensions</a></li><li><a class="reference internal" href="#clock-example"><generated classes="sectnum">5   </generated>Clock Example</a></li></ul></div></div><div class="col-md-9"><div class="section" id="introduction"><h1><generated classes="sectnum">1   </generated>Introduction</h1><p>A common pattern when using <code>diagrams</code> is to make a program that generates a
+single diagram.  Often there are details about the diagram that we would like
+to delay in fixing.  In particular the output file, image format, and final
+size of the diagram are all standard options we would expect for making a
+diagram that are relatively independent of the image being made.  With the
+<span class="module"><a href="../haddock/Diagrams-Backend-SVG-CmdLine.html"><code>Diagrams.Backend.SVG.CmdLine</code></a></span> module (and related modules in other
+backends) we provide easy creation of a command-line interface that supports
+standard options as well as easy customization for additional parameters.</p><p>To give some concrete examples, the following are programs one can
+write using the tools already provided, and their interaction on the
+command-line.  For an example of a custom extension to this framework,
+see the <a class="reference internal" href="#user-extensions">User Extensions</a> section below.</p><p>First is the simplest case of generating a single diagram:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Simple">Simple</a></span>
+<span class="ot">></span>
+<span class="ot">> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="fu">=</span> <span class="fu">...</span>
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code></pre></div></div><p>Here we just have a diagram and the standard options.  We can invoke
+with just a width and the height is made to match the diagram.</p><pre><code>$ ./Simple -o simple.svg -w 100</code></pre><p>If we have multiple diagrams with names we can use <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a></code> to give an
+interface that allows the selection of a particular diagram by name.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- Multiple</span>
+<span class="ot">></span>
+<span class="ot">></span> d1, d2,<span class="ot"> d3 ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
+<span class="ot">></span> <span class="fu">...</span>
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> [(<span class="st">"<a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:First">First</a>"</span>, d1),(<span class="st">"Second"</span>, d2),(<span class="st">"Third"</span>, d3)]</code></pre></div></div><p>The <code>--list</code> option just lists the available diagrams to render and
+the <code>-S</code> selection option takes a name and renders the associated
+diagram with the standard options.</p><pre><code>$ ./Multiple --list
+Available diagrams:
+  First Second Third
+$ ./Multiple -o d1.svg -w 100 -S First</code></pre><p>Some backends support rendering animations (typically as individually indexed
+files of frames).</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- <a href="../haddock/diagrams-lib/Diagrams-Animation.html#t:Animation">Animation</a></span>
+<span class="ot">></span>
+<span class="ot">> a ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Animation.html#t:Animation">Animation</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
+<span class="ot">></span> a <span class="fu">=</span> <span class="fu">...</span>
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> a</code></pre></div></div><p>The default options are expected, but the output file has an index appended
+to the name for each frame.  The <code>--fpu</code> option indicates the desired number
+of frames per unit of time.  If the <code>a</code> animation above is one second long
+then the following will create files <code>a01.png</code> through <code>a24.png</code>.</p><pre><code>$ ./Animation -o a.png -w 100 --fpu 24</code></pre><p>In backends that support multiple pages we can list all the diagrams and
+have each render on its own page.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- Pages</span>
+<span class="ot">></span>
+<span class="ot">></span> d1, d2,<span class="ot"> d3 ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Postscript</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
+<span class="ot">></span> <span class="fu">...</span>
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> [d1,d2,d3]</code></pre></div></div><p>We only need the default options here and the interface is the same as a
+single diagram.</p><pre><code>$ ./Pages -o pages.ps -w 400</code></pre><p>To make things more interesting we could require additional arguments to
+build a diagram.  We can take a function to build a diagram from some
+parameters and create an interface that fills those parameters with
+arguments from the command-line.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- Function</span>
+<span class="ot">></span>
+<span class="ot">> f ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Colour">Colour</a></span> <span class="dt">Double</span> <span class="ot">-></span> <span class="dt">Double</span> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
+<span class="ot">></span> f c x <span class="fu">=</span> <span class="fu">...</span>
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> f</code></pre></div></div><p>In addition to the standard flags, we can provide arguments <code>blue</code> and <code>42.0</code> which
+will be passed along to <code>f</code>.</p><pre><code>$ ./Function -o blue.svg -w 400 blue 42.0</code></pre><p>In addition to <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Colour">Colour</a></span></code>s and <code class="sourceCode"><span class="dt">Double</span></code>s, default command-line parsers are
+provided for <code class="sourceCode"><span class="dt">Int</span></code>, <code class="sourceCode"><span class="dt">String</span></code>, and <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:AlphaColour">AlphaColour</a></span></code> arguments.  You can
+also easily define your own parsers for additional argument types; see
+the <a class="reference internal" href="#user-extensions">User Extensions</a> section below.</p><p>Diagrams that are the result of executing an IO action can also be handled
+by <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a></code>.  This can be useful for reading input files or doing other
+IO that the diagram depends on.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- IO-diagram</span>
+<span class="ot">></span>
+<span class="ot">> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> ::</span> FilePath <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>)
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> file <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>     f <span class="ot"><-</span> readFile file
+<span class="ot">></span>     <span class="fu">...</span>
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code></pre></div></div><p>The program will expect a file name on the command-line which it reads to
+generate a diagram.</p><pre><code>$ ./IO-diagram -o file.svg -w 400 ~/data.log</code></pre><p>See the <a class="reference internal" href="#clock-example">Clock Example</a> section below.</p></div><div class="section" id="standard-options"><h1><generated classes="sectnum">2   </generated>Standard Options</h1><p>The standard options for diagram creation are found in the
+<span class="module"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html"><code>Diagrams.Backend.CmdLine</code></a></span> module of <span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span> and are
+represented with the following record:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">data</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span> <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span>
+<span class="ot">></span>   {<span class="ot"> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:-95-width">_width</a>     ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
+<span class="ot">></span>   ,<span class="ot"> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:-95-height">_height</a>    ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
+<span class="ot">></span>   ,<span class="ot"> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:-95-output">_output</a>    ::</span> FilePath
+<span class="ot">></span>   }</code></pre></div></div><p>This models having an optional width and height and a required <code class="sourceCode">FilePath</code>.
+We also need to have a parser for command-line arguments that results in a
+value of this record.  We use the <span class="package"><a href="http://hackage.haskell.org/package/optparse-applicative"><code>optparse-applicative</code></a></span> package for
+command-line parsing and the parser for the standard options is the following:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:diagramOpts">diagramOpts</a> ::</span> <span class="dt">Parser</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span>
+<span class="ot">></span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:diagramOpts">diagramOpts</a> <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span>
+<span class="ot">></span>     <span class="fu"><$></span> (optional <span class="fu">.</span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:option">option</a> auto)
+<span class="ot">></span>         ( long <span class="st">"<a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:width">width</a>"</span> <span class="fu"><></span> short <span class="ch">'w'</span>
+<span class="ot">></span>        <span class="fu"><></span> metavar <span class="st">"WIDTH"</span>
+<span class="ot">></span>        <span class="fu"><></span> help <span class="st">"Desired WIDTH of the <a href="../haddock/diagrams-core/Diagrams-Core.html#v:output">output</a> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Image.html#v:image">image</a>"</span>)
+<span class="ot">></span>     <span class="fu"><*></span> (optional <span class="fu">.</span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:option">option</a> auto)
+<span class="ot">></span>         ( long <span class="st">"<a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:height">height</a>"</span> <span class="fu"><></span> short <span class="ch">'h'</span>
+<span class="ot">></span>        <span class="fu"><></span> metavar <span class="st">"HEIGHT"</span>
+<span class="ot">></span>        <span class="fu"><></span> help <span class="st">"Desired HEIGHT of the <a href="../haddock/diagrams-core/Diagrams-Core.html#v:output">output</a> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Image.html#v:image">image</a>"</span>)
+<span class="ot">></span>     <span class="fu"><*></span> strOption
+<span class="ot">></span>         ( long <span class="st">"<a href="../haddock/diagrams-core/Diagrams-Core.html#v:output">output</a>"</span> <span class="fu"><></span> short <span class="ch">'o'</span>
+<span class="ot">></span>        <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> <span class="st">""</span>
+<span class="ot">></span>        <span class="fu"><></span> metavar <span class="st">"OUTPUT"</span>
+<span class="ot">></span>        <span class="fu"><></span> help <span class="st">"OUTPUT file"</span>)</code></pre></div></div><p>This is written in applicative form, <code class="sourceCode"><span class="dt">Constructor</span> <span class="fu"><$></span> <span class="fu">...</span> <span class="fu"><*></span> <span class="fu">...</span> <span class="fu"><*></span> <span class="fu">...</span></code>,
+where the values we fill in are the parsers for the fields of the record.  The
+parsers in <span class="package"><a href="http://hackage.haskell.org/package/optparse-applicative"><code>optparse-applicative</code></a></span> take as an argument a collection of
+parameters.</p></div><div class="section" id="abstracting-main"><h1><generated classes="sectnum">3   </generated>Abstracting Main</h1><p>This section walks through and motivates the design of the abstraction
+mechanisms that make possible the examples shown above.  If you want
+to create your own custom command-line-driven diagram generation
+executables, you will likely find it helpful to understand this
+section.  The truly impatient, however, may wish to skip directly to
+<a class="reference internal" href="#user-extensions">User Extensions</a> and return to this section as necessary.</p><p>What work does the backend need to do to render a diagram?  It depends
+on the backend, of course, but there are several common tasks given
+the standard options.  To start with we need to parse the command-line
+arguments.  The <span class="package"><a href="http://hackage.haskell.org/package/optparse-applicative"><code>optparse-applicative</code></a></span> package provides all the
+tools we need for this.  Next we will need to translate the standard
+arguments into something backend specific.  Typically the extension on
+the output filename will drive the format of the output and some
+combination of the supplied width and height will dictate the final
+scale of the diagram.  Let's look at a full example of a backend doing
+this work and try to see what parts we can abstract out for general
+use (we will use the <code class="sourceCode"><span class="dt">Cairo</span></code> backend for this example).</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> defaultMain ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span> <span class="ot">-></span> <span class="dt">IO</span> ()
+<span class="ot">></span> defaultMain <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>   prog <span class="ot"><-</span> getProgName
+<span class="ot">></span>   <span class="kw">let</span> p <span class="fu">=</span> info (helper' <span class="fu"><*></span> diagramOpts)
+<span class="ot">></span>               ( fullDesc
+<span class="ot">></span>              <span class="fu"><></span> progDesc <span class="st">"Command-line diagram generation."</span>
+<span class="ot">></span>              <span class="fu"><></span> header prog)
+<span class="ot">></span>   opts <span class="ot"><-</span> execParser p
+<span class="ot">></span>   chooseRender opts d
+<span class="ot">></span>
+<span class="ot">> chooseRender ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span> <span class="ot">-></span> <span class="dt">IO</span> ()
+<span class="ot">></span> chooseRender opts <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="fu">=</span>
+<span class="ot">></span>   <span class="kw">case</span> splitOn <span class="st">"."</span> (output opts) <span class="kw">of</span>
+<span class="ot">></span>     [<span class="st">""</span>] <span class="ot">-></span> putStrLn <span class="st">"No <a href="../haddock/diagrams-core/Diagrams-Core.html#v:output">output</a> file given."</span>
+<span class="ot">></span>     <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a> <span class="fu">|</span> last <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a> <span class="ot">`elem`</span> [<span class="st">"png"</span>, <span class="st">"<a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a>"</span>, <span class="st">"pdf"</span>, <span class="st">"svg"</span>] <span class="ot">-></span> <span class="kw">do</span>
+<span class="ot">></span>            <span class="kw">let</span> outTy <span class="fu">=</span> <span class="kw">case</span> last <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a> <span class="kw">of</span>
+<span class="ot">></span>                  <span class="st">"png"</span> <span class="ot">-></span> <span class="dt">PNG</span>
+<span class="ot">></span>                  <span class="st">"<a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a>"</span>  <span class="ot">-></span> <span class="dt">PS</span>
+<span class="ot">></span>                  <span class="st">"pdf"</span> <span class="ot">-></span> <span class="dt">PDF</span>
+<span class="ot">></span>                  <span class="st">"svg"</span> <span class="ot">-></span> <span class="dt">SVG</span>
+<span class="ot">></span>                  _     <span class="ot">-></span> <span class="dt">PDF</span>
+<span class="ot">></span>            fst <span class="fu">$</span> renderDia
+<span class="ot">></span>                    <span class="dt">Cairo</span>
+<span class="ot">></span>                    ( <span class="dt">CairoOptions</span>
+<span class="ot">></span>                      (output opts)
+<span class="ot">></span>                      <a href="../haddock/diagrams-lib/Diagrams-Size.html#v:mkSizeSpec">(mkSizeSpec
+</a><span class="ot">></span>                        (fromIntegral <span class="fu"><$></span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:width">width</a> opts)
+<span class="ot">></span>                        (fromIntegral <span class="fu"><$></span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:height">height</a> opts)
+<span class="ot">></span>                      )
+<span class="ot">></span>                      outTy
+<span class="ot">></span>                      <span class="dt">False</span>
+<span class="ot">></span>                    )
+<span class="ot">></span>                    d
+<span class="ot">></span>        <span class="fu">|</span> otherwise <span class="ot">-></span> putStrLn <span class="fu">$</span> <span class="st">"Unknown file type: "</span> <span class="fu">++</span> last <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:ps">ps</a></code></pre></div></div><p>There are several things that make this structuring of the program inflexible.
+Let's consider building a <code class="sourceCode">main</code> where we accept a function that can produce a
+diagram.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> functionMain ::</span> (a <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>) <span class="ot">-></span> <span class="dt">IO</span> ()</code></pre></div></div><p>Clearly we cannot use the given function as we have no way to produce an <code class="sourceCode">a</code>.
+So we provide a type class called <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span></code> for associating a parser with the
+type that it parses:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">class</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> a <span class="kw">where</span>
+<span class="ot">>    <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:parser">parser</a> ::</span> <span class="dt">Parser</span> a</code></pre></div></div><p>Now we can make more progress.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> functionMain ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> a <span class="ot">=></span> (a <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>) <span class="ot">-></span> <span class="dt">IO</span> ()
+<span class="ot">></span> functionMain f <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>   prog <span class="ot"><-</span> getProgName
+<span class="ot">></span>   <span class="kw">let</span> p <span class="fu">=</span> info (helper' <span class="fu"><*></span> ((,) <span class="fu"><$></span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:diagramOpts">diagramOpts</a> <span class="fu"><*></span> parser))
+<span class="ot">></span>               ( fullDesc
+<span class="ot">></span>              <span class="fu"><></span> progDesc <span class="st">"Command-line diagram generation."</span>
+<span class="ot">></span>              <span class="fu"><></span> header prog)
+<span class="ot">></span>   (opts,a) <span class="ot"><-</span> execParser p
+<span class="ot">></span>   chooseRender opts (f a)</code></pre></div></div><p>The only parts so far that are backend specific are the type of the final
+diagram and <code class="sourceCode">chooseRender</code>, though we may want other parts may be subject to
+customization.  We will split this into four parts, the type of the options
+needed, the action of parsing the command-line, the backend specific rendering,
+and an entry point for the library consumer.  We will give this the brilliant
+name <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">class</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="kw">where</span>
+<span class="ot">></span>    <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span><span class="ot"> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> ::</span> <span class="fu">*</span>
+<span class="ot">></span>
+<span class="ot">>    <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a>   ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d) <span class="ot">=></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d)
+<span class="ot">>    <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt">IO</span> ()
+<span class="ot">>    <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a>   ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d) <span class="ot">=></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt">IO</span> ()</code></pre></div></div><p>There is one associated type and three class methods.  Let's consider the
+instance of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> for a simple diagram with type <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span></code>:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>) <span class="kw">where</span></code></pre></div></div><p>The associated type indicates what options we will want to be parsed
+from the command-line.  In this case we will just use the standard
+options:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>) <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span></code></pre></div></div><p>The <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a></code> method is nearly what we had before.  In this case there isn't
+anything backend specific, so instead of an instance implementation we will
+show the default implementation for <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a></code>.  Instead of a specific parser
+<code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:diagramOpts">diagramOpts</a></code> we have a constraint <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d)</code> allowing us to use
+<code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:parser">parser</a></code> where we had <code class="sourceCode">diagramsOpts</code>.  The parser from the constraint is combined with some
+additional standard configuration for the program name and the right kind of
+help message.  Running the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a></code> IO action results in either the program
+quitting with a parse error or help message, or the program continuing with the
+parsed value.  Also note that we need the diagram to be passed to <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a></code>
+only to fix the type so we can use our associated type function <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a> ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d) <span class="ot">=></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d)
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a> _ <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>       prog <span class="ot"><-</span> getProgName
+<span class="ot">></span>       <span class="kw">let</span> p <span class="fu">=</span> info (helper' <span class="fu"><*></span> parser)
+<span class="ot">></span>                   ( fullDesc
+<span class="ot">></span>                  <span class="fu"><></span> progDesc <span class="st">"Command-line diagram generation."</span>
+<span class="ot">></span>                  <span class="fu"><></span> header prog)
+<span class="ot">></span>       execParser p</code></pre></div></div><p>The next method to implement is the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a></code> method.  Here we can just use
+the <code class="sourceCode">chooseRender</code> function we had before, handling all the backend specific
+interpretation of the standard arguments.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:DiagramOpts">DiagramOpts</a></span> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span> <span class="ot">-></span> <span class="dt">IO</span> ()
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> <span class="fu">=</span> chooseRender</code></pre></div></div><p>Finally we have <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a></code> which joins the previous parts to make an entry point
+for users of the backend to build their programs.  In this example we take as an
+argument the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span></code> and result in a complete program.  Again, we can
+get away with the default implementation.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d) <span class="ot">=></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt">IO</span> ()
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>         opts <span class="ot"><-</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainArgs">mainArgs</a> d
+<span class="ot">></span>         <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> opts <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code></pre></div></div><p>Now let's try a much harder instance.  We want to be able to handle
+functions whose final result has a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> instance, but require
+some <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span></code> arguments first.  The tricky part of this instance is
+that we need to know up front what <em>all</em> our arguments are going to be
+in order to be able to parse them.  It sounds tempting to peel off one
+argument at a time, parse, apply, and recurse with one less argument;
+but this does not work.  To facilitate collecting the arguments, we
+make a new type class that has associated types for all the
+arguments of the type and the final result of the type.  It will also
+contain a function to perform the application of all the arguments and
+give the final result.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">class</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="kw">where</span>
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span><span class="ot"> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> ::</span> <span class="fu">*</span>
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span><span class="ot"> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> ::</span> <span class="fu">*</span>
+<span class="ot">></span>
+<span class="ot">>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a> ::</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code></pre></div></div><p>We will need a base case for when we have reached the final result.  It needs
+no arguments so we use the unit type for <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span></code> and the final result is just
+the diagram itself.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> b v n) <span class="kw">where</span>
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> b v n) <span class="fu">=</span> ()
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> b v n) <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> b v n
+<span class="ot">></span>
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> _ <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code></pre></div></div><p>Now we can write the inductive case of a function resulting in something with
+a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span></code> instance.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">=></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> (a <span class="ot">-></span> d) <span class="kw">where</span>
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> (a <span class="ot">-></span> d) <span class="fu">=</span> (a, <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> d)
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> (a <span class="ot">-></span> d) <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> d
+<span class="ot">></span>
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a> f (a,args) <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a> (f a) args</code></pre></div></div><p>Here <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span></code> is the product of the argument and any arguments that <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> demands.
+The final result is the final result of <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code> and to produce a result we apply
+one argument and recurse to <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code>'s <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span></code> instance.</p><p>Now that we have <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span></code> to work with, we can write the type for the instance
+of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> that we want:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> a, <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> d), <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> d, <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> d))
+<span class="ot">></span>         <span class="ot">=></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> (a <span class="ot">-></span> d) <span class="kw">where</span></code></pre></div></div><div class="exercises panel panel-success"><div class="panel-body"><ol><li><p>Think about this type for a bit.</p></li></ol></div></div><p>Now we need a type for <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (a <span class="ot">-></span> d)</code> and at least an implementation for
+<code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a></code>.  Remember the purpose of <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span></code> is to give a type for all
+the arguments needed.  We will need the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span></code> from the final result and
+some structure containing all the function arguments.  Note that we rely on
+having a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span></code> instance for products.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (a <span class="ot">-></span> d) <span class="fu">=</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> (a <span class="ot">-></span> d)), <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> (a <span class="ot">-></span> d))</code></pre></div></div><p>Our <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a></code> will be handed a value of this type and a function of our
+instance type.  We can use <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a></code> to apply the second part of the pair
+to the function and hand the final result off to the final result's <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code>
+instance along with its required options.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> (opts, a) f <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> opts (toResult f a)</code></pre></div></div><p>Now we compile and cross our fingers!</p><p>We can also handle IO with a couple more instances.  First we will need a
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span></code> instance that handles IO actions:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">=></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ToResult">ToResult</a></span> (<span class="dt">IO</span> d) <span class="kw">where</span>
+<span class="ot">></span>    <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> (<span class="dt">IO</span> d) <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Args">Args</a></span> d
+<span class="ot">></span>    <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> (<span class="dt">IO</span> d) <span class="fu">=</span> <span class="dt">IO</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:ResultOf">ResultOf</a></span> d)
+<span class="ot">></span>
+<span class="ot">></span>    <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> args <span class="fu">=</span> flip <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:toResult">toResult</a> args <span class="fu"><$></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a></code></pre></div></div><p>This states that the needed arguments are not affected by this being
+an IO action and the final result is an IO action producing the final
+result of the action's result type.  Our <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> instance can now
+be written:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">=></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> (<span class="dt">IO</span> d) <span class="kw">where</span>
+<span class="ot">></span>     <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (<span class="dt">IO</span> d) <span class="fu">=</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> d
+<span class="ot">></span>
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> opts dio <span class="fu">=</span> dio <span class="fu">>>=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> opts</code></pre></div></div><p>Here we merely perform the diagram creating action and bind its value
+to the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> instance that can handle it.  For an example of using
+these instances see the <a class="reference internal" href="#clock-example">Clock Example</a> section below.</p></div><div class="section" id="user-extensions"><h1><generated classes="sectnum">4   </generated>User Extensions</h1><p>You can easily build on top of this framework to create executables
+taking your own custom command-line flags.  This section walks through
+a simple example.</p><p>Suppose we want to make "flippable" diagrams: a single executable that
+can render either a diagram or its mirror image, depending on a
+command-line flag.  Of course we also want to support all the usual
+command-line options like <code>--width</code>, <code>--height</code>, <code>--output</code>, and
+so on.  The framework described above—together with the
+composability of <span class="package"><a href="http://hackage.haskell.org/package/optparse-applicative"><code>optparse-applicative</code></a></span>-based command-line
+parsers—makes this very easy to do.</p><p>First, some pragmas and imports:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="ot">{-# LANGUAGE FlexibleInstances         #-}</span>
+<span class="ot">></span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">></span> <span class="ot">{-# LANGUAGE TypeFamilies              #-}</span>
+<span class="ot">></span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.Backend.CmdLine</span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.Prelude</span>             <span class="kw">hiding</span> ((<>))
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Options.Applicative</span></code></pre></div></div><p>(Unfortunately, <span class="module"><a href="../haddock/Options-Applicative.html"><code>Options.Applicative</code></a></span> re-exports the <code class="sourceCode">(<span class="fu"><></span>)</code> from
+<code>Data.Monoid</code>, whereas <span class="module"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html"><code>Diagrams.Prelude</code></a></span> re-exports the one
+from <code>Data.Semigroup</code>.)</p><p>We now create a newtype for "flippable" things:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">newtype</span> <span class="dt">Flippable</span> a <span class="fu">=</span> <span class="dt">Flippable</span> a</code></pre></div></div><p>We need a newtype since we need to make a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> instance which is
+different than the default instance for <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span></code>.</p><p>We create a data structure to contain our new command-line options,
+along with a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span></code> instance for it.  In this case we just want a
+single <code class="sourceCode"><span class="dt">Bool</span></code> value, corresponding to a new command-line switch
+<code>--flipped</code> along with an appropriate help message</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">data</span> <span class="dt">FlipOpts</span> <span class="fu">=</span> <span class="dt">FlipOpts</span> <span class="dt">Bool</span>
+<span class="ot">></span>
+<span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span> <span class="dt">FlipOpts</span> <span class="kw">where</span>
+<span class="ot">></span>   <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:parser">parser</a> <span class="fu">=</span> <span class="dt">FlipOpts</span> <span class="fu"><$></span> switch (long <span class="st">"<a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:flipped">flipped</a>"</span> <span class="fu"><></span> help <span class="st">"<a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#t:Flip">Flip</a> the diagram L-R"</span>)</code></pre></div></div><p>For help on constructing command-line parsers, see the documentation
+for the <span class="package"><a href="http://hackage.haskell.org/package/optparse-applicative"><code>optparse-applicative</code></a></span> package; you can also look at the
+source code of <span class="module"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html"><code>Diagrams.Backend.CmdLine</code></a></span> for some examples.</p><p>Finally, we create a <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> instance for flippable diagrams.  The
+<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span></code> for flippable diagrams consists of a pair of our new
+<code class="sourceCode"><span class="dt">FlipOpts</span></code> along with the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span></code> for diagrams.  To implement
+<code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a></code>, we take in our options and a flippable diagram, and pass
+the diagram-specific options along to the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a></code> method for
+diagrams, flipping the diagram appropriately.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> (<span class="dt">Flippable</span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>)) <span class="kw">where</span>
+<span class="ot">></span>   <span class="kw">type</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (<span class="dt">Flippable</span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>)) <span class="fu">=</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:MainOpts">MainOpts</a></span> (<span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>), <span class="dt">FlipOpts</span>)
+<span class="ot">></span>
+<span class="ot">></span>   <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> (opts, <span class="dt">FlipOpts</span> f) (<span class="dt">Flippable</span> d) <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainRender">mainRender</a> opts ((<span class="kw">if</span> f <span class="kw">then</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:reflectX">reflectX</a> <span class="kw">else</span> id) d)</code></pre></div></div><p>Let's try it out!</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">SVG</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
+<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:red">red</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:-124--124--124-">|||</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> blue
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> (<span class="dt">Flippable</span> d)</code></pre></div></div><p>Note the <code>--flipped</code> option in the help message:</p><pre><code>$ ./Flippable --help
+
+Flippable
+
+Usage: Flippable [-w|--width WIDTH] [-h|--height HEIGHT] [-o|--output OUTPUT] [-l|--loop] [-s|--src ARG] [-i|--interval INTERVAL] [--flipped]
+  Command-line diagram generation.
+
+Available options:
+  -?,--help                Show this help text
+  -w,--width WIDTH         Desired WIDTH of the output image (default 400)
+  -h,--height HEIGHT       Desired HEIGHT of the output image (default 400)
+  -o,--output OUTPUT       OUTPUT file
+  -l,--loop                Run in a self-recompiling loop
+  -s,--src ARG             Source file to watch
+  -i,--interval INTERVAL   When running in a loop, check for changes every INTERVAL seconds.
+  --flipped                Flip the diagram L-R</code></pre><p>And running it yields:</p><pre><code>$ ./Flippable -o Flippable.svg -w 400</code></pre><div class="exampleimg"><div style="text-align: center"><img src="images/b4a8bf431d74032d.png" width="500" height="200" /></div></div><pre><code>$ ./Flippable -o Flippable.svg -w 400 --flipped</code></pre><div class="exampleimg"><div style="text-align: center"><img src="images/bcab04ebecfb6ad7.png" width="500" height="200" /></div></div><p>It works!</p><p>It is also worth noting that for this simple example, <em>we actually did
+not need the</em> <code class="sourceCode"><span class="dt">Flippable</span></code> <em>wrapper or</em> <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> <em>instance at all</em>!
+Given only the <code class="sourceCode"><span class="dt">FlipOpts</span></code> type and its <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Parseable">Parseable</a></span></code> instance, we can
+simply write</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> (\(<span class="dt">FlipOpts</span> f) <span class="ot">-></span> (<span class="kw">if</span> f <span class="kw">then</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:reflectX">reflectX</a> <span class="kw">else</span> id) d)</code></pre></div></div><p>which gives us <em>exactly the same program</em>!  Indeed, if you squint at
+the function instance for <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span></code> and the instance we wrote for
+<code class="sourceCode"><span class="dt">Flippable</span></code>, you can see that our instance is a direct specialization
+of the more general one.</p></div><div class="section" id="clock-example"><h1><generated classes="sectnum">5   </generated>Clock Example</h1><p>We may want to build diagrams based on the state of the world.  For
+instance, if we want to build a diagram of a clock we will want to
+know what time it is.  Consider the following program.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.Coordinates</span>
+<span class="ot">></span> <span class="kw">import </span><span class="dt">Data.Time</span>
+<span class="ot">></span>
+<span class="ot">> clock ::</span> <span class="dt">UTCTime</span> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">B</span>
+<span class="ot">></span> clock t <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.35</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:silver">silver</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="dv">0</span>
+<span class="ot">></span>        <span class="fu"><></span> bigHand <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> f <span class="dv">12</span> h <span class="fu"><></span> littleHand <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> f <span class="dv">60</span> m
+<span class="ot">></span>        <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span>  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:black">black</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="dv">0</span>
+<span class="ot">></span>        <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">11</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="fl">1.5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:lc">lc</a> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:slategray">slategray</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> lightsteelblue
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu">=</span> realToFrac <span class="fu">$</span> utctDayTime<span class="ot"> t ::</span> <span class="dt">Double</span>
+<span class="ot">></span>     <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:m">m</a> <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu">/</span> <span class="dv">60</span>
+<span class="ot">></span>     h <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:m">m</a> <span class="fu">/</span> <span class="dv">60</span>
+<span class="ot">></span>
+<span class="ot">></span>     bigHand    <span class="fu">=</span> (<span class="dv">0</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="fl">1.5</span>)) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> (<span class="dv">0</span> <span class="fu">^&</span> <span class="fl">7.5</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="fl">0.5</span>
+<span class="ot">></span>     littleHand <span class="fu">=</span> (<span class="dv">0</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="dv">2</span>))   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span> (<span class="dv">0</span> <span class="fu">^&</span> <span class="fl">9.5</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="fl">0.2</span>
+<span class="ot">></span>     f n v <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:rotate">rotate</a> (<span class="fu">-</span> v <span class="fu">/</span> n <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn)
+<span class="ot">></span>
+<span class="ot">></span> main <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> (clock <span class="fu"><$></span> getCurrentTime)</code></pre></div></div><p>Running we get:</p><div class="exampleimg"><div style="text-align: center"><img src="images/9d2ce1145b3e8203.png" width="500" height="200" /></div></div><p>This uses the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:d">d</a> <span class="ot">=></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#t:Mainable">Mainable</a></span> (<span class="dt">IO</span> d)</code> instance to allow our
+effectful clock generator.  However, we could have just as well avoided
+this instance, writing instead:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> main <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>     t <span class="ot"><-</span> getCurrentTime
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Backend-CmdLine.html#v:mainWith">mainWith</a> (clock t)</code></pre></div></div><p>This instance is quite convenient, however, especially when we want our IO action
+to depend on some command-line option.  The following exercises should be helpful
+in gaining practice working with IO and options by modifying the clock example into
+a useful clock making program.</p><div class="exercises panel panel-success"><div class="panel-body"><ol><li><p>Modify the example so it can take a time as a command-line
+option, but if one is not given, it uses the current time.</p></li><li><p>Modify <code class="sourceCode">clock</code> to take a <code class="sourceCode"><span class="dt">ClockStyle</span></code> argument that includes options for
+various visual styles for the clock.  For instance <code class="sourceCode"><span class="dt">ClockStyle</span></code> could
+include a color for the clock background, a flag for turning on hour
+marks, or a flag for including a second hand.</p></li></ol></div></div></div></div></div></div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

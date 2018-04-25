@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - About Diagrams</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="./css/callout.css" rel="stylesheet" />
+    <link href="./css/doc.css" rel="stylesheet" />
+    <link href="./css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="./css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="./css/syntax.css" />
+    <link rel="shortcut icon" href="./diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="./">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="./">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="./download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="./tutorials.html">Tutorials</a></li>
+		<li><a href="./doc/manual.html">User manual</a></li>
+                <li><a href="./haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="./doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="./releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="./gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="./sightings.html">Sightings</a></li>
+		<li><a href="./community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="./blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    <div class="banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5">
+        <h1 style="font-size: 9rem; padding-top: 100px; color: darkred">diagrams</h1>
+      </div>
+      <div class="col-md-7 hidden-sm hidden-xs hidden-md">
+        <div class="sourceCode" style="background-color: rgba(0,0,0,0); border-width: 0px; font-size: 1.75rem; margin-top: 40px; margin-left: 100px; margin-right: 20px;"><pre class="sourceCode haskell"><code class="sourceCode haskell">hilbert <span class="dv">0</span> <span class="fu">=</span> mempty
+hilbert n <span class="fu">=</span> hilbert' (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> reflectY <span class="fu">&lt;&gt;</span> vrule <span class="dv">1</span>
+         <span class="fu">&lt;&gt;</span> hilbert  (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">&lt;&gt;</span> hrule <span class="dv">1</span>
+         <span class="fu">&lt;&gt;</span> hilbert  (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">&lt;&gt;</span> vrule (<span class="fu">-</span><span class="dv">1</span>)
+         <span class="fu">&lt;&gt;</span> hilbert' (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> reflectX
+  <span class="kw">where</span>
+    hilbert' m <span class="fu">=</span> hilbert m <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)
+
+<span class="ot">diagram ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+diagram <span class="fu">=</span> strokeT (hilbert <span class="dv">6</span>) <span class="fu">#</span> lc silver
+                              <span class="fu">#</span> opacity <span class="fl">0.3</span></code></pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container" style="padding-top: 60px;">
+      <p class="lead" style="text-align: center; font-size: 3rem">
+<b>diagrams</b> is a <em>powerful</em>, <em>flexible</em>, <em>declarative</em> domain-specific language for creating vector graphics, using the <a href="http://haskell.org/">Haskell programming language</a>.
+</p>
+<br>
+<div class="row">
+<div class="col-md-4">
+<div class="panel panel-default lead-panel" onclick="window.location='doc/quickstart.html';">
+<div class="panel-body">
+<p class="lead text-center" style="font-weight:bold; font-size:24px">
+Get started
+</p>
+<p class="text-center">
+Read the <a href="doc/quickstart.html">quick start tutorial</a> or the <a href="doc/manual.html">user manual</a>.
+</p>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="panel panel-default lead-panel" onclick="window.location='gallery.html';">
+<div class="panel-body">
+<p class="lead text-center" style="font-weight:bold; font-size:24px">
+Get excited
+</p>
+<p class="text-center">
+Check out the <a href="./gallery.html">gallery</a> for example images and code.
+</p>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="panel panel-default lead-panel" onclick="window.location='http://webchat.freenode.net/?channels=diagrams';">
+<div class="panel-body">
+<p class="lead text-center" style="font-weight:bold; font-size:24px">
+Get connected
+</p>
+<p class="text-center">
+Drop by the <a href="http://webchat.freenode.net/?channels=diagrams"><code>#diagrams</code> IRC channel</a> with questions, or post them to the <a href="http://groups.google.com/group/diagrams-discuss">mailing list</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+<p><!--
+ <form method="get" action="http://paste.hskll.org">
+ <p class="lead text-center">
+ Impatient? &nbsp;&nbsp; <button type="submit" value="clickable button" class="btn btn-primary btn-lg">Try diagrams in your browser!</button>
+ </p>
+ </form>
+ --></p>
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+<h2 id="news">News</h2>
+<div class="row">
+<div class="col-md-3">
+October 27, 2016
+</div>
+<div class="col-md-9">
+<p>
+Diagrams 1.4 <a href="http://projects.haskell.org/diagrams/releases.html">released</a>! See the <a href="https://wiki.haskell.org/Diagrams/Dev/Migrate1.4">migration guide</a> for help porting existing diagrams code to 1.4.
+</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3">
+September 5, 2015
+</div>
+<div class="col-md-9">
+<p>
+Ryan Yates and Brent Yorgey gave a <a href="https://www.youtube.com/watch?v=oAz8AEf7WDA&amp;list=PLnqUlCo055hWmIvlbzE2zTghLlaeyHnfE&amp;index=4">presentation about diagrams</a> at <a href="http://functional-art.org/2015/">FARM 2015</a>. The <a href="http://ozark.hendrix.edu/~yorgey/pub/diagrams-FARM-15.pdf">slides are available here</a>.
+</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3">
+May 27, 2015
+</div>
+<div class="col-md-9">
+<p>
+Jeff spoke about diagrams at the <a href="http://www.meetup.com/NY-Haskell/">New York Haskell users’ group</a>. Diagrams: Composition, Envelopes and Alignment. <a href="https://www.youtube.com/watch?v=5_fCUSOn7m0">Part 1 is about compositon and envelopes.</a>, and <a href="https://www.youtube.com/watch?v=nZCzsBOYdis">part 2 talks about animated GIFs and the design of the arrow API.</a>. The <a href="https://github.com/jeffreyrosenbluth/NYC-meetup">slides are also available</a>.
+</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3">
+April 19, 2015
+</div>
+<div class="col-md-9">
+<p>
+Diagrams 1.3 <a href="./releases.html">released</a>! Look for a blog post soon with a rundown of new features. In the meantime, see the <a href="http://www.haskell.org/haskellwiki/Diagrams/Dev/Migrate1.3">migration guide</a> for help porting existing diagrams code to 1.3.
+</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3">
+November 24, 2013
+</div>
+<div class="col-md-9">
+<p>
+Brent gave a talk on diagrams at the <a href="http://www.meetup.com/NY-Haskell/">New York Haskell users’ group</a>. <a href="http://vimeo.com/84104226">Part 1 presents a basic introduction to the library</a>, and <a href="http://vimeo.com/84249042">part 2 talks about mathematical abstraction and DSL design</a>. The <a href="http://www.cis.upenn.edu/~byorgey/pub/13-11-25-nyhaskell-diagrams.pdf">slides are also available</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr />
+<p class="small text-center">
+Built with <a href="http://jaspervdj.be/hakyll/">hakyll</a>, <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>, and, of course, diagrams.
+</p>
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-docs-application.js"></script>
+    <script src="./js/hoogle-search.js"></script>
+  </body>
+</html>

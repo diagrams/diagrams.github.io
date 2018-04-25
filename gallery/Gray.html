@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Circular gray code</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>Circular gray code, like that used on some rotational sensors.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/Gray.big.png" width="400.0" height="400.0" />
+</div>
+Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/Gray.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>     <span class="kw">hiding</span> (gray)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List.Split</span>      (chunksOf)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Maybe</span>           (catMaybes)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Control.Applicative</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Monoid</span>          (mconcat)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List</span>            (transpose)</code></pre></div>
+<p><code>gray n</code> recursively generates an n-bit Gray code, where each n-bit binary number differs from the next in exactly one position.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> gray <span class="dv">0</span> <span class="fu">=</span> [[]]
+<span class="ot">&gt;</span> gray n <span class="fu">=</span> map (<span class="dt">False</span><span class="fu">:</span>) g <span class="fu">++</span> map (<span class="dt">True</span><span class="fu">:</span>) (reverse g)
+<span class="ot">&gt;</span>   <span class="kw">where</span> g <span class="fu">=</span> gray (n<span class="fu">-</span><span class="dv">1</span>)</code></pre></div>
+<p>Construct a circular diagram from the n-bit gray code: each bit position corresponds to a concentric ring, with black/white indicating 0/1. <code>ringOffsets</code> converts a list of booleans into a list of angular segments corresponding to consecutive runs of <code>True</code>.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> rings n <span class="fu">=</span> mkRingsDia <span class="fu">.</span> map ringOffsets <span class="fu">.</span> transpose <span class="fu">.</span> gray <span class="fu">$</span> n
+<span class="ot">&gt;</span>   <span class="kw">where</span><span class="ot"> ringOffsets ::</span> [<span class="dt">Bool</span>] <span class="ot">-&gt;</span> [(<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>, <span class="dt">Angle</span> <span class="dt">Double</span>)]
+<span class="ot">&gt;</span>         ringOffsets <span class="fu">=</span> map l2t <span class="fu">.</span> chunksOf <span class="dv">2</span> <span class="fu">.</span> findEdges <span class="fu">.</span> zip [rotate α xDir <span class="fu">|</span> α <span class="ot">&lt;-</span> [<span class="dv">0</span> <span class="fu">@@</span> turn, <span class="dv">1</span><span class="fu">/</span>(<span class="dv">2</span><span class="fu">^</span>n) <span class="fu">@@</span> turn <span class="fu">..</span> fullTurn]]
+<span class="ot">&gt;</span>         l2t [x,y] <span class="fu">=</span>  (x, angleBetweenDirs x y)
+<span class="ot">&gt;</span>         l2t [x]   <span class="fu">=</span> (x, angleBetweenDirs x xDir) <span class="co">-- arc angle will never be &gt; fullturn ^/ 2</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt; findEdges ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [(<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>, a)] <span class="ot">-&gt;</span> [<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>]
+<span class="ot">&gt;</span> findEdges <span class="fu">=</span> catMaybes <span class="fu">.</span> (zipWith edge <span class="fu">&lt;*&gt;</span> tail)
+<span class="ot">&gt;</span>   <span class="kw">where</span> edge (_,c1) (a,c2) <span class="fu">|</span> c1 <span class="fu">/=</span> c2  <span class="fu">=</span> <span class="dt">Just</span> a
+<span class="ot">&gt;</span>                            <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span></code></pre></div>
+<p>Generate concentric circular arcs from lists of angular segments.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> mkRingsDia <span class="fu">=</span> mconcat <span class="fu">.</span> zipWith mkRingDia [<span class="dv">2</span>,<span class="dv">3</span><span class="fu">..</span>]
+<span class="ot">&gt;</span>   <span class="kw">where</span> mkRingDia r <span class="fu">=</span> lwL <span class="fl">1.05</span> <span class="fu">.</span> mconcat <span class="fu">.</span> map (strokeP <span class="fu">.</span> scale r <span class="fu">.</span> uncurry arc)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> example <span class="fu">=</span> pad <span class="fl">1.1</span> (rings <span class="dv">10</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

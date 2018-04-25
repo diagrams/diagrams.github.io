@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Circle Packing</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>Automatically arranging diagrams in a compact circular fashion</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/CirclePacking.big.png" width="400.0" height="400.0" />
+</div>
+Author: <b><a href="http://www.joachim-breitner.de/">Joachim Breitner</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/CirclePacking.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE MultiParamTypeClasses #-}</span>
+<span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE FlexibleContexts #-}</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.Palette.BrewerSet</span></code></pre></div>
+<p>This code demonstrates the circle-packing layout from the <code>diagrams-contrib</code> package. For more information on the algorithm used, see the <a href="http://hackage.haskell.org/package/circle%2Dpacking"><code>circle-packing</code> package</a>.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Layout.CirclePacking</span></code></pre></div>
+<p>Lets collect some objects of varying size and color to draw. They do not need to be single shapes but can be arbitrary complex diagrams, as demonstrated by including some Spierpinsky triangles among them.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> colorize <span class="fu">=</span> zipWith fc <span class="fu">$</span> cycle (brewerSet <span class="dt">Dark2</span> <span class="dv">8</span>)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt; sierpinski ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> sierpinski <span class="dv">1</span> <span class="fu">=</span> eqTriangle <span class="dv">1</span>
+<span class="ot">&gt;</span> sierpinski n <span class="fu">=</span> (s <span class="fu">===</span> (s <span class="fu">|||</span> s) <span class="fu">#</span> centerX) <span class="fu">#</span> alignY (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">3</span>)
+<span class="ot">&gt;</span>   <span class="kw">where</span> s <span class="fu">=</span> sierpinski (n<span class="fu">-</span><span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; objects ::</span> [<span class="dt">Diagram</span> <span class="dt">B</span>]
+<span class="ot">&gt;</span> objects <span class="fu">=</span> lw thin <span class="fu">.</span> colorize <span class="fu">$</span>
+<span class="ot">&gt;</span>     scale <span class="fl">0.04</span> (sierpinski <span class="dv">7</span>) <span class="fu">:</span>
+<span class="ot">&gt;</span>     scale <span class="fl">0.03</span> (sierpinski <span class="dv">7</span>) <span class="fu">:</span>
+<span class="ot">&gt;</span>     [ circle r  <span class="fu">|</span> r <span class="ot">&lt;-</span> [<span class="fl">0.1</span>,<span class="fl">0.2</span><span class="fu">..</span><span class="fl">1.6</span>] ] <span class="fu">++</span>
+<span class="ot">&gt;</span>     [ hexagon r <span class="fu">|</span> r <span class="ot">&lt;-</span> [<span class="fl">0.1</span>,<span class="fl">0.2</span><span class="fu">..</span><span class="fl">0.7</span>] ] <span class="fu">++</span>
+<span class="ot">&gt;</span>     [ decagon r <span class="fu">|</span> r <span class="ot">&lt;-</span> [<span class="fl">0.1</span>,<span class="fl">0.2</span><span class="fu">..</span><span class="fl">0.7</span>] ]</code></pre></div>
+<p>And now we can leave the layouting to <code>diagrams-contrib</code>:</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> renderCirclePacking (approxRadius <span class="dv">6</span>) objects</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

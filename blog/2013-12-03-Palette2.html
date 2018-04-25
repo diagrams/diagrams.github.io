@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Introduction to Palette, Part 2</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div class="blog-header">
+    <p>by <em>Jeffrey Rosenbluth</em> on <strong>December  4, 2013</strong></p>
+    <p>Tagged as: <a href="../tags/color.html">color</a>, <a href="../tags/palette.html">palette</a>, <a href="../tags/harmony.html">harmony</a>.</p>
+</div>
+
+<div>
+    <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"></div></div><div class="col-md-9"><h1 class="title">Introducing the Palette Package, Part II</h1><p>In part 1 of this post we talked mostly about borrowing a set of colors that was made by someone else. In this part we talk about tools we can use to make our own color schemes.</p><p>Most software provides some type of color picker for selecting a single color. To choose a color we are often given the choice between several different color panels, including a clolor wheel, color sliders, and others. The sliders metaphor works well for choosing a single color, but it doesn't provide us with an intuitive way to choose a color scheme.</p><p>The color wheel is more promising. A color wheel is designed to have pure hues on the perimeter, that means saturation and brightness are set to 100%. If you look at this type of color wheel, that is one based on HSB or HSL, you will notice that the red, green and blue sections are 120 degrees apart. If you look at <a class="reference external" href="https://kuler.adobe.com/create/color-wheel/">Adobe Kuler</a> on the other hand you will see that red and green lie on oposite poles of the wheel. That's a better way to visualize the color wheel since red and green are complimentary colors (They produce black or white when combined in the correct proportions). <a class="reference external" href="http://en.wikipedia.org/wiki/Complementary_colors">Complimentary colors</a></p><p>The point is that when picking colors for a scheme, tradional color harmony defines which colors are chosen by choosing a base color and other colors on the wheel at specific angles apart. The wheel that is used though is one with complimentary colors opposite each other like in Kuler. This is the so called traditional or artist's color wheel. We call it the RYB (red, yellow, blue) wheel since it is based on those three being the primary colors and colors in between as mixtures of those.</p><p>The RYB color wheel and the color schemes we will design below are easy to view using the <code class="sourceCode">wheel</code> function. <code class="sourceCode">wheel</code> takes a list of colors and makes a color wheel out of them by placing the first color in the list at the top of the wheel.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> wheel cs <span class="fu">=</span> wheel' <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:rotate">rotate</a> r
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     wheel' <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a> <span class="fu">$</span> zipWith <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> cs (iterateN n (rotate a) w)
+<span class="ot">></span>     n <span class="fu">=</span> length cs
+<span class="ot">></span>     a <span class="fu">=</span> <span class="dv">1</span> <span class="fu">/</span> (fromIntegral n) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn
+<span class="ot">></span>     w <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Arc.html#v:wedge">wedge</a> <span class="dv">1</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Vector.html#v:xDir">xDir</a> a <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="dv">0</span>
+<span class="ot">></span>     <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:r">r</a> <span class="fu">=</span> (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn)  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-94--45--94-">^-^</a></span>  (<span class="dv">1</span><span class="fu">/</span>(<span class="dv">2</span><span class="fu">*</span>(fromIntegral n)) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn)</code></pre></div></div><p>Here is the RYB color wheel. Notice that colors we perceive as opposites, e.g. red and green are 180 degrees apart on the wheel. In <code class="sourceCode">harmony</code> the RYB color wheel is created by shrinking and stretching sections of the HSB color wheel so that complimentary colors are always on opposite sides of the wheel.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> ryb <span class="fu">=</span> [rybColor n <span class="fu">|</span> n <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">23</span>]]
+<span class="ot">></span> example <span class="fu">=</span> wheel ryb</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/4d18e35a23b01f5e.png" width="500" height="200" /></div></div><p>Although we have described the base color as a pure hue, we are actually free to choose any color we like at the base color. In order to create the harmonies we desire, we want a function that takes a given color and returns the color a certain number of degrees away on the RYB wheel. For that <code class="sourceCode">harmony</code> provides the function <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:rotateColor">rotateColor</a></code>. Here is the original d3 color set and the same set rotated by 60 degrees (counter clockwise).</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> d3 <span class="fu">=</span> [d3Colors1 n <span class="fu">|</span> n <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span>]]
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [bar d3, bar <span class="fu">$</span> map (rotateColor <span class="dv">60</span>) d3]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/b690740a02d680c9.png" width="500" height="200" /></div></div><p>Let's pick a base color to demonstrate the classic color harmonies and how to use the <code class="sourceCode"><span class="dt">Harmony</span></code> functions. How about a nice mustardy yellow "#FFC200".</p><div class="exampleimg"><div style="text-align: center"><img src="images/b234d37e82e9c06c.png" width="500" height="200" /></div></div><p>Since we have been talking about complimentary colors, the first scheme we describe is unsurprisingly called <em>Complimentary</em>. It's based on two complimentary colors and in the <code class="sourceCode"><span class="dt">Harmmony</span></code> module three other colors are choosen by shading and tinting those two colors.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [ bar (take <span class="dv">2</span> (complement base))
+<span class="ot">></span>                                     , wheel <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:complement">complement</a> base]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/288e7a45c341ba7f.png" width="500" height="200" /></div></div><p>A <em>Monochromatic</em> color harmony consists of the base color plus various tints, shades and tones.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> wheel <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:monochrome">monochrome</a> base</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/c02578d6039e7dda.png" width="500" height="200" /></div></div><p>The following scheme does not have a name as far as I know. We take the base color and mix a little bit of it into black, grey, and white. In <code class="sourceCode"><span class="dt">Harmony</span></code> the function is called <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:bwg">bwg</a></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> wheel <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:bwg">bwg</a> base</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/8163ad3def731872.png" width="500" height="200" /></div></div><p>Sometimes it is useful to view a color scheme like a wheel but with the base color as a disc in the center. We define the function <code class="sourceCode">pie</code> for this purpose.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> pie (c<span class="fu">:</span>cs) <span class="fu">=</span> ring <span class="fu"><></span> center
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     <a href="../haddock/diagrams-lib/Diagrams-Align.html#v:center">center</a> <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> c <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="dv">0</span>
+<span class="ot">></span>     ring <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a> <span class="fu">$</span> zipWith <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> cs (iterateN n (rotate a) w)
+<span class="ot">></span>     n <span class="fu">=</span> length cs
+<span class="ot">></span>     a <span class="fu">=</span> <span class="dv">1</span> <span class="fu">/</span> (fromIntegral n) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn
+<span class="ot">></span>     w <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Arc.html#v:annularWedge">annularWedge</a> <span class="fl">0.5</span> <span class="dv">1</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Vector.html#v:xDir">xDir</a> a <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="dv">0</span></code></pre></div></div><p>The <em>Analogic</em> color scheme is the base color plus the two colors 30 degrees apart on each side. As usual we add in some tints, shades, and tones to fill out a 5 color scheme. <em>Accent Analogic</em> is similar but we add in the color complimentary to the base color.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [ pie <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:analogic">analogic</a> base
+<span class="ot">></span>                                     , pie <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:accentAnalogic">accentAnalogic</a> base]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/b27057951cfbd3bc.png" width="500" height="200" /></div></div><p>The lase two schemes provided by <code class="sourceCode"><span class="dt">Harmony</span></code> are <em>Triad</em>, with colors 120 degrees apart and <em>Tetrad</em> with colors on the corners of a rectangle inscribed in the color wheel.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [ pie <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:triad">triad</a> base
+<span class="ot">></span>                                     , pie <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:tetrad">tetrad</a> base]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/e7827a64966ad72d.png" width="500" height="200" /></div></div></div></div></div>
+
+</div>
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

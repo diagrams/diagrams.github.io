@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Diagrams and LaTeX</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"><ul class="nav"><li><a class="reference internal" href="#introduction"><generated classes="sectnum">1   </generated>Introduction</a></li><li><a class="reference internal" href="#installation"><generated classes="sectnum">2   </generated>Installation</a></li><li><a class="reference internal" href="#diagrams-latex-package-options"><generated classes="sectnum">3   </generated><code>diagrams-latex</code> package options</a></li><li><a class="reference internal" href="#diagram-blocks"><generated classes="sectnum">4   </generated>Diagram blocks</a></li><li><a class="reference internal" href="#running"><generated classes="sectnum">5   </generated>Running</a></li><li><a class="reference internal" href="#tips-and-tricks"><generated classes="sectnum">6   </generated>Tips and tricks</a></li><li><a class="reference internal" href="#using-diagrams-latex-with-beamer"><generated classes="sectnum">7   </generated>Using <code>diagrams-latex</code> with Beamer</a></li></ul></div></div><div class="col-md-9"><div class="section" id="introduction"><h1><generated classes="sectnum">1   </generated>Introduction</h1><p>Diagrams can be used to easily include pictures in your \(\LaTeX\)
+documents, using the <span class="package"><a href="http://hackage.haskell.org/package/diagrams-cairo"><code>diagrams-cairo</code></a></span>,
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-postscript"><code>diagrams-postscript</code></a></span>, or <span class="package"><a href="http://hackage.haskell.org/package/diagrams-pgf"><code>diagrams-pgf</code></a></span> backends.  You
+directly embed diagrams code in your \(\LaTeX\) source, within
+special <code>\begin{diagram} ... \end{diagram}</code> blocks; the
+<code>diagrams-latex</code> package then takes care of automatically running
+your diagrams code and including the generated images in the output,
+so you don't need to worry about maintaining a bunch of source files
+or running special preprocessing tools.</p></div><div class="section" id="installation"><h1><generated classes="sectnum">2   </generated>Installation</h1><p>First, you will need the <span class="package"><a href="http://hackage.haskell.org/package/diagrams-builder"><code>diagrams-builder</code></a></span> package, which
+<code>diagrams-latex</code> depends on.  <span class="package"><a href="http://hackage.haskell.org/package/diagrams-builder"><code>diagrams-builder</code></a></span> does not come
+automatically as part of a basic diagrams installation, so you will
+need to install it separately.  You can install it with a command like</p><pre><code>cabal install -fps diagrams-builder</code></pre><p>Instead of <code>-fps</code> you may specify whichever backend you plan to use
+(<code>-fps</code>, <code>-fcairo</code>, or <code>-fpgf</code>).  If you wish, you may specify
+more than one.</p><p>These flags (<code>-fps</code>, <code>-fcairo</code>, or <code>-fpgf</code>) cause executables to
+be installed (<code>diagrams-builder-ps</code>, <code>diagrams-builder-cairo</code>, and
+<code>diagrams-builder-pgf</code> respectively); make sure the appropriate
+executable(s) are installed and accessible via your <code>PATH</code>.</p><p>Finally, download <a class="reference external" href="https://github.com/diagrams/diagrams-builder/blob/master/latex/diagrams-latex.sty">diagrams-latex.sty</a> and put it somewhere \(\LaTeX\)
+can find it. One such place is in the same directory as your <code>.tex</code>
+file. If you plan to use <code>diagrams-latex</code> often, you may prefer
+putting it in a more global location; if you don't know how to do that,
+a good place to start is <a class="reference external" href="http://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-files-to-make-them-available-to-all-my-tex-files">this StackExchange question</a>.</p></div><div class="section" id="diagrams-latex-package-options"><h1><generated classes="sectnum">3   </generated><code>diagrams-latex</code> package options</h1><p>The first step is to include the <code>diagrams-latex</code> package.  In the
+preamble of your \(\LaTeX\) file, add</p><pre><code>\usepackage{diagrams-latex}
+\usepackage{graphicx}</code></pre><p>Note inclusion of the <code>graphicx</code> package is currently required if
+you are using the PostScript or Cairo backends.  You can also pass
+some options to the <code>diagrams-latex</code> package:</p><ul><li><p><code>outputdir</code> specifies the name of directory where intermediate and
+final diagram files will be written.  The directory will be created
+if it does not already exist.  By default, intermediate files will
+be written in the same directory as the \(\LaTeX\) document, which may
+not be desirable.</p></li><li><p><code>backend</code> specifies the backend to be used.  Possible values
+include <code>cairo</code>, <code>ps</code>, and <code>pgf</code>.  The default is <code>cairo</code>.</p></li><li><p><code>extension</code> specifies the file extension which should be used for
+compiled diagrams.  The default is <code>pdf</code>. Be sure to use an
+extension which is compatible with the chosen backend; forexample,
+if you specify <code>backend=ps</code> you likely want to also specify
+<code>extension=eps</code>; for <code>backend=pgf</code> you likely want
+<code>extension=pgf</code>.</p></li><li><p>The <code>input</code> flag causes the generated diagrams to be included in
+the document via <code>\input</code> (instead of the default, which is
+<code>\includegraphics</code>).  This option should be used with the PGF
+backend.</p></li></ul><p>As a complete example, to specify diagrams compiled with the
+<code>postscript</code> backend, using the <code>diagrams</code> directory, one would
+write</p><pre><code>\usepackage[backend=ps, extension=eps, outputdir=diagrams]{diagrams-latex}
+\usepackage{graphicx}</code></pre><p>To use the <code>pgf</code> backend, one might write</p><pre><code>\usepackage[backend=pgf, extension=pgf, outputdir=diagrams, input]{diagrams-latex}</code></pre></div><div class="section" id="diagram-blocks"><h1><generated classes="sectnum">4   </generated>Diagram blocks</h1><p>To include a diagram in your document, create a <code>diagram</code> block,
+like so:</p><pre><code>\begin{diagram}[width=300,height=200]
+  {-# LANGUAGE FlexibleContexts #-}
+  import Data.List
+
+  foo = circle 1 # fc green
+  dia = foo ||| foo
+\end{diagram}</code></pre><p>The <code>width</code> and <code>height</code> arguments work as you would expect; they
+are both optional.  Within the block, you can place an arbitrary
+Haskell module (including imports and <code>LANGUAGE</code> pragmas, as
+illustrated above).  Note that the indentation does not matter, as
+long as it is consistent.  Imports of <span class="module"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html"><code>Diagrams.Prelude</code></a></span> and whichever
+backend you are using will be added automatically.  The module must
+contain a definition of a diagram named <code class="sourceCode">dia</code>, which will be
+rendered.  It may also contain any other arbitrary helper definitions.</p></div><div class="section" id="running"><h1><generated classes="sectnum">5   </generated>Running</h1><p>To compile your en-diagrammed \(\LaTeX\) document, simply run <code>latex</code>,
+<code>pdflatex</code>, <em>etc.</em> as usual.  However, you <strong>must also pass the</strong>
+<code>--enable-write18</code> <strong>command-line flag</strong>.  For example,</p><pre><code>pdflatex --enable-write18 mydocument.tex</code></pre><p>This is because in order to compile the embedded diagrams, \(\LaTeX\) must
+call out to the <code>diagrams-builder</code> executable via the shell, and
+this requires special permission.</p></div><div class="section" id="tips-and-tricks"><h1><generated classes="sectnum">6   </generated>Tips and tricks</h1><p>Each of the <code>diagram</code> blocks is a completely independent scope.  If
+you have definitions that should be shared among multiple diagrams (as
+is common), simply put the definitions in a separate Haskell module in
+the same directory, and import this module in each <code>diagram</code> block.
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-builder"><code>diagrams-builder</code></a></span> is smart enough to recompile a diagram when
+its imports have changed.  In general, <span class="package"><a href="http://hackage.haskell.org/package/diagrams-builder"><code>diagrams-builder</code></a></span> tries
+hard to avoid recompiling diagrams when recompilation is not
+necessary, in order to speed build times.</p><p>If you use the PGF backend, any <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Text.html#v:text">text</a></code> diagrams will be typeset by
+\(\LaTeX\).  In particular, if your text contains any sections
+surrounded by dollar signs, these will be typeset in math mode.  For
+example,</p><pre><code>\begin{diagram}[width=300,height=200]
+  dia = text "hi $\\sqrt{\\pi}$" # scale 0.5 &lt;> circle 1 # fc yellow
+\end{diagram}</code></pre><p>will produce a yellow circle with "hi \(\sqrt{\pi}\)" in the
+middle.</p></div><div class="section" id="using-diagrams-latex-with-beamer"><h1><generated classes="sectnum">7   </generated>Using <code>diagrams-latex</code> with Beamer</h1><p><code>diagrams-latex</code> works well in conjunction with <code>beamer</code> for
+making slide decks with embedded images.  However:</p><div class="warning bs-callout bs-callout-warning"><p>Every <code>frame</code> containing a diagram <em>must</em> be marked as <code>[fragile]</code>!</p></div><p>Non-<code>[fragile]</code> frames with diagrams in them cause \(\TeX\) to
+choke with horrendous, inscrutable errors.  If you are using
+<code>pandoc</code> to generate slides, you can "trick" <code>pandoc</code> into
+emitting <code>[fragile]</code> annotations by inserting an empty code block
+into each slide with a diagram.</p><p>See <a class="reference external" href="http://tex.stackexchange.com/questions/11328/beamers-fragile-frame-as-default">this StackExchange answer</a>
+explaining how to define an alternate <code>frame</code> environment which is
+fragile by default.  It boils down to something like</p><pre><code>\newenvironment{xframe}[1][]
+  {\begin{frame}[fragile,environment=xframe,#1]}
+  {\end{frame}}</code></pre><p>and then using <code>xframe</code> instead of <code>frame</code> (it's probably possible
+to replace <code>frame</code> entirely with some clever renaming, but I haven't
+figured out how to do it).</p></div></div></div></div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

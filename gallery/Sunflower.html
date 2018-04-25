@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Sunflower</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>H.Vogel’s pattern for sunflower forets.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/Sunflower.big.png" width="400.0" height="400.0" />
+</div>
+Author: <b><a href="https://www.projects.haskell.org/diagrams/">Jeffrey Rosenbluth</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/Sunflower.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<p>A representation of Vogel’s model for the floret pattern of a sunflower head. Vogel, H (1979). “A better way to construct the sunflower head”. Mathematical Biosciences 44 (44): 179–189. doi:10.1016/0025-5564(79)90080-4.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Data.Colour.Palette.BrewerSet</span></code></pre></div>
+<p>The n florets of the sunflower are positioned at radii proportional to the square root of n and rotated by a factor 2.4 radians in accordance with Vogel’s model.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; mkCoords ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">P2</span> <span class="dt">Double</span>]
+<span class="ot">&gt;</span> mkCoords n <span class="fu">=</span>[coord (fromIntegral i) <span class="fu">|</span> i <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="fu">..</span>n]]
+<span class="ot">&gt;</span>   <span class="kw">where</span>
+<span class="ot">&gt;</span>     coord m <span class="fu">=</span> p2 <span class="fu">$</span> fromPolar (sqrt m) (<span class="fl">2.4</span> <span class="fu">*</span> m)
+<span class="ot">&gt;</span>     fromPolar r theta <span class="fu">=</span> (r <span class="fu">*</span> cos theta, r <span class="fu">*</span> sin theta)</code></pre></div>
+<p>The color of each floret is based on it’s radius.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; floret ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> floret r <span class="fu">=</span> circle <span class="fl">0.6</span> <span class="fu">#</span> lw none <span class="fu">#</span> fc (colors <span class="fu">!!</span> n)
+<span class="ot">&gt;</span>   <span class="kw">where</span>
+<span class="ot">&gt;</span>     n <span class="fu">=</span> floor (<span class="fl">1.4</span> <span class="fu">*</span> sqrt r) <span class="ot">`mod`</span> <span class="dv">10</span>
+<span class="ot">&gt;</span>     colors <span class="fu">=</span> black <span class="fu">:</span> (reverse <span class="fu">$</span> brewerSet <span class="dt">YlOrBr</span> <span class="dv">9</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; sunflower ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span>  <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> sunflower n <span class="fu">=</span> frame <span class="dv">4</span> <span class="fu">$</span> position <span class="fu">$</span> zip (mkCoords n) (florets n)
+<span class="ot">&gt;</span>   <span class="kw">where</span>
+<span class="ot">&gt;</span>     florets m <span class="fu">=</span> [floret (sqrt (fromIntegral i)) <span class="fu">|</span> i <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="fu">..</span>m]]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> example <span class="fu">=</span> frame <span class="dv">4</span> <span class="fu">$</span> sunflower <span class="dv">2000</span> <span class="fu">#</span> bg black</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

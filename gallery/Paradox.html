@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Fibonacci paradox</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>A favorite puzzle/paradox of Lewis Carroll based on Fibonacci numbers. The two figures are “obviously” composed of the same pieces, yet they have different areas!</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/Paradox.big.png" width="400.0" height="200.0" />
+</div>
+Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/Paradox.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (tri)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.SRGB</span> (sRGB24read)</code></pre></div>
+<p>The standard infinite list of Fibonacci numbers.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; fibs ::</span> [<span class="dt">Int</span>]
+<span class="ot">&gt;</span> fibs <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:</span> <span class="dv">1</span> <span class="fu">:</span> zipWith (<span class="fu">+</span>) fibs (tail fibs)</code></pre></div>
+<p>Create a grid by gluing together a bunch of squares.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; grid ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> grid x y <span class="fu">=</span> frame <span class="fu">&lt;&gt;</span> lattice
+<span class="ot">&gt;</span>   <span class="kw">where</span> s       <span class="fu">=</span> unitSquare <span class="fu">#</span> lw thin
+<span class="ot">&gt;</span>         frame   <span class="fu">=</span> rect (fromIntegral x) (fromIntegral y)
+<span class="ot">&gt;</span>                 <span class="fu">#</span> lw thick
+<span class="ot">&gt;</span>         lattice <span class="fu">=</span> centerXY <span class="fu">.</span> vcat <span class="fu">.</span> map hcat <span class="fu">.</span> replicate y <span class="fu">.</span> replicate x <span class="fu">$</span> s</code></pre></div>
+<p>The trapezoid and triangle shapes, with sides lengths based on two Fibonacci numbers.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> trap,<span class="ot"> tri ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> trap s1 s2 <span class="fu">=</span> lw none <span class="fu">.</span> strokeLoop <span class="fu">.</span> closeLine
+<span class="ot">&gt;</span>            <span class="fu">.</span> fromOffsets <span class="fu">.</span> map r2 <span class="fu">$</span> [(<span class="dv">0</span>,<span class="fu">-</span>s2), (s2,<span class="dv">0</span>), (<span class="dv">0</span>,s1)]
+<span class="ot">&gt;</span> tri s1 s2  <span class="fu">=</span> lw none <span class="fu">.</span>  strokeLoop <span class="fu">.</span> closeLine
+<span class="ot">&gt;</span>            <span class="fu">.</span> fromOffsets <span class="fu">.</span> map r2 <span class="fu">$</span> [(s1,<span class="dv">0</span>), (<span class="dv">0</span>,s1<span class="fu">+</span>s2)]</code></pre></div>
+<p>Draw the paradox diagram based on the nth Fibonacci number.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; paradox ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">&gt;</span> paradox n drawDiags <span class="fu">=</span> (sq <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)
+<span class="ot">&gt;</span>                    <span class="fu">|||</span> strutX (s2 <span class="fu">/</span> <span class="dv">2</span>)
+<span class="ot">&gt;</span>                    <span class="fu">|||</span> rect <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)) <span class="fu">#</span> centerXY
+<span class="ot">&gt;</span>   <span class="kw">where</span> f1 <span class="fu">=</span> fibs <span class="fu">!!</span> n
+<span class="ot">&gt;</span>         f2 <span class="fu">=</span> fibs <span class="fu">!!</span> (n<span class="fu">+</span><span class="dv">1</span>)
+<span class="ot">&gt;</span>         s1 <span class="fu">=</span> fromIntegral f1
+<span class="ot">&gt;</span>         s2 <span class="fu">=</span> fromIntegral f2
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span>         trap1 <span class="fu">=</span> trap s1 s2 <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#BEC3C7&quot;</span>)
+<span class="ot">&gt;</span>         trap2 <span class="fu">=</span> trap s1 s2 <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#1ABC9C&quot;</span>)
+<span class="ot">&gt;</span>                            <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span>         tri1  <span class="fu">=</span> tri s1 s2  <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#FF6666&quot;</span>)
+<span class="ot">&gt;</span>         tri2  <span class="fu">=</span> tri s1 s2  <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#37485D&quot;</span>)</code></pre></div>
+<p>The four shapes assembled into a square.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>         sq <span class="fu">=</span> (<span class="kw">if</span> drawDiags <span class="kw">then</span> sqDiags <span class="kw">else</span> mempty)
+<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> grid (f1<span class="fu">+</span>f2) (f1<span class="fu">+</span>f2)
+<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> sqShapes
+<span class="ot">&gt;</span>         sqDiags <span class="fu">=</span> (fromVertices [p2 (<span class="dv">0</span>,s2), p2 (s2,s1)] <span class="fu">&lt;&gt;</span>
+<span class="ot">&gt;</span>                    fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s2,s1<span class="fu">+</span>s2)] <span class="fu">&lt;&gt;</span>
+<span class="ot">&gt;</span>                    fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s1<span class="fu">+</span>s2,s1<span class="fu">+</span>s2)])
+<span class="ot">&gt;</span>                 <span class="fu">#</span> strokeP
+<span class="ot">&gt;</span>                 <span class="fu">#</span> lw thick
+<span class="ot">&gt;</span>                 <span class="fu">#</span> centerXY
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span>         sqShapes <span class="fu">=</span> (traps <span class="fu">#</span> centerY <span class="fu">|||</span> tris <span class="fu">#</span> centerY)
+<span class="ot">&gt;</span>                  <span class="fu">#</span> centerXY
+<span class="ot">&gt;</span>         traps <span class="fu">=</span> trap2 <span class="fu">#</span> alignL
+<span class="ot">&gt;</span>                       <span class="fu">#</span> translateY (s1 <span class="fu">-</span> s2)
+<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> trap1
+<span class="ot">&gt;</span>         tris  <span class="fu">=</span> tri1 <span class="fu">#</span> alignBL
+<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> tri2 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)
+<span class="ot">&gt;</span>                      <span class="fu">#</span> alignBL</code></pre></div>
+<p>The four shapes assembled into a rectangle.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>         rect <span class="fu">=</span> (<span class="kw">if</span> drawDiags <span class="kw">then</span> rDiags <span class="kw">else</span> mempty)
+<span class="ot">&gt;</span>                <span class="fu">&lt;&gt;</span> grid (<span class="dv">2</span><span class="fu">*</span>f2 <span class="fu">+</span> f1) f2
+<span class="ot">&gt;</span>                <span class="fu">&lt;&gt;</span> rShapes
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span>         rShapes <span class="fu">=</span> (bot <span class="fu">#</span> alignTL <span class="fu">&lt;&gt;</span> top <span class="fu">#</span> alignTL) <span class="fu">#</span> centerXY
+<span class="ot">&gt;</span>         bot <span class="fu">=</span> trap1 <span class="fu">#</span> alignB <span class="fu">|||</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) tri1 <span class="fu">#</span> alignB
+<span class="ot">&gt;</span>         top <span class="fu">=</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) tri2 <span class="fu">#</span> alignT <span class="fu">|||</span> trap2 <span class="fu">#</span> alignT
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span>         rDiags <span class="fu">=</span> (fromVertices [p2 (<span class="dv">0</span>,s2), p2 (<span class="dv">2</span><span class="fu">*</span>s2<span class="fu">+</span>s1, <span class="dv">0</span>)] <span class="fu">&lt;&gt;</span>
+<span class="ot">&gt;</span>                   fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s2,s1)] <span class="fu">&lt;&gt;</span>
+<span class="ot">&gt;</span>                   fromVertices [p2 (s1<span class="fu">+</span>s2,s2<span class="fu">-</span>s1), p2 (s1<span class="fu">+</span>s2,s2)]
+<span class="ot">&gt;</span>                   )
+<span class="ot">&gt;</span>                  <span class="fu">#</span> strokeP
+<span class="ot">&gt;</span>                  <span class="fu">#</span> lw thick
+<span class="ot">&gt;</span>                  <span class="fu">#</span> lineCap <span class="dt">LineCapRound</span>
+<span class="ot">&gt;</span>                  <span class="fu">#</span> centerXY</code></pre></div>
+<p>Draw the order-4 diagram with thick lines in the middle. Passing the argument <code>False</code> causes the thick lines to be omitted, revealing the skinny gap in the rectangular assembly. Lower-order diagrams make the gap more obvious; higher-order diagrams make it increasingly less obvious (but make the grid smaller).</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> paradox <span class="dv">4</span> <span class="dt">True</span> <span class="fu">#</span> frame <span class="fl">0.5</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

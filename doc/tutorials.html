@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - How to write diagrams tutorials</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"><ul class="nav"><li><a class="reference internal" href="#getting-started"><generated classes="sectnum">1   </generated>Getting started</a></li><li><a class="reference internal" href="#basic-formatting"><generated classes="sectnum">2   </generated>Basic formatting</a></li><li><a class="reference internal" href="#diagrams-specific-formatting"><generated classes="sectnum">3   </generated>Diagrams-specific formatting</a></li><li><a class="reference internal" href="#special-containers"><generated classes="sectnum">4   </generated>Special containers</a></li><li><a class="reference internal" href="#code-blocks"><generated classes="sectnum">5   </generated>Code blocks</a></li><li><a class="reference internal" href="#static-images"><generated classes="sectnum">6   </generated>Static images</a></li><li><a class="reference internal" href="#building"><generated classes="sectnum">7   </generated>Building</a></li></ul></div></div><div class="col-md-9"><p>Know how to explain a certain technique?  Have a cool diagram which
+makes for a good, illustrative example but is too long to go in the
+gallery?  Write a tutorial!</p><div class="section" id="getting-started"><h1><generated classes="sectnum">1   </generated>Getting started</h1><p>Tutorials on the diagrams website (and the user manual) are written
+using the <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText format</a>.  Though it is a large and
+complex format, there's not a lot you need to know in order to write a
+tutorial.</p><p>The most important advice is to take a look at the source for the user
+manual and other tutorials for examples, and copy and paste one to get
+started (for example, there is some routine boilerplate that must go
+at the top).  Tutorials go in the <span class="repo"><a href="http://github.com/diagrams/diagrams-doc"><code>diagrams-doc</code></a></span> repository, in
+the <code>doc</code> subdirectory.  For example, the user manual is
+<code>doc/manual.rst</code>; the source for this tutorial is
+<code>doc/tutorials.rst</code>.  Copy one of those into
+<code>doc/your-tutorial-name.rst</code>, and off you go! You also need a file
+called <code>doc/your-tutorial-name.html.metadata</code>, containing the line
+<code>title: Your Title Here</code>.  To get your tutorial linked on the main
+<code class="sourceCode">diagrams</code> web page edit the file <code>web/tutorials.markdown</code> by
+adding a line that looks like</p><p><code>* [Name of your tutorial] (/doc/your-tutorial-name.html) — description</code></p></div><div class="section" id="basic-formatting"><h1><generated classes="sectnum">2   </generated>Basic formatting</h1><p>In addition to the below notes, you can refer to the reStructuredText
+<a class="reference external" href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">quick reference</a> for more details.</p><ul><li><p><em>Italics</em> can be produced with <code>*asterisks*</code>.</p></li><li><p>Make bulleted lists by preceding the items with <code>*</code>.</p></li><li><p>Everything can be nested; you simply have to be careful with
+indentation (as in Haskell, indentation is used to determine the
+extent of each scope).</p></li><li><p>The format for hyperlinks is a bit strange; see the user manual for
+examples, or refer to the <a class="reference external" href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">quick reference</a>.</p></li><li><p>Heading levels are indicated by underlining heading titles, with a
+different character for each level.  From top (biggest) to bottom
+(smallest), the heading characters are <code>=</code>, <code>-</code>, <code>~</code>, and
+<code>+</code>.  The overall title of the tutorial should not be included in
+the document itself, but in the associated <code>.html.metadata</code> file
+(for rendering by hakyll).</p></li></ul></div><div class="section" id="diagrams-specific-formatting"><h1><generated classes="sectnum">3   </generated>Diagrams-specific formatting</h1><p>The diagrams documentation toolchain is set up to recognize and handle
+some special markup.  Inline markup is accomplished by surrounding
+some text in backquotes, followed by a tag surrounded by colons, like
+<code>`some text here`:tag:</code>.</p><ul><li><p>Haskell expressions should be enclosed in single backquotes.  Such
+expressions will be linked to Haddock documentation as appropriate.
+For example, <code>`circle 1`</code> is typeset like this: <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span></code>.</p></li><li><p>For other literal expressions which should be typeset using a
+monospaced font, use double backquotes, like <code>``foo``</code>.</p></li><li><p>For embedded \(\LaTeX\) like \(2 + \sqrt{\pi}\), use the
+<code>math</code> tag, as in <code>`2 + \sqrt{\pi}`:math:</code>.  Math is typeset
+using <a class="reference external" href="http://www.mathjax.org/">MathJax</a>.</p></li><li><p>For names of packages on Hackage, use the <code>pkg</code> tag, as in
+<code>`diagrams-lib`:pkg:</code>.  Package names tagged with <code>pkg</code> will
+automatically turn into Hackage links, like this: <span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span>.</p></li><li><p>For names of diagrams-related modules, use the <code>mod</code> tag, as in
+<code>`Diagrams.Path`:mod:</code>.  This will turn into a link to the
+Haddock documentation <em>hosted on the diagrams website</em> (not
+Hackage), like this: <span class="module"><a href="../haddock/diagrams-lib/Diagrams-Path.html"><code>Diagrams.Path</code></a></span>. Hence, this should only
+be used for modules which are hosted on the diagrams website.</p></li><li><p>To link to a repository in the <code>diagrams</code> github organization, use
+the <code>repo</code> tag.  For example, <code>`diagrams-lib`:repo:</code> turns into
+<span class="repo"><a href="http://github.com/diagrams/diagrams-lib"><code>diagrams-lib</code></a></span>.</p></li></ul></div><div class="section" id="special-containers"><h1><generated classes="sectnum">4   </generated>Special containers</h1><p>Currently, there are three special types of "containers" defined,
+which are introduced with the syntax</p><pre><code>.. container:: &lt;type>
+
+  Indented
+  content</code></pre><p>In place of <code>&lt;type></code> you can put <code>todo</code>, <code>warning</code>, or
+<code>exercises</code>, which produce boxes like the following.</p><p><code>todo</code>:</p><div class="todo bs-callout bs-callout-info"><p>Some stuff to do.  This tutorial is not finished yet!</p></div><p><code>warning</code>:</p><div class="warning bs-callout bs-callout-warning"><p>Careful! The first three errors you encounter will be due to the
+fact that you do not understand this warning!</p></div><p><code>exercises</code>:</p><div class="exercises panel panel-success"><div class="panel-body"><ol><li><p>Do 100 jumping jacks.</p></li><li><p>Now do it again, this time using diagrams.</p></li><li><p>Generalize this result.</p></li></ol></div></div></div><div class="section" id="code-blocks"><h1><generated classes="sectnum">5   </generated>Code blocks</h1><p>Literal blocks are indicated by a double colon on a line by itself,
+followed by a blank line, followed by an indented block, optionally
+using bird tracks (blocks using bird tracks do not have to be
+indented).  Such blocks will be typeset using a monospaced font.</p><p>To assign a "class" to a literal block, prefix the double colon by an
+additional blank line and the syntax <code>.. class:: foo</code>.  For example,
+a literal block with the class <code>lhs</code> could be specified as follows:</p><pre><code>.. class:: lhs
+
+::
+
+> x = 13
+> z = square 2 &lt;> circle 3</code></pre><p>which produces:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> x <span class="fu">=</span> <span class="dv">13</span>
+<span class="ot">></span> z <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">2</span> <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">3</span></code></pre></div></div><p>As you can see, the <code>lhs</code> class produces syntax-highlighted and
+hyperlinked literate Haskell source.  To include an inline diagram,
+use the <code>dia</code> class and define a diagram named <code>example</code>.  For
+example,</p><pre><code>.. class:: dia
+
+::
+
+> myCircle = circle 1 # fc purple
+> example = hcat (replicate 4 myCircle)</code></pre><p>produces</p><div class="exampleimg"><div style="text-align: center"><img src="images/ed492de066757fa3.png" width="500" height="200" /></div></div><p>When writing <code>dia</code> blocks you can add extra imports and <code>LANGUAGE</code>
+pragmas as necessary.  However, you should not explicitly import
+<span class="module"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html"><code>Diagrams.Prelude</code></a></span> or any diagrams backend.  These
+imports are added automatically when the documentation is built,
+depending on what backend is in use.</p><p>Finally, using <code>dia-lhs</code> will produce a diagram <em>and</em> typeset the
+code below it.  For example, changing <code>dia</code> to <code>dia-lhs</code> above
+produces</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/ed492de066757fa3.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> myCircle <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> purple
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a> (replicate <span class="dv">4</span> myCircle)</code></pre></div></div></div></div><div class="section" id="static-images"><h1><generated classes="sectnum">6   </generated>Static images</h1><div style="text-align: center"><img src="../doc/static/phone.png" align="center" uri="/doc/static/phone.png" width="300" /></div><p>If you have some static images (that is, images which are not
+generated by diagrams code, but are to be stored explicitly in the
+<span class="repo"><a href="http://github.com/diagrams/diagrams-doc"><code>diagrams-doc</code></a></span> repository), you can put them in the
+<code>doc/static</code> directory, and reference them in several ways.  To
+include a static image in a tutorial, as above, do something like</p><pre><code>.. image:: /doc/static/phone.png
+   :width: 300
+   :align: center</code></pre><p>(this is the code used for the image above); note the leading slash.
+To reference an image from a diagram, do something like</p><pre><code>.. class:: dia
+
+::
+
+> no = (circle 1 &lt;> hrule 2 # rotateBy (1/8))
+>    # lwG 0.2 # lc red
+> example = do
+>   res &lt;- loadImageEmb "doc/static/phone.png"
+>   return $ case res of
+>     Left err    -> mempty
+>     Right phone -> no &lt;> image phone # sized (dims $ V2 1.5 1.5)</code></pre><p>(note the <em>lack</em> of a leading slash), which produces</p><div class="exampleimg"><div style="text-align: center"><img src="images/8d69310838378bdc.png" width="500" height="200" /></div></div></div><div class="section" id="building"><h1><generated classes="sectnum">7   </generated>Building</h1><p>It's ideal to continuously rebuild the diagrams website locally while
+you're writing, so you can see what the final product looks like.  The
+website takes a bit of effort to build initially, but once you have it
+built, incremental rebuilds are very fast (thanks to <span class="package"><a href="http://hackage.haskell.org/package/shake"><code>shake</code></a></span> and
+<span class="package"><a href="http://hackage.haskell.org/package/hakyll"><code>hakyll</code></a></span>), making for a tight edit-compile-view feedback loop.
+For instructions on how to build the diagrams website, see the
+<a class="reference external" href="https://github.com/diagrams/diagrams-doc/blob/master/README.markdown">diagrams-doc README</a>.</p></div></div></div></div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

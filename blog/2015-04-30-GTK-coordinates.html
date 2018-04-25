@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Diagrams + Cairo + Gtk + Mouse picking, Reloaded</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div class="blog-header">
+    <p>by <em>Brent Yorgey</em> on <strong>April 30, 2015</strong></p>
+    <p>Tagged as: <a href="../tags/cairo.html">cairo</a>, <a href="../tags/GTK.html">GTK</a>, <a href="../tags/mouse.html">mouse</a>, <a href="../tags/coordinates.html">coordinates</a>, <a href="../tags/transformation.html">transformation</a>, <a href="../tags/features.html">features</a>, <a href="../tags/1.3.html">1.3</a>.</p>
+</div>
+
+<div>
+    <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"></div></div><div class="col-md-9"><h1 class="title">Diagrams + Cairo + Gtk + Mouse picking, reloaded</h1><p>A little over a year ago, Christopher Mears wrote <a class="reference external" href="http://www.cmears.id.au/articles/diagrams-gtk-mouse.html">a nice article on
+how to match up mouse clicks in a GTK window with parts of a
+diagram</a>.  The only downside was that to make it work, you had to
+explicitly construct the diagram in such a way that its coordinate
+system precisely matched the coordinates of the window you wanted to
+use, so that there was essentially no "translation" to do.  This was
+unfortunate, since constructing a diagram in a particular global
+coordinate system is not a very "diagrams-y" sort of thing to do.
+However, the 1.3 release of diagrams includes a new feature that makes
+matching up mouse clicks and diagrams much easier and more idiomatic,
+and I thought it would be worth updating Chris's original example to
+work more idiomatically in diagrams 1.3. The complete code is listed
+at the end.</p><p>First, here's how we construct the house.  This is quite different
+from the way Chris did it; I have tried to make it more idiomatic by
+focusing on local relationships of constituent pieces, rather than
+putting everything at absolute global coordinates.  We first create
+all the constituent pieces:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="co">-- The diagram <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:to">to</a> be drawn, <a href="../haddock/diagrams-lib/Diagrams-Util.html#v:with">with</a> features tagged by strings.</span>
+<span class="ot">> prettyHouse ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span> [<span class="dt">String</span>]
+<span class="ot">></span> prettyHouse <span class="fu">=</span> house
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     roof    <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:triangle">triangle</a> <span class="dv">1</span>   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#v:scaleToY">scaleToY</a> <span class="fl">0.75</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Align.html#v:centerY">centerY</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> blue
+<span class="ot">></span>     door    <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:rect">rect</a> <span class="fl">0.2</span> <span class="fl">0.4</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> red
+<span class="ot">></span>     handle  <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.02</span>  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> black
+<span class="ot">></span>     wall    <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">1</span>     <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> yellow
+<span class="ot">></span>     chimney <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:fromOffsets">fromOffsets</a> [<span class="dv">0</span> <span class="fu">^&</span> <span class="fl">0.25</span>, <span class="fl">0.1</span> <span class="fu">^&</span> <span class="dv">0</span>, <span class="dv">0</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="fl">0.4</span>)]
+<span class="ot">></span>             <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Trail.html#v:closeTrail">closeTrail</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:strokeT">strokeT</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> green
+<span class="ot">></span>             <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> centerX
+<span class="ot">></span>             <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Names.html#v:named">named</a> <span class="st">"chimney"</span>
+<span class="ot">></span>     smoke <span class="fu">=</span> mconcat
+<span class="ot">></span>       [ <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.05</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:translate">translate</a> v
+<span class="ot">></span>       <span class="fu">|</span> v <span class="ot"><-</span> [ zero, <span class="fl">0.05</span> <span class="fu">^&</span> <span class="fl">0.15</span> ]
+<span class="ot">></span>       ]
+<span class="ot">></span>       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:grey">grey</a></code></pre></div></div><p>We then put the pieces together, labelling each by its name with the
+<code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a></code> function. Diagrams can be valuated by any monoid; when two
+diagrams are combined, the value at each point will be the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mappend">mappend</a></code>
+of the values of the two component diagrams.  In this case, each point
+in the final diagram will accumulate a list of <code class="sourceCode"><span class="dt">String</span></code>s
+corresponding to the pieces of the house which are under that point.
+Note how we make use of combinators like <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:vcat">vcat</a></code> and <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a></code>,
+alignments like <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignB">alignB</a></code>, <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugL">snugL</a></code> and <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugR">snugR</a></code>, and the use of a named
+subdiagram (the chimney) to position the components relative to each
+other. (You can click on any of the above function names to go to
+their documentation!)</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>     house <span class="fu">=</span> vcat
+<span class="ot">></span>       [ mconcat
+<span class="ot">></span>         [ roof    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugR">snugR</a>                   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"roof"</span>]
+<span class="ot">></span>         , chimney <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugL">snugL</a>                   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"chimney"</span>]
+<span class="ot">></span>         ]
+<span class="ot">></span>         <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> centerX
+<span class="ot">></span>       , mconcat
+<span class="ot">></span>         [ handle  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:translate">translate</a> (<span class="fl">0.05</span> <span class="fu">^&</span> <span class="fl">0.2</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"handle"</span>]
+<span class="ot">></span>         , door    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignB">alignB</a>                  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"door"</span>]
+<span class="ot">></span>         , wall    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignB">alignB</a>                  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"wall"</span>]
+<span class="ot">></span>         ]
+<span class="ot">></span>       ]
+<span class="ot">></span>       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:withName">withName</a> <span class="st">"chimney"</span> (\chim <span class="ot">-></span>
+<span class="ot">></span>           <a href="../haddock/diagrams-core/Diagrams-Core.html#v:atop">atop</a> (smoke <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:moveTo">moveTo</a> (location chim) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:translateY">translateY</a> <span class="fl">0.4</span>
+<span class="ot">></span>                       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"smoke"</span>]
+<span class="ot">></span>                )
+<span class="ot">></span>         )</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/37edfa0badeed824.png" width="500" height="200" /></div></div><p>Now, when we render the diagram to a GTK window, we can get diagrams
+to give us an affine transformation that mediates between the
+diagram's local coordinates and the GTK window's coordinates.  I'll
+just highlight a few pieces of the code; the complete listing can be
+found at the end of the post.  We first create an <code>IORef</code> to hold
+the transformation:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>   gtk2DiaRef <span class="ot"><-</span> (newIORef<span class="ot"> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mempty">mempty</a> ::</span> <span class="dt">IO</span> (<span class="dt">IORef</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#t:T2">T2</a></span> <span class="dt">Double</span>)))</code></pre></div></div><p>We initialize it with the identity transformation.  We use the
+<code class="sourceCode"><a href="../haddock/diagrams-core/Diagrams-Core.html#v:renderDiaT">renderDiaT</a></code> function to get not only a rendering action but also the
+transformation from diagram to GTK coordinates; we save the inverse of
+the transformation in the <code>IORef</code> (since we will want to convert
+from GTK to diagram coordinates):</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>     <span class="kw">let</span> (dia2gtk, (_,r)) <span class="fu">=</span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:renderDiaT">renderDiaT</a> <span class="dt">Cairo</span>
+<span class="ot">></span>                              (<span class="dt">CairoOptions</span> <span class="st">""</span> (mkWidth <span class="dv">250</span>) <span class="dt">PNG</span> <span class="dt">False</span>)
+<span class="ot">></span>                              prettyHouse
+<span class="ot">></span>
+<span class="ot">></span>     <span class="co">-- store the inverse of the diagram -> window coordinate transformation</span>
+<span class="ot">></span>     <span class="co">-- for later <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:use">use</a> in interpreting mouse clicks</span>
+<span class="ot">></span>     writeIORef gtk2DiaRef (inv dia2gtk)</code></pre></div></div><p>(Note that if it is possible for the first motion notify event to
+happen before the expose event, then such mouse motions will be
+computed to correspond to the wrong part of the diagram, but who
+cares.)  Now, when we receive a mouse click, we apply the stored
+transformation to convert to a point in diagram coordinates, and pass
+it to the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Query.html#v:sample">sample</a></code> function to extract a list of house components at
+that location.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span>     (x,y) <span class="ot"><-</span> eventCoordinates
+<span class="ot">></span>
+<span class="ot">></span>     <span class="co">-- <a href="../haddock/diagrams-core/Diagrams-Core.html#v:transform">transform</a> the mouse click back into diagram coordinates.</span>
+<span class="ot">></span>     gtk2Dia <span class="ot"><-</span> liftIO <span class="fu">$</span> readIORef gtk2DiaRef
+<span class="ot">></span>     <span class="kw">let</span> pt' <span class="fu">=</span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:transform">transform</a> gtk2Dia (p2 (x,y))
+<span class="ot">></span>
+<span class="ot">></span>     liftIO <span class="fu">$</span> <span class="kw">do</span>
+<span class="ot">></span>       putStrLn <span class="fu">$</span> show (x,y) <span class="fu">++</span> <span class="st">": "</span>
+<span class="ot">></span>                    <span class="fu">++</span> intercalate <span class="st">" "</span> (sample prettyHouse pt')</code></pre></div></div><p>The final product ends up looking and behaving identically to the
+<a class="reference external" href="https://www.youtube.com/watch?v=vwf9aVdDipo">video that Chris made</a>.</p><p>Finally, here's the complete code.  A lot of it is just boring
+standard GTK setup.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import           </span><span class="dt">Control.Monad</span>                   (void)
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Control.Monad.IO.Class</span>          (liftIO)
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Data.IORef</span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Data.List</span>                       (intercalate)
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.Backend.Cairo</span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.Backend.Cairo.Internal</span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">></span> <span class="kw">import           </span><span class="dt">Graphics.UI.Gtk</span>
+<span class="ot">></span>
+<span class="ot">> main ::</span> <span class="dt">IO</span> ()
+<span class="ot">></span> main <span class="fu">=</span> <span class="kw">do</span>
+<span class="ot">></span>   <span class="co">-- Ordinary Gtk setup.</span>
+<span class="ot">></span>   void initGUI
+<span class="ot">></span>   w <span class="ot"><-</span> windowNew
+<span class="ot">></span>   da <span class="ot"><-</span> drawingAreaNew
+<span class="ot">></span>   w <span class="ot">`containerAdd`</span> da
+<span class="ot">></span>   void <span class="fu">$</span> w <span class="ot">`on`</span> deleteEvent <span class="fu">$</span> liftIO mainQuit <span class="fu">>></span> return <span class="dt">True</span>
+<span class="ot">></span>
+<span class="ot">></span>   <span class="co">-- Make an IORef <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:to">to</a> hold the transformation <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:from">from</a> window <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:to">to</a> diagram</span>
+<span class="ot">></span>   <span class="co">-- coordinates.</span>
+<span class="ot">></span>   gtk2DiaRef <span class="ot"><-</span> (newIORef<span class="ot"> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mempty">mempty</a> ::</span> <span class="dt">IO</span> (<span class="dt">IORef</span> (<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#t:T2">T2</a></span> <span class="dt">Double</span>)))
+<span class="ot">></span>
+<span class="ot">></span>   <span class="co">-- <a href="../haddock/diagrams-core/Diagrams-Core.html#t:Render">Render</a> the diagram on the drawing area and save the transformation.</span>
+<span class="ot">></span>   void <span class="fu">$</span> da <span class="ot">`on`</span> exposeEvent <span class="fu">$</span> liftIO <span class="fu">$</span> <span class="kw">do</span>
+<span class="ot">></span>     dw <span class="ot"><-</span> widgetGetDrawWindow da
+<span class="ot">></span>
+<span class="ot">></span>     <span class="co">-- <a href="../haddock/diagrams-core/Diagrams-Core.html#v:renderDiaT">renderDiaT</a> returns <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:both">both</a> a rendering result as well as the</span>
+<span class="ot">></span>     <span class="co">-- transformation <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:from">from</a> diagram <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:to">to</a> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:output">output</a> coordinates.</span>
+<span class="ot">></span>     <span class="kw">let</span> (dia2gtk, (_,r)) <span class="fu">=</span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:renderDiaT">renderDiaT</a> <span class="dt">Cairo</span>
+<span class="ot">></span>                              (<span class="dt">CairoOptions</span> <span class="st">""</span> (mkWidth <span class="dv">250</span>) <span class="dt">PNG</span> <span class="dt">False</span>)
+<span class="ot">></span>                              prettyHouse
+<span class="ot">></span>
+<span class="ot">></span>     <span class="co">-- store the inverse of the diagram -> window coordinate transformation</span>
+<span class="ot">></span>     <span class="co">-- for later <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:use">use</a> in interpreting mouse clicks</span>
+<span class="ot">></span>     writeIORef gtk2DiaRef (inv dia2gtk)
+<span class="ot">></span>
+<span class="ot">></span>     renderWithDrawable dw r
+<span class="ot">></span>     return <span class="dt">True</span>
+<span class="ot">></span>
+<span class="ot">></span>   <span class="co">-- When the mouse moves, show the coordinates and the objects <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:under">under</a></span>
+<span class="ot">></span>   <span class="co">-- the pointer.</span>
+<span class="ot">></span>   void <span class="fu">$</span> da <span class="ot">`on`</span> motionNotifyEvent <span class="fu">$</span> <span class="kw">do</span>
+<span class="ot">></span>     (x,y) <span class="ot"><-</span> eventCoordinates
+<span class="ot">></span>
+<span class="ot">></span>     <span class="co">-- <a href="../haddock/diagrams-core/Diagrams-Core.html#v:transform">transform</a> the mouse click back into diagram coordinates.</span>
+<span class="ot">></span>     gtk2Dia <span class="ot"><-</span> liftIO <span class="fu">$</span> readIORef gtk2DiaRef
+<span class="ot">></span>     <span class="kw">let</span> pt' <span class="fu">=</span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:transform">transform</a> gtk2Dia (p2 (x,y))
+<span class="ot">></span>
+<span class="ot">></span>     liftIO <span class="fu">$</span> <span class="kw">do</span>
+<span class="ot">></span>       putStrLn <span class="fu">$</span> show (x,y) <span class="fu">++</span> <span class="st">": "</span>
+<span class="ot">></span>                    <span class="fu">++</span> intercalate <span class="st">" "</span> (sample prettyHouse pt')
+<span class="ot">></span>       return <span class="dt">True</span>
+<span class="ot">></span>
+<span class="ot">></span>   <span class="co">-- Run the Gtk main loop.</span>
+<span class="ot">></span>   da <span class="ot">`widgetAddEvents`</span> [<span class="dt">PointerMotionMask</span>]
+<span class="ot">></span>   widgetShowAll w
+<span class="ot">></span>   mainGUI
+<span class="ot">></span>
+<span class="ot">></span> <span class="co">-- The diagram <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:to">to</a> be drawn, <a href="../haddock/diagrams-lib/Diagrams-Util.html#v:with">with</a> features tagged by strings.</span>
+<span class="ot">> prettyHouse ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:QDiagram">QDiagram</a></span> <span class="dt">Cairo</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span> [<span class="dt">String</span>]
+<span class="ot">></span> prettyHouse <span class="fu">=</span> house
+<span class="ot">></span>   <span class="kw">where</span>
+<span class="ot">></span>     roof    <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:triangle">triangle</a> <span class="dv">1</span>   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#v:scaleToY">scaleToY</a> <span class="fl">0.75</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Align.html#v:centerY">centerY</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> blue
+<span class="ot">></span>     door    <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:rect">rect</a> <span class="fl">0.2</span> <span class="fl">0.4</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> red
+<span class="ot">></span>     handle  <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.02</span>  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> black
+<span class="ot">></span>     wall    <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">1</span>     <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> yellow
+<span class="ot">></span>     chimney <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:fromOffsets">fromOffsets</a> [<span class="dv">0</span> <span class="fu">^&</span> <span class="fl">0.25</span>, <span class="fl">0.1</span> <span class="fu">^&</span> <span class="dv">0</span>, <span class="dv">0</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="fl">0.4</span>)]
+<span class="ot">></span>             <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Trail.html#v:closeTrail">closeTrail</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:strokeT">strokeT</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> green
+<span class="ot">></span>             <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> centerX
+<span class="ot">></span>             <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Names.html#v:named">named</a> <span class="st">"chimney"</span>
+<span class="ot">></span>     smoke <span class="fu">=</span> mconcat
+<span class="ot">></span>       [ <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.05</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:translate">translate</a> v
+<span class="ot">></span>       <span class="fu">|</span> v <span class="ot"><-</span> [ zero, <span class="fl">0.05</span> <span class="fu">^&</span> <span class="fl">0.15</span> ]
+<span class="ot">></span>       ]
+<span class="ot">></span>       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> grey
+<span class="ot">></span>     house <span class="fu">=</span> vcat
+<span class="ot">></span>       [ mconcat
+<span class="ot">></span>         [ roof    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugR">snugR</a>                  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"roof"</span>]
+<span class="ot">></span>         , chimney <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugL">snugL</a>                  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"chimney"</span>]
+<span class="ot">></span>         ]
+<span class="ot">></span>         <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> centerX
+<span class="ot">></span>       , mconcat
+<span class="ot">></span>         [ handle  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:translate">translate</a> (<span class="fl">0.05</span> <span class="fu">^&</span> <span class="fl">0.2</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"handle"</span>]
+<span class="ot">></span>         , door    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignB">alignB</a>                  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"door"</span>]
+<span class="ot">></span>         , wall    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignB">alignB</a>                  <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"wall"</span>]
+<span class="ot">></span>         ]
+<span class="ot">></span>       ]
+<span class="ot">></span>       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:withName">withName</a> <span class="st">"chimney"</span> (\chim <span class="ot">-></span>
+<span class="ot">></span>           <a href="../haddock/diagrams-core/Diagrams-Core.html#v:atop">atop</a> (smoke <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:moveTo">moveTo</a> (location chim) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:translateY">translateY</a> <span class="fl">0.4</span>
+<span class="ot">></span>                       <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Query.html#v:value">value</a> [<span class="st">"smoke"</span>]
+<span class="ot">></span>                )
+<span class="ot">></span>         )</code></pre></div></div></div></div></div>
+
+</div>
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

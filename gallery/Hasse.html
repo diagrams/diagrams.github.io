@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Hasse diagrams</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>Hasse diagram of all subsets of a four-element set.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/Hasse.big.png" width="600.0" height="600.0" />
+</div>
+Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/Hasse.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Ord</span> (comparing)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Function</span> (on)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Maybe</span> (fromMaybe)
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.SRGB</span> (sRGB24read)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> colors <span class="fu">=</span> map sRGB24read[<span class="st">&quot;#000000&quot;</span>, <span class="st">&quot;#D1DBBD&quot;</span>, <span class="st">&quot;#91AA9D&quot;</span>, <span class="st">&quot;#3E606F&quot;</span>, <span class="st">&quot;#193441&quot;</span>, <span class="st">&quot;#000000&quot;</span>]</code></pre></div>
+<p>A subset is represented by the size of the parent set paired with the list of elements in the subset. <code>isSubset</code> tests whether one set is a subset of another; <code>subsetsBySize</code> lists all the subsets of a set of size <code>n</code>, grouped according to size.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">data</span> <span class="dt">Subset</span> <span class="fu">=</span> <span class="dt">Subset</span> <span class="dt">Int</span> [<span class="dt">Int</span>]
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> (<span class="dt">Subset</span> _ elts1) <span class="ot">`isSubset`</span> (<span class="dt">Subset</span> _ elts2) <span class="fu">=</span> all (<span class="ot">`elem`</span> elts2) elts1
+<span class="ot">&gt;</span> 
+<span class="ot">&gt; subsetsBySize ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [[<span class="dt">Subset</span>]]
+<span class="ot">&gt;</span> subsetsBySize n <span class="fu">=</span> map (map (<span class="dt">Subset</span> n))
+<span class="ot">&gt;</span>                 <span class="fu">.</span> groupBy ((<span class="fu">==</span>) <span class="ot">`on`</span> length)
+<span class="ot">&gt;</span>                 <span class="fu">.</span> sortBy (comparing length)
+<span class="ot">&gt;</span>                 <span class="fu">.</span> subsequences
+<span class="ot">&gt;</span>                 <span class="fu">$</span> [<span class="dv">1</span><span class="fu">..</span>n]</code></pre></div>
+<p>Draw the elements of a subset, by drawing a colored square for each element present, and leaving a blank space for absent elements.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> drawElts n elts <span class="fu">=</span> hcat
+<span class="ot">&gt;</span>                 <span class="fu">.</span> map (\i <span class="ot">-&gt;</span> <span class="kw">if</span> i <span class="ot">`elem`</span> elts
+<span class="ot">&gt;</span>                                <span class="kw">then</span> drawElt i
+<span class="ot">&gt;</span>                                <span class="kw">else</span> strutX <span class="dv">1</span>
+<span class="ot">&gt;</span>                       )
+<span class="ot">&gt;</span>                 <span class="fu">$</span> [<span class="dv">1</span><span class="fu">..</span>n]
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> drawElt e <span class="fu">=</span> unitSquare <span class="fu">#</span> fc (colors <span class="fu">!!</span> e) <span class="fu">#</span> lw thin</code></pre></div>
+<p>Draw a subset by drawing a dashed rectangle around the elements. Note that we also assign a name to the rectangle, corresponding to the elements it contains, which we use to draw connections between subsets later.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> drawSet (<span class="dt">Subset</span> n elts) <span class="fu">=</span> (    drawElts n elts <span class="fu">#</span> centerXY
+<span class="ot">&gt;</span>                             <span class="fu">&lt;&gt;</span> rect (fromIntegral n <span class="fu">+</span> <span class="fl">0.5</span>) <span class="fl">1.5</span>
+<span class="ot">&gt;</span>                                  <span class="fu">#</span> dashingG [<span class="fl">0.2</span>,<span class="fl">0.2</span>] <span class="dv">0</span>
+<span class="ot">&gt;</span>                                  <span class="fu">#</span> lw thin
+<span class="ot">&gt;</span>                                  <span class="fu">#</span> named elts
+<span class="ot">&gt;</span>                           )</code></pre></div>
+<p>Draw a Hasse diagram by drawing subsets grouped by size in rows, and connecting each set to its subsets in the row below. <a href="http://projects.haskell.org/diagrams/manual/diagrams-manual.html#named-subdiagrams">See the user manual</a> for a more in-depth explanation of how names are used to connect subsets.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> hasseRow <span class="fu">=</span> centerX <span class="fu">.</span> hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">2</span>) <span class="fu">.</span> map drawSet
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> hasseDiagram n <span class="fu">=</span> setsD <span class="fu">#</span> drawConnections <span class="fu">#</span> centerXY
+<span class="ot">&gt;</span>   <span class="kw">where</span> setsD <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> fromIntegral n)
+<span class="ot">&gt;</span>               <span class="fu">.</span> map hasseRow
+<span class="ot">&gt;</span>               <span class="fu">.</span> reverse
+<span class="ot">&gt;</span>               <span class="fu">$</span> subsets
+<span class="ot">&gt;</span>         subsets <span class="fu">=</span> subsetsBySize n
+<span class="ot">&gt;</span>         drawConnections <span class="fu">=</span> applyAll connections</code></pre></div>
+<p>To generate all the connections, we apply <code>connectSome</code> to each pair of adjacent rows, which calls <code>connect</code> on those pairs where one is a subset of the other.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>         connections <span class="fu">=</span> concat <span class="fu">$</span> zipWith connectSome subsets (tail subsets)
+<span class="ot">&gt;</span>         connectSome subs1 subs2 <span class="fu">=</span> [ connect s1 s2 <span class="fu">|</span> s1 <span class="ot">&lt;-</span> subs1
+<span class="ot">&gt;</span>                                                   , s2 <span class="ot">&lt;-</span> subs2
+<span class="ot">&gt;</span>                                                   , s1 <span class="ot">`isSubset`</span> s2 ]</code></pre></div>
+<p>Connect two subsets by looking up the subdiagrams named with their elements, and drawing a line from the upper boundary of one to the lower boundary of the other.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>         connect (<span class="dt">Subset</span> _ elts1) (<span class="dt">Subset</span> _ elts2) <span class="fu">=</span>
+<span class="ot">&gt;</span>           withNames [elts1, elts2] <span class="fu">$</span> \[b1, b2] <span class="ot">-&gt;</span>
+<span class="ot">&gt;</span>             beneath ((boundaryFrom b1 unitY <span class="fu">~~</span> boundaryFrom b2 unit_Y) <span class="fu">#</span> lw thin)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">$</span> hasseDiagram <span class="dv">4</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

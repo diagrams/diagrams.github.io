@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Introduction to Palette, Part 1</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div class="blog-header">
+    <p>by <em>Jeffrey Rosenbluth</em> on <strong>December  3, 2013</strong></p>
+    <p>Tagged as: <a href="../tags/color.html">color</a>, <a href="../tags/palette.html">palette</a>, <a href="../tags/brewer.html">brewer</a>, <a href="../tags/d3.html">d3</a>.</p>
+</div>
+
+<div>
+    <?xml version="1.0" encoding="UTF-8" ?>
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"></div></div><div class="col-md-9"><h1 class="title">Introducing the Palette Package, Part I</h1><subtitle ids="introduction" names="introduction">Introduction</subtitle><p>Choosing a set of colors that look good together can be quite a challenge. The task comes up in a variety of different contexts including: webiste design, print design, cartography, and as we will discuss here, making diagrams. The problem comes down to a balancing act between two issues; first is that the choosen set of colors is asthetically pleasing, and second is that there is enough contrast between them.</p><p>The easiest approach is to borrow a set of colors from someone who has already put in the time and effort to create it. The Palette package "Data.Colour.Palette.ColorSet" provides access to a few different predefined color sets including <a class="reference external" href="https://github.com/mbostock/d3/wiki/Ordinal-Scales">the ones in d3</a> and the package "Data.Colour.Palette.BrewerSet" contains a large variety of color schemes created by Cynthia Brewer for use in map making see <a class="reference external" href="http://colorbrewer2.org/">colorbrewer 2.0</a>.</p><p>Let's start out by building some tools in Diagrams, the Haskell drawing framework. We will use the golden ration to give us some pleasing proportions.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> gr <span class="fu">=</span> (<span class="dv">1</span> <span class="fu">+</span> sqrt <span class="dv">5</span>) <span class="fu">/</span> <span class="dv">2</span></code></pre></div></div><p>The function <code class="sourceCode">bar</code> takes a list of colors which we define here as <code class="sourceCode">[<span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Colour">Colour</a></span> <span class="dt">Double</span>]</code> (we often use the type synonym <code class="sourceCode">[<span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Kolor">Kolor</a></span>]</code>). We set the length of the color bar to the golden ratio and the height to 1.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> bar cs <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a> [square gr <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:scaleX">scaleX</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> k <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lwG">lwG</a> <span class="dv">0</span> <span class="fu">|</span> k <span class="ot"><-</span> cs] <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> centerXY
+<span class="ot">></span>   <span class="kw">where</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu">=</span> gr <span class="fu">/</span> (fromIntegral (length cs))</code></pre></div></div><p>We can use <code class="sourceCode">bar</code> to view the color sets in <code class="sourceCode"><span class="dt">Palette</span></code>. Let's make a few color bars. We will use functions provided in <code class="sourceCode"><span class="dt">Palette</span></code> to make the color lists and then use <code class="sourceCode">bar</code> to make the diagrams. The function <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#v:d3Colors1">d3Colors1</a></code> takes an <code class="sourceCode"><span class="dt">Int</span></code> between 0 and 9 and returns a color from the set.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> d3 <span class="fu">=</span> [d3Colors1 n <span class="fu">|</span> n <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span>]]
+<span class="ot">></span> example <span class="fu">=</span> bar d3</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/a7fbf9bf3aaad2a8.png" width="500" height="200" /></div></div><p>The function we use to access schemes from <code class="sourceCode"><span class="dt">Data.Colour.Palette.Brewerset</span></code> is <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#v:brewerSet">brewerSet</a></code>. It takes two arguments: the category of the set <code class="sourceCode"><span class="dt"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#t:ColorCat">ColorCat</a></span></code> (see the haddocks documentation for a list of categories), and an integer representing how many colors in the set. The sets are divided up into 3 categories primarily for showing different types of data on a map: sequential, diverging and qualitative. But they are useful for making diagrams as well.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> gb <span class="fu">=</span> bar <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#v:brewerSet">brewerSet</a> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#t:GnBu">GnBu</a></span> <span class="dv">9</span>    <span class="co">-- green/blue, sequential multihue</span>
+<span class="ot">></span> po <span class="fu">=</span> bar <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#v:brewerSet">brewerSet</a> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#t:PuOr">PuOr</a></span> <span class="dv">11</span>   <span class="co">-- purple/orange, diverging</span>
+<span class="ot">></span> bs <span class="fu">=</span> bar <span class="fu">$</span> <a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#v:brewerSet">brewerSet</a> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#t:Paired">Paired</a></span> <span class="dv">11</span> <span class="co">-- qualitative</span>
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [gb, po, bs]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/4e375f484cb7e16f.png" width="500" height="200" /></div></div><p>Some of the color sets provided in <code class="sourceCode"><span class="dt">ColorSet</span></code> occur with 2 or 4 brightness levels. <code class="sourceCode"><span class="kw">data</span> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Brightness">Brightness</a></span> <span class="fu">=</span> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Darkest">Darkest</a></span> <span class="fu">|</span> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Dark">Dark</a></span> <span class="fu">|</span> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Light">Light</a></span> <span class="fu">|</span> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Lightest">Lightest</a></span></code> with <code class="sourceCode"><span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Darkest">Darkest</a></span> <span class="fu">==</span> <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Dark">Dark</a></span></code> and similarly for <code class="sourceCode"><span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Light">Light</a></span></code> when using a two set variant. The <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a></code> function is useful for visualizing these.</p><p><code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a></code> takes a nested list of colors <code class="sourceCode">[[<span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Kolor">Kolor</a></span>]]</code> and returns a grid of vertically stacked bars.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a> cs <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Align.html#v:centerXY">centerXY</a> <span class="fu">$</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:vcat">vcat</a> [bar c <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Transform.html#v:scaleY">scaleY</a> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu">|</span> c <span class="ot"><-</span> cs]
+<span class="ot">></span>   <span class="kw">where</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu">=</span> <span class="dv">1</span> <span class="fu">/</span> (fromIntegral (length cs))
+<span class="ot">></span>
+<span class="ot">></span> d3Pairs <span class="fu">=</span> [[d3Colors2  <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Dark">Dark</a></span>  n <span class="fu">|</span> n <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span>]], [d3Colors2 <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Light">Light</a></span> n <span class="fu">|</span> n <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span>]]]
+<span class="ot">></span> g2 <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a> d3Pairs
+<span class="ot">></span>
+<span class="ot">></span> d3Quads <span class="fu">=</span> [[d3Colors4 b n <span class="fu">|</span> n <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span>]] <span class="fu">|</span> b <span class="ot"><-</span> [<span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Darkest">Darkest</a></span>, <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Dark">Dark</a></span>, <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Light">Light</a></span>, <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#t:Lightest">Lightest</a></span>]]
+<span class="ot">></span> g4 <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a> d3Quads
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [g2, g4]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/394a64915f14d3f1.png" width="500" height="200" /></div></div><p>The are over 300 colors that W3C recommends that every browser support. These are usually list in alphabetical order, which needless to say does not separate similar colors well.  <code class="sourceCode"><span class="dt">Palette</span></code> provides the function <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#v:webColors">webColors</a></code> which takes an integer <em>n</em> returns the <em>n</em> th color in a list which has first been sorted by hue and then travesed by skiping every 61 elements. This cycles through a good amount of colors before repeating similar hues. The variant <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-ColorSet.html#v:infiniteWebColors">infiniteWebColors</a></code> recycles this list. When using these colors it's a good idea to pick some random starting point and increment the color number by 1 every time a new color is required.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> web <span class="fu">=</span> [[webColors (<span class="dv">19</span> <span class="fu">*</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:j">j</a> <span class="fu">+</span> i) <span class="fu">|</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:i">i</a> <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">8</span>]] <span class="fu">|</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:j">j</a> <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">8</span>]]
+<span class="ot">></span> w1 <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a> web
+<span class="ot">></span>
+<span class="ot">></span> web2 <span class="fu">=</span> [[webColors (<span class="dv">19</span> <span class="fu">*</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:j">j</a> <span class="fu">+</span> i) <span class="fu">|</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:i">i</a> <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">19</span>]] <span class="fu">|</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Metafont-Types.html#v:j">j</a> <span class="ot"><-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">14</span>]]
+<span class="ot">></span> w2 <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:grid">grid</a> web2
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [w1, w2]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/1890ba105bcb8e3c.png" width="500" height="200" /></div></div><p>If none of the above color schemes suit your purposes or if you just want to create your own - use the functions in <code class="sourceCode"><span class="dt">Data.Colour.Palette.Harmony</span></code>. The module provides some basic functions for adjusting colors plus a progammatic interface to tools like <a class="reference external" href="https://kuler.adobe.com/create/color-wheel/">Adobe Kuler</a> and <a class="reference external" href="http://colorschemedesigner.com/">Color Scheme Designer</a>. We'll finish Part 1 of this post by examining some of the functions provided to tweak a color: <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:shade">shade</a></code>, <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:tone">tone</a></code> and <code class="sourceCode"><a href="../haddock/palette/Data-Colour-Palette-Harmony.html#v:tint">tint</a></code>. These three functions mix a given color with black, gray, and white repsectively. So if for example we wanted a darker version of the d3 scheme, we can apply a shade.
+Or we can add some gray to the brewer set <code class="sourceCode"><span class="dt"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#t:GnBu">GnBu</a></span></code> from above.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-Example-Logo.html#v:s">s</a> <span class="fu">=</span> bar <span class="fu">$</span> map (shade <span class="fl">0.75</span>) d3
+<span class="ot">></span> t <span class="fu">=</span> bar <span class="fu">$</span> map (tone <span class="fl">0.65</span>) (brewerSet <span class="dt"><a href="../haddock/palette/Data-Colour-Palette-BrewerSet.html#t:GnBu">GnBu</a></span> <span class="dv">9</span>)
+<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a>' (with <span class="fu">&</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:sep">sep</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:-46--126-">.~</a></span> <span class="fl">0.5</span>) [s, t]</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/bc276864403a1672.png" width="500" height="200" /></div></div><p>In part II we will talk just a bit about color theory and explain more of the fucntions in <code class="sourceCode"><span class="dt">Harmony</span></code>.</p></div></div></div>
+
+</div>
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

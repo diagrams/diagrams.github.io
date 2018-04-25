@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Naive fibonacci call tree</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>The tree of function calls made by a naive Fibonacci implementation.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/FibCalls.big.png" width="800.0" height="400.0" />
+</div>
+Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/FibCalls.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span></code></pre></div>
+<p>We make use of a tree layout module from the <code>diagrams-contrib</code> package:</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Layout.Tree</span></code></pre></div>
+<p>Generate the tree of naive Fibonacci calls.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; fibCalls ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">BTree</span> <span class="dt">Integer</span>
+<span class="ot">&gt;</span> fibCalls <span class="dv">0</span> <span class="fu">=</span> leaf <span class="dv">0</span>
+<span class="ot">&gt;</span> fibCalls <span class="dv">1</span> <span class="fu">=</span> leaf <span class="dv">1</span>
+<span class="ot">&gt;</span> fibCalls n <span class="fu">=</span> <span class="dt">BNode</span> n (fibCalls (n<span class="fu">-</span><span class="dv">1</span>)) (fibCalls (n<span class="fu">-</span><span class="dv">2</span>))</code></pre></div>
+<p>Lay out the tree and render it by providing a function to render nodes and a function to render edges.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="dt">Just</span> t <span class="fu">=</span> uniqueXLayout <span class="dv">2</span> <span class="dv">2</span> (fibCalls <span class="dv">5</span>)
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">.</span> centerXY
+<span class="ot">&gt;</span>         <span class="fu">$</span> renderTree
+<span class="ot">&gt;</span>             (\n <span class="ot">-&gt;</span> (text (<span class="st">&quot;fib &quot;</span> <span class="fu">++</span> show n)
+<span class="ot">&gt;</span>                     <span class="fu">&lt;&gt;</span> roundedRect <span class="dv">3</span> <span class="fl">1.3</span> <span class="fl">0.3</span> <span class="fu">#</span> fc gold)
+<span class="ot">&gt;</span>             )
+<span class="ot">&gt;</span>             (<span class="fu">~~</span>) t
+<span class="ot">&gt;</span>         <span class="ot">`atop`</span> square <span class="dv">1</span> <span class="fu">#</span> scaleY <span class="dv">12</span> <span class="fu">#</span> translateY (<span class="fu">-</span><span class="dv">5</span>)
+<span class="ot">&gt;</span>                         <span class="fu">#</span> scaleX <span class="dv">34</span>
+<span class="ot">&gt;</span>                         <span class="fu">#</span> lw none <span class="fu">#</span> fc whitesmoke</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>

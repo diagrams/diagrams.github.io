@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Diagrams - Pythagorean Tree</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/sticky-footer-navbar.css" rel="stylesheet" />
+    <link href="../css/callout.css" rel="stylesheet" />
+    <link href="../css/doc.css" rel="stylesheet" />
+    <link href="../css/bootstrap-docs.css" rel="stylesheet" />
+    <link href="../css/home.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="shortcut icon" href="../diagrams.ico" />
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+
+    <div id="wrap">
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">diagrams</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="../">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+		<li><a href="../download.html">Installation</a></li>
+		<li class="divider"></li>
+ 		<li><a href="../tutorials.html">Tutorials</a></li>
+		<li><a href="../doc/manual.html">User manual</a></li>
+                <li><a href="../haddock/index.html">API reference (Haddocks)</a></li>
+                <li><a href="../doc/core.html">Core library reference</a></li>
+		<li class="divider"></li>
+		<li><a href="http://haskell.org/haskellwiki/Diagrams">Wiki</a></li>
+		<li><a href="../releases.html">Releases / changelogs</a></li>
+              </ul>
+            </li>
+	    <li><a href="../gallery.html">Gallery</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Community <b class="caret"></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="http://webchat.freenode.net?channels=diagrams">IRC channel</a></li>
+		<li><a href="http://groups.google.com/group/diagrams-discuss">Mailing
+		    list</a></li>
+                <li><a href="https://github.com/diagrams">Github</a></li>
+		<li><a href="../sightings.html">Sightings</a></li>
+		<li><a href="../community.html">Get involved</a></li>
+              </ul>
+	    </li>
+            <li><a href="../blog/index.html">Blog</a></li>
+	    <li>
+	        <form id="search" class="navbar-form navbar-left" role="search" method="get" action="http://haskell.org/hoogle">
+	            <div class="form-group">
+	                <input id="hoogle" name="hoogle" type="text" class="form-control" placeholder="API Search">
+	            </div>
+	        </form>
+	    </li>
+	   </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container" style="padding-top: 60px;">
+      <div id="examplesrc">
+
+<p>A fractal made of squares and right-angled triangles that looks like a tree.</p>
+
+<div class="exampleimg" style="text-align: center">
+<img src="../gallery/images/PythagoreanTree.big.png" width="400.0" height="300.0" />
+</div>
+Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
+
+<p><span style="font-size: small"><a href="../gallery/PythagoreanTree.lhs">Download raw source code</a></span><br /></p>
+
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<p>This diagram was inspired by the one at <a href="http://projecteuler.net/problem=395" class="uri">http://projecteuler.net/problem=395</a>, which explains the algorithm for constructing the tree.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.TwoD</span>
+<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour</span> (blend)</code></pre></div>
+<p>An order \(n\) tree has a square and a right-angled triangle on top, and an order \(n-1\) tree on each short side of the triangle. As the recursion deepens, the limbs get smaller and more transparent.</p>
+<p>For aesthetics, let the leaves have circles instead of squares.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> stops <span class="fu">=</span> mkStops [(saddlebrown, <span class="dv">0</span>, <span class="dv">1</span>), (peru, <span class="fl">0.5</span>, <span class="dv">1</span>), (saddlebrown, <span class="dv">1</span>, <span class="dv">1</span>)]
+<span class="ot">&gt;</span> b <span class="fu">=</span> mkLinearGradient stops ((<span class="fu">-</span><span class="fl">0.5</span>) <span class="fu">^&amp;</span> <span class="dv">0</span>) (<span class="fl">0.5</span> <span class="fu">^&amp;</span> <span class="dv">0</span>) <span class="dt">GradPad</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> stops' <span class="fu">=</span> mkStops [(green, <span class="dv">0</span>, <span class="dv">1</span>), (lightgreen, <span class="dv">1</span>, <span class="dv">1</span>)]
+<span class="ot">&gt;</span> g <span class="fu">=</span> mkRadialGradient stops' (<span class="fl">0.0</span> <span class="fu">^&amp;</span> <span class="dv">0</span>) <span class="fl">0.5</span> (<span class="fl">0.0</span> <span class="fu">^&amp;</span> <span class="fl">0.0</span>) <span class="dv">1</span> <span class="dt">GradPad</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> sky <span class="fu">=</span> mkLinearGradient (mkStops [(darkgreen,<span class="dv">0</span>,<span class="dv">1</span>), (white,<span class="fl">0.1</span>,<span class="dv">1</span>), (skyblue,<span class="dv">1</span>,<span class="dv">1</span>)])
+<span class="ot">&gt;</span>                        (<span class="dv">0</span> <span class="fu">^&amp;</span> (<span class="fu">-</span><span class="fl">2.5</span>)) (<span class="dv">0</span> <span class="fu">^&amp;</span> <span class="dv">3</span>) <span class="dt">GradPad</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> tree <span class="dv">1</span> <span class="fu">=</span> circle <span class="fl">1.25</span> <span class="fu">#</span> fillTexture g
+<span class="ot">&gt;</span>                     <span class="fu">#</span> translate (r2 (<span class="dv">0</span>, <span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)) <span class="fu">#</span> lwG <span class="dv">0</span>
+<span class="ot">&gt;</span> tree n <span class="fu">=</span>
+<span class="ot">&gt;</span>   square <span class="dv">1</span>          <span class="fu">#</span> translate (r2 (<span class="dv">0</span>, <span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)) <span class="fu">#</span> fillTexture b
+<span class="ot">&gt;</span>                     <span class="fu">#</span> lineTexture b <span class="fu">#</span> lw thin
+<span class="ot">&gt;</span>   <span class="ot">`atop`</span> triangle   <span class="fu">#</span> translate (r2 (<span class="dv">0</span>,<span class="dv">1</span>))    <span class="fu">#</span> fillTexture b <span class="fu">#</span> lwG <span class="dv">0</span>
+<span class="ot">&gt;</span>   <span class="ot">`atop`</span> tree (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> rotate (<span class="fu">-</span>asin <span class="fl">0.8</span> <span class="fu">@@</span> rad)
+<span class="ot">&gt;</span>                     <span class="fu">#</span> scale <span class="fl">0.6</span> <span class="fu">#</span> translate (r2 ( <span class="fl">0.32</span>,<span class="fl">1.24</span>)) <span class="fu">#</span> fade
+<span class="ot">&gt;</span>   <span class="ot">`atop`</span> tree (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> rotate ( asin <span class="fl">0.6</span> <span class="fu">@@</span> rad)
+<span class="ot">&gt;</span>                     <span class="fu">#</span> scale <span class="fl">0.8</span> <span class="fu">#</span> translate (r2 (<span class="fu">-</span><span class="fl">0.18</span>,<span class="fl">1.24</span>)) <span class="fu">#</span> fade
+<span class="ot">&gt;</span>   <span class="kw">where</span>
+<span class="ot">&gt;</span>     triangle <span class="fu">=</span> translate (r2 (<span class="fu">-</span><span class="fl">0.5</span>,<span class="dv">0</span>)) <span class="fu">.</span> strokeLoop <span class="fu">.</span> closeLine
+<span class="ot">&gt;</span>                  <span class="fu">.</span> fromVertices <span class="fu">.</span> map p2 <span class="fu">$</span> [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">1</span>,<span class="dv">0</span>), (<span class="fl">0.8</span><span class="fu">*</span><span class="fl">0.8</span>,<span class="fl">0.8</span><span class="fu">*</span><span class="fl">0.6</span>)]
+<span class="ot">&gt;</span>     fade <span class="fu">=</span> opacity <span class="fl">0.95</span>
+<span class="ot">&gt;</span> 
+<span class="ot">&gt;</span> colourise c <span class="fu">=</span> fc c <span class="fu">.</span> lc (blend <span class="fl">0.5</span> black c)</code></pre></div>
+<p>Draw the order 10 tree.</p>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> (tree <span class="dv">10</span> <span class="fu">===</span> square <span class="dv">1</span> <span class="fu">#</span> fillTexture b
+<span class="ot">&gt;</span>                      <span class="fu">#</span> lineTexture b <span class="fu">#</span> lw thin) <span class="fu">#</span> center
+<span class="ot">&gt;</span>                     <span class="fu">&lt;&gt;</span> (square <span class="fl">6.25</span> <span class="fu">#</span> fillTexture sky <span class="fu">#</span> lw none )</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+
+</div>
+
+    </div>
+
+    </div> <!-- #wrap -->
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-docs-application.js"></script>
+    <script src="../js/hoogle-search.js"></script>
+  </body>
+</html>
