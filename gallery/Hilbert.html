@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,28 +84,28 @@
 <p>An order-5 approximation to the space-filling Hilbert curve.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Hilbert.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Hilbert.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="https://www.projects.haskell.org/diagrams/">Jeffrey Rosenbluth</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Hilbert.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> hilbert <span class="dv">0</span> <span class="fu">=</span> mempty
-<span class="ot">&gt;</span> hilbert n <span class="fu">=</span> hilbert' (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> reflectY <span class="fu">&lt;&gt;</span> vrule <span class="dv">1</span>
-<span class="ot">&gt;</span>          <span class="fu">&lt;&gt;</span> hilbert  (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">&lt;&gt;</span> hrule <span class="dv">1</span>
-<span class="ot">&gt;</span>          <span class="fu">&lt;&gt;</span> hilbert  (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">&lt;&gt;</span> vrule (<span class="fu">-</span><span class="dv">1</span>)
-<span class="ot">&gt;</span>          <span class="fu">&lt;&gt;</span> hilbert' (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> reflectX
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     hilbert' m <span class="fu">=</span> hilbert m <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span> frame <span class="dv">1</span> <span class="fu">.</span> lw medium <span class="fu">.</span> lc darkred
-<span class="ot">&gt;</span>                   <span class="fu">.</span> strokeT <span class="fu">$</span> hilbert <span class="dv">5</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">hilbert <span class="dv">0</span> <span class="fu">=</span> mempty</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">hilbert n <span class="fu">=</span> hilbert' (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> reflectY <span class="fu">&lt;&gt;</span> vrule <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">         <span class="fu">&lt;&gt;</span> hilbert  (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">&lt;&gt;</span> hrule <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">         <span class="fu">&lt;&gt;</span> hilbert  (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">&lt;&gt;</span> vrule (<span class="fu">-</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">         <span class="fu">&lt;&gt;</span> hilbert' (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> reflectX</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">    hilbert' m <span class="fu">=</span> hilbert m <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">example <span class="fu">=</span> frame <span class="dv">1</span> <span class="fu">.</span> lw medium <span class="fu">.</span> lc darkred</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">                  <span class="fu">.</span> strokeT <span class="fu">$</span> hilbert <span class="dv">5</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

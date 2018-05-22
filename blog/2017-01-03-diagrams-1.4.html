@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -93,34 +93,34 @@ this was a fairly quiet release, with very few breaking changes;
 mostly 1.4 just introduced new features.  There is a <a class="reference external" href="https://wiki.haskell.org/Diagrams/Dev/Migrate1.4">migration
 guide</a> which lists a few known potentially breaking changes, but most
 users should have no trouble.  The rest of this post highlights some
-of the new features in 1.4.</p><div class="section" id="alignment-and-layout"><h1>Alignment and layout</h1><div class="section" id="radial-tree-layout"><h2>Radial tree layout</h2><p>The existing <span class="module"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Tree.html"><code>Diagrams.TwoD.Layout.Tree</code></a></span> module from
-<span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> has been extended with a new <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Tree.html#v:radialLayout">radialLayout</a></code>
+of the new features in 1.4.</p><div class="section" id="alignment-and-layout"><h1>Alignment and layout</h1><div class="section" id="radial-tree-layout"><h2>Radial tree layout</h2><p>The existing <code>Diagrams.TwoD.Layout.Tree</code> module from
+<span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> has been extended with a new <code class="sourceCode">radialLayout</code>
 function, based on an <a class="reference external" href="http://www.cs.cmu.edu/~pavlo/static/papers/APavloThesis032006.pdf">algorithm by Andy Pavlo</a>.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/69c4f35e79910ce9.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Layout.Tree</span>
 <span class="ot">></span> <span class="kw">import </span><span class="dt">Data.Tree</span>
 <span class="ot">></span>
 <span class="ot">></span> t <span class="fu">=</span> <span class="dt">Node</span> <span class="ch">'A'</span>
 <span class="ot">></span>     [ <span class="dt">Node</span> <span class="ch">'B'</span> (map lf <span class="st">"CDE"</span>)
-<span class="ot">></span>     , <span class="dt">Node</span> <span class="ch">'<a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#t:F">F</a>'</span> [<span class="dt">Node</span> <span class="ch">'<a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#t:G">G</a>'</span> (map lf <span class="st">"HIJKLM"</span>), <span class="dt">Node</span> <span class="ch">'<a href="../haddock/diagrams-core/Diagrams-Core.html#t:N">N</a>'</span> (map lf <span class="st">"OPQRS"</span>)]
+<span class="ot">></span>     , <span class="dt">Node</span> <span class="ch">'F'</span> [<span class="dt">Node</span> <span class="ch">'G'</span> (map lf <span class="st">"HIJKLM"</span>), <span class="dt">Node</span> <span class="ch">'N'</span> (map lf <span class="st">"OPQRS"</span>)]
 <span class="ot">></span>     , <span class="dt">Node</span> <span class="ch">'T'</span> (map lf <span class="st">"UVWXYZ"</span>)
 <span class="ot">></span>     ]
 <span class="ot">></span>   <span class="kw">where</span> lf x <span class="fu">=</span> <span class="dt">Node</span> x []
 <span class="ot">></span>
 <span class="ot">></span> example <span class="fu">=</span>
-<span class="ot">></span>    <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Tree.html#v:renderTree">renderTree</a> (\n <span class="ot">-></span> (text (show n) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Text.html#v:fontSizeG">fontSizeG</a> <span class="fl">0.5</span>
-<span class="ot">></span>                             <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> white))
-<span class="ot">></span>              (<span class="fu"><a href="../haddock/diagrams-lib/Diagrams-TrailLike.html#v:-126--126-">~~</a></span>) (radialLayout t)
-<span class="ot">></span>    <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-ThreeD-Align.html#v:centerXY">centerXY</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:frame">frame</a> <span class="fl">0.5</span></code></pre></div></div></div></div><div class="section" id="aligned-composition"><h2>Aligned composition</h2><p>Sometimes, it is desirable to compose some diagrams according to a
+<span class="ot">></span>    renderTree (\n <span class="ot">-></span> (text (show n) <span class="fu">#</span> fontSizeG <span class="fl">0.5</span>
+<span class="ot">></span>                             <span class="fu"><></span> circle <span class="fl">0.5</span> <span class="fu">#</span> fc white))
+<span class="ot">></span>              (<span class="fu">~~</span>) (radialLayout t)
+<span class="ot">></span>    <span class="fu">#</span> centerXY <span class="fu">#</span> frame <span class="fl">0.5</span></code></pre></div></div></div></div><div class="section" id="aligned-composition"><h2>Aligned composition</h2><p>Sometimes, it is desirable to compose some diagrams according to a
 certain alignment, but without affecting their local origins. The
-<code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:composeAligned">composeAligned</a></code> function can be used for this purpose. It takes as
-arguments an alignment function (such as <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignT">alignT</a></code> or <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:snugL">snugL</a></code>), a
+<code class="sourceCode">composeAligned</code> function can be used for this purpose. It takes as
+arguments an alignment function (such as <code class="sourceCode">alignT</code> or <code class="sourceCode">snugL</code>), a
 composition function of type <code>[Diagram] -> Diagram</code>, and produces a
 new composition function which works by first aligning the diagrams
-before composing them.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/efb94a1abf753555.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> example ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">B</span>
-<span class="ot">></span> example <span class="fu">=</span> (hsep <span class="dv">2</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:composeAligned">composeAligned</a> alignT) (map <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> [<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>])
-<span class="ot">></span>         <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Model.html#v:showOrigin">showOrigin</a></code></pre></div></div></div><p>The example above shows using <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="dv">2</span></code> to compose a collection of
+before composing them.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/efb94a1abf753555.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">> example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">></span> example <span class="fu">=</span> (hsep <span class="dv">2</span> <span class="fu">#</span> composeAligned alignT) (map circle [<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>])
+<span class="ot">></span>         <span class="fu">#</span> showOrigin</code></pre></div></div></div><p>The example above shows using <code class="sourceCode">hsep <span class="dv">2</span></code> to compose a collection of
 top-aligned circles.  Notice how the origin of the composed diagram is
 still at the center of the leftmost circle, instead of at its top edge
-(where it would normally be placed by <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Align.html#v:alignT">alignT</a></code>).</p></div><div class="section" id="constrained-layout"><h2>Constrained layout</h2><p>The new <span class="module"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html"><code>Diagrams.TwoD.Layout.Constrained</code></a></span> module from
+(where it would normally be placed by <code class="sourceCode">alignT</code>).</p></div><div class="section" id="constrained-layout"><h2>Constrained layout</h2><p>The new <code>Diagrams.TwoD.Layout.Constrained</code> module from
 <span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> implements basic linear constraint-based
 layout.  As a simple example of something that would be tedious to
 draw without some kind of constraint solving, consider this diagram
@@ -130,51 +130,51 @@ is constrained to lie on the same horizontal line as a circle, and (2)
 the squares all lie on a diagonal line.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/9072ef90694fb4b9.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Layout.Constrained</span>
 <span class="ot">></span> <span class="kw">import </span><span class="dt">Control.Monad</span> (zipWithM_)
 <span class="ot">></span>
-<span class="ot">> example ::</span> <span class="dt"><a href="../haddock/diagrams-core/Diagrams-Core.html#t:Diagram">Diagram</a></span> <span class="dt">B</span>
-<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:frame">frame</a> <span class="dv">1</span> <span class="fu">$</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:layout">layout</a> <span class="fu">$</span> <span class="kw">do</span>
+<span class="ot">> example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
+<span class="ot">></span> example <span class="fu">=</span> frame <span class="dv">1</span> <span class="fu">$</span> layout <span class="fu">$</span> <span class="kw">do</span>
 <span class="ot">></span>   <span class="kw">let</span> rs <span class="fu">=</span> [<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">6</span>]
-<span class="ot">></span>   cirs <span class="ot"><-</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:newDias">newDias</a> (map <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> rs <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> blue)
-<span class="ot">></span>   sqs  <span class="ot"><-</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:newDias">newDias</a> (replicate (length rs) (square <span class="dv">2</span>) <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> orange)
-<span class="ot">></span>   <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:constrainWith">constrainWith</a> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:vcat">vcat</a> cirs
-<span class="ot">></span>   zipWithM_ <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:sameY">sameY</a> cirs sqs
-<span class="ot">></span>   <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:constrainWith">constrainWith</a> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a> [cirs <span class="fu">!!</span> <span class="dv">0</span>, sqs <span class="fu">!!</span> <span class="dv">0</span>]
-<span class="ot">></span>   <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:along">along</a> (direction (<span class="dv">1</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="dv">1</span>))) (map <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html#v:centerOf">centerOf</a> sqs)</code></pre></div></div></div><p>See the <a class="reference external" href="http://projects.haskell.org/diagrams/haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html">package documentation</a> for more examples and documentation.</p></div><div class="section" id="anchors"><h2>Anchors</h2><p>Another new module in <span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span>,
-<span class="module"><a href="../haddock/diagrams-contrib/Diagrams-Anchors.html"><code>Diagrams.Anchors</code></a></span>, provides a convenient interface for aligning
+<span class="ot">></span>   cirs <span class="ot"><-</span> newDias (map circle rs <span class="fu">#</span> fc blue)
+<span class="ot">></span>   sqs  <span class="ot"><-</span> newDias (replicate (length rs) (square <span class="dv">2</span>) <span class="fu">#</span> fc orange)
+<span class="ot">></span>   constrainWith vcat cirs
+<span class="ot">></span>   zipWithM_ sameY cirs sqs
+<span class="ot">></span>   constrainWith hcat [cirs <span class="fu">!!</span> <span class="dv">0</span>, sqs <span class="fu">!!</span> <span class="dv">0</span>]
+<span class="ot">></span>   along (direction (<span class="dv">1</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="dv">1</span>))) (map centerOf sqs)</code></pre></div></div></div><p>See the <a class="reference external" href="http://projects.haskell.org/diagrams/haddock/diagrams-contrib/Diagrams-TwoD-Layout-Constrained.html">package documentation</a> for more examples and documentation.</p></div><div class="section" id="anchors"><h2>Anchors</h2><p>Another new module in <span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span>,
+<code>Diagrams.Anchors</code>, provides a convenient interface for aligning
 diagrams relative to named anchor points.  This can be useful, for
 example, when laying out diagrams composed of pieces that should
 "attach" to each other at various points.</p><p>We don't have an example of its use at the moment—if you play with
-it and create a nice example, let us know!</p></div></div><div class="section" id="paths"><h1>Paths</h1><div class="section" id="boolean-path-operations"><h2>Boolean path operations</h2><p>The new <span class="module"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Boolean.html"><code>Diagrams.TwoD.Path.Boolean</code></a></span> module from
+it and create a nice example, let us know!</p></div></div><div class="section" id="paths"><h1>Paths</h1><div class="section" id="boolean-path-operations"><h2>Boolean path operations</h2><p>The new <code>Diagrams.TwoD.Path.Boolean</code> module from
 <span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> contains functions for computing boolean
 combinations of paths, such as union, intersection, difference, and
 symmetric difference.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/842ddb95b25d4e23.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import qualified</span> <span class="dt">Diagrams.TwoD.Path.Boolean</span> <span class="kw">as</span> <span class="dt">B</span>
 <span class="ot">></span>
-<span class="ot">></span> thing1,<span class="ot"> thing2 ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Path.html#t:Path">Path</a></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
-<span class="ot">></span> thing1 <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">1</span>
-<span class="ot">></span> thing2 <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="fl">0.5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:translate">translate</a> (<span class="fl">0.5</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="fl">0.5</span>))
+<span class="ot">></span> thing1,<span class="ot"> thing2 ::</span> <span class="dt">Path</span> <span class="dt">V2</span> <span class="dt">Double</span>
+<span class="ot">></span> thing1 <span class="fu">=</span> square <span class="dv">1</span>
+<span class="ot">></span> thing2 <span class="fu">=</span> circle <span class="fl">0.5</span> <span class="fu">#</span> translate (<span class="fl">0.5</span> <span class="fu">^&</span> (<span class="fu">-</span><span class="fl">0.5</span>))
 <span class="ot">></span>
-<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="fl">0.5</span> <span class="fu">.</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:green">green</a> <span class="fu">.</span> map <a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#v:strokePath">strokePath</a> <span class="fu">$</span>
-<span class="ot">></span>   [ B.union        <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#t:Winding">Winding</a></span> (thing1 <span class="fu"><></span> thing2)
-<span class="ot">></span>   , B.intersection <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#t:Winding">Winding</a></span> thing1     thing2
-<span class="ot">></span>   , B.difference   <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#t:Winding">Winding</a></span> thing1     thing2
-<span class="ot">></span>   , B.exclusion    <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Path.html#t:Winding">Winding</a></span> thing1     thing2
-<span class="ot">></span>   ]</code></pre></div></div></div></div><div class="section" id="cubic-b-splines"><h2>Cubic B-splines</h2><p><span class="module"><a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html"><code>Diagrams.CubicSpline</code></a></span> has a new function, <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html#v:bspline">bspline</a></code>, which
+<span class="ot">></span> example <span class="fu">=</span> hsep <span class="fl">0.5</span> <span class="fu">.</span> fc green <span class="fu">.</span> map strokePath <span class="fu">$</span>
+<span class="ot">></span>   [ B.union        <span class="dt">Winding</span> (thing1 <span class="fu"><></span> thing2)
+<span class="ot">></span>   , B.intersection <span class="dt">Winding</span> thing1     thing2
+<span class="ot">></span>   , B.difference   <span class="dt">Winding</span> thing1     thing2
+<span class="ot">></span>   , B.exclusion    <span class="dt">Winding</span> thing1     thing2
+<span class="ot">></span>   ]</code></pre></div></div></div></div><div class="section" id="cubic-b-splines"><h2>Cubic B-splines</h2><p><code>Diagrams.CubicSpline</code> has a new function, <code class="sourceCode">bspline</code>, which
 creates a smooth curve (to be precise, a [uniform cubic
-B-spline](<a class="reference external" href="https://en.wikipedia.org/wiki/B-spline">https://en.wikipedia.org/wiki/B-spline</a>)) with the given
+B-spline](<a class="reference external" href="https://en.wikipedia.org/wiki/B-spline">https://en.wikipedia.org/wiki/B-spline</a>) ) with the given
 points as control points. The curve begins and ends at the first and
 last points, and is tangent to the lines to the second-to-last control
 points.  It does not, in general, pass through the intermediate
-control points.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/06ce1d338b86a736.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> pts <span class="fu">=</span> map <a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#v:p2">p2</a> (zip [<span class="dv">0</span> <span class="fu">..</span> <span class="dv">8</span>] (cycle [<span class="dv">0</span>, <span class="dv">1</span>]))
+control points.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/06ce1d338b86a736.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> pts <span class="fu">=</span> map p2 (zip [<span class="dv">0</span> <span class="fu">..</span> <span class="dv">8</span>] (cycle [<span class="dv">0</span>, <span class="dv">1</span>]))
 <span class="ot">></span> example <span class="fu">=</span> mconcat
-<span class="ot">></span>   [ <a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html#v:bspline">bspline</a> pts
-<span class="ot">></span>   , <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:mconcat">mconcat</a> <span class="fu">$</span> map (place (circle <span class="fl">0.1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> <a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html#v:blue">blue</a> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lw">lw</a> none)) pts
-<span class="ot">></span>   ]</code></pre></div></div></div><p>One major difference between <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html#v:cubicSpline">cubicSpline</a></code> and <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html#v:bspline">bspline</a></code> is that the
-curves generated by <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html#v:cubicSpline">cubicSpline</a></code> depend on the control points in a
+<span class="ot">></span>   [ bspline pts
+<span class="ot">></span>   , mconcat <span class="fu">$</span> map (place (circle <span class="fl">0.1</span> <span class="fu">#</span> fc blue <span class="fu">#</span> lw none)) pts
+<span class="ot">></span>   ]</code></pre></div></div></div><p>One major difference between <code class="sourceCode">cubicSpline</code> and <code class="sourceCode">bspline</code> is that the
+curves generated by <code class="sourceCode">cubicSpline</code> depend on the control points in a
 global way—that is, changing one control point could alter the
-entire curve—whereas with <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-CubicSpline.html#v:bspline">bspline</a></code>, each control point only affects
+entire curve—whereas with <code class="sourceCode">bspline</code>, each control point only affects
 a local portion of the curve.</p></div><div class="section" id="following-composition"><h2>Following composition</h2><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> has a new module,
-<span class="module"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Follow.html"><code>Diagrams.TwoD.Path.Follow</code></a></span>, which defines a wrapper type
-<code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Follow.html#t:Following">Following</a></span> n</code>.  <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-Follow.html#t:Following">Following</a></span></code> is just like <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Trail.html#t:Trail">Trail</a>'</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Trail.html#t:Line">Line</a></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span></code>, except that
-it has a different <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#t:Monoid">Monoid</a></span></code> instance: following values are
+<code>Diagrams.TwoD.Path.Follow</code>, which defines a wrapper type
+<code class="sourceCode"><span class="dt">Following</span> n</code>.  <code class="sourceCode"><span class="dt">Following</span></code> is just like <code class="sourceCode"><span class="dt">Trail'</span> <span class="dt">Line</span> <span class="dt">V2</span></code>, except that
+it has a different <code class="sourceCode"><span class="dt">Monoid</span></code> instance: following values are
 concatenated, just like regular lines, except that they are also
 rotated so the tangents match at the join point. In addition, they are
 normalized so the tangent at the start point is in the direction of
@@ -182,40 +182,40 @@ the positive \(x\) axis (essentially we are considering trails
 equivalent up to rotation).</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/87d7f30846d9e30a.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import </span><span class="dt">Control.Lens</span> (ala)
 <span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Path.Follow</span>
 <span class="ot">></span>
-<span class="ot">> wibble ::</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Trail.html#t:Trail">Trail</a>'</span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Trail.html#t:Line">Line</a></span> <span class="dt"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Types.html#t:V2">V2</a></span> <span class="dt">Double</span>
-<span class="ot">></span> wibble <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:hrule">hrule</a> <span class="dv">1</span> <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:hrule">hrule</a> <span class="fl">0.5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#v:rotateBy">rotateBy</a> (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:hrule">hrule</a> <span class="fl">0.5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#v:rotateBy">rotateBy</a> (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) <span class="fu"><></span> a
-<span class="ot">></span>   <span class="kw">where</span> a <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Arc.html#v:arc">arc</a> (xDir <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Transform.html#v:rotateBy">rotateBy</a> (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)) (<span class="dv">1</span><span class="fu">/</span><span class="dv">5</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn)
-<span class="ot">></span>           <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-core/Diagrams-Core.html#v:scale">scale</a> <span class="fl">0.7</span>
+<span class="ot">> wibble ::</span> <span class="dt">Trail'</span> <span class="dt">Line</span> <span class="dt">V2</span> <span class="dt">Double</span>
+<span class="ot">></span> wibble <span class="fu">=</span> hrule <span class="dv">1</span> <span class="fu"><></span> hrule <span class="fl">0.5</span> <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) <span class="fu"><></span> hrule <span class="fl">0.5</span> <span class="fu">#</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) <span class="fu"><></span> a
+<span class="ot">></span>   <span class="kw">where</span> a <span class="fu">=</span> arc (xDir <span class="fu">#</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)) (<span class="dv">1</span><span class="fu">/</span><span class="dv">5</span> <span class="fu">@@</span> turn)
+<span class="ot">></span>           <span class="fu">#</span> scale <span class="fl">0.7</span>
 <span class="ot">></span>
 <span class="ot">></span> example <span class="fu">=</span>
 <span class="ot">></span>   [ wibble
 <span class="ot">></span>   , wibble
-<span class="ot">></span>     <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> replicate <span class="dv">5</span>
-<span class="ot">></span>     <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:ala">ala</a> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Tilings.html#v:follow">follow</a> foldMap
+<span class="ot">></span>     <span class="fu">#</span> replicate <span class="dv">5</span>
+<span class="ot">></span>     <span class="fu">#</span> ala follow foldMap
 <span class="ot">></span>   ]
-<span class="ot">></span>   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> map stroke
-<span class="ot">></span>   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> map centerXY
-<span class="ot">></span>   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="dv">1</span>
-<span class="ot">></span>   <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Combinators.html#v:frame">frame</a> <span class="fl">0.3</span></code></pre></div></div></div><p>Notice how the above example makes use of the <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html#v:ala">ala</a></code> combinator from
-<code class="sourceCode"><span class="dt">Control.Lens</span></code> to automatically wrap all the <code class="sourceCode"><span class="dt"><a href="../haddock/diagrams-lib/Diagrams-Trail.html#t:Line">Line</a></span></code>s using <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Tilings.html#v:follow">follow</a></code>
-before combining and then unwrap the result.</p></div></div><div class="section" id="fun"><h1>Fun</h1><div class="section" id="l-systems"><h2>L-systems</h2><p>The new module <span class="module"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html"><code>Diagrams.TwoD.Path.LSystem</code></a></span> in
+<span class="ot">></span>   <span class="fu">#</span> map stroke
+<span class="ot">></span>   <span class="fu">#</span> map centerXY
+<span class="ot">></span>   <span class="fu">#</span> hsep <span class="dv">1</span>
+<span class="ot">></span>   <span class="fu">#</span> frame <span class="fl">0.3</span></code></pre></div></div></div><p>Notice how the above example makes use of the <code class="sourceCode">ala</code> combinator from
+<code class="sourceCode"><span class="dt">Control.Lens</span></code> to automatically wrap all the <code class="sourceCode"><span class="dt">Line</span></code>s using <code class="sourceCode">follow</code>
+before combining and then unwrap the result.</p></div></div><div class="section" id="fun"><h1>Fun</h1><div class="section" id="l-systems"><h2>L-systems</h2><p>The new module <code>Diagrams.TwoD.Path.LSystem</code> in
 <span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> draws L-systems described by recursive string
 rewriting rules, and provides a number of examples that can be used as
 starting points for exploration.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/c669472f67c0a554.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import           </span><span class="dt">Diagrams.TwoD.Path.LSystem</span>
-<span class="ot">></span> <span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt"><a href="../haddock/monoid-extras/Data-Monoid-Split.html#t:M">M</a></span>
+<span class="ot">></span> <span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span>
 <span class="ot">></span>
-<span class="ot">> tree ::</span> <span class="dt">RealFloat</span> n <span class="ot">=></span> <span class="dt">Int</span> <span class="ot">-></span> <span class="dt"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#t:TurtleState">TurtleState</a></span> n
-<span class="ot">></span> tree n <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#v:lSystem">lSystem</a> n (<span class="dv">1</span><span class="fu">/</span><span class="dv">18</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Angle.html#v:-64--64-">@@</a></span> turn) <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#v:symbol">(symbols</a> <span class="st">"<a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#t:F">F</a>"</span>) rules
+<span class="ot">> tree ::</span> <span class="dt">RealFloat</span> n <span class="ot">=></span> <span class="dt">Int</span> <span class="ot">-></span> <span class="dt">TurtleState</span> n
+<span class="ot">></span> tree n <span class="fu">=</span> lSystem n (<span class="dv">1</span><span class="fu">/</span><span class="dv">18</span> <span class="fu">@@</span> turn) (symbols <span class="st">"F"</span>) rules
 <span class="ot">></span>  <span class="kw">where</span>
-<span class="ot">></span>    rules  <span class="fu">=</span> M.fromList [rule <span class="ch">'<a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#t:F">F</a>'</span> <span class="st">"F[+>>>F]F[->>>F][>>>F]"</span>]
+<span class="ot">></span>    rules  <span class="fu">=</span> M.fromList [rule <span class="ch">'F'</span> <span class="st">"F[+>>>F]F[->>>F][>>>F]"</span>]
 <span class="ot">></span>
-<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#v:getTurtleDiagram">getTurtleDiagram</a> <span class="fu">$</span> tree <span class="dv">6</span></code></pre></div></div></div><p>This example is already provided by the module as <code class="sourceCode"><a href="../haddock/diagrams-contrib/Diagrams-TwoD-Path-LSystem.html#v:tree2">tree2</a></code>.</p></div><div class="section" id="xkcd-colors"><h2>XKCD colors</h2><p>Randall Munroe, of xkcd fame, ran a survey to determine commonly used
+<span class="ot">></span> example <span class="fu">=</span> getTurtleDiagram <span class="fu">$</span> tree <span class="dv">6</span></code></pre></div></div></div><p>This example is already provided by the module as <code class="sourceCode">tree2</code>.</p></div><div class="section" id="xkcd-colors"><h2>XKCD colors</h2><p>Randall Munroe, of xkcd fame, ran a survey to determine commonly used
 names for colors, and published a list of the 954 most common colors
-based on the results.  <span class="module"><a href="../haddock/diagrams-contrib/Diagrams-Color-XKCD.html"><code>Diagrams.Color.XKCD</code></a></span> from
+based on the results.  <code>Diagrams.Color.XKCD</code> from
 <span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> provides all these color names.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/4dacb58d9aec6e70.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">import </span><span class="dt">Diagrams.Color.XKCD</span>
 <span class="ot">></span>
-<span class="ot">></span> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Sunburst.html#v:colors">colors</a> <span class="fu">=</span> [booger, poisonGreen, cinnamon, petrol, vibrantPurple]
-<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hsep">hsep</a> <span class="fl">0.1</span> (zipWith <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fcA">fcA</a> <a href="../haddock/diagrams-contrib/Diagrams-TwoD-Sunburst.html#v:colors">colors</a> (repeat (circle <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-Attributes.html#v:lw">lw</a> none)))</code></pre></div></div></div></div></div></div></div></div>
+<span class="ot">></span> colors <span class="fu">=</span> [booger, poisonGreen, cinnamon, petrol, vibrantPurple]
+<span class="ot">></span> example <span class="fu">=</span> hsep <span class="fl">0.1</span> (zipWith fcA colors (repeat (circle <span class="dv">1</span> <span class="fu">#</span> lw none)))</code></pre></div></div></div></div></div></div></div></div>
 
 </div>
     </div>

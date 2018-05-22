@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,64 +84,64 @@
 <p>W. Kolmyjec’s Hex Variation</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/HexVariation.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/HexVariation.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/HexVariation.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
 <p>This is a transcription in Haskell of “Hex Variation” by William Kolmyjec. The algorithm itself is inspired by <a href="http://recodeproject.com/artwork/v3n4hex-variation">the version of Steve Berrick</a>, from the <a href="http://recodeproject.com">Recode project</a>.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">System.Random</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">System.Random</span></a></code></pre></div>
 <p>We first define the parameters of the tile, which is hexagonal. The side of a hexagon is the radius of its circumscribed circle, here taken as 1.</p>
 <p>The apothem is the distance from the center to the side:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> h <span class="fu">=</span> sqrt(<span class="dv">3</span>)<span class="fu">/</span><span class="dv">2</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">h <span class="fu">=</span> sqrt(<span class="dv">3</span>)<span class="fu">/</span><span class="dv">2</span></a></code></pre></div>
 <p>We define the difference between the radius and the apothem:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> h' <span class="fu">=</span> cos(pi<span class="fu">/</span><span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">h' <span class="fu">=</span> cos(pi<span class="fu">/</span><span class="dv">3</span>)</a></code></pre></div>
 <p>We then define a tile. The hexagon is not actually shown but inside are two arcs, along with a vertical line. To see the tiling, you can add an hexagon in the list below:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; hexagon' ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> hexagon' <span class="fu">=</span> mconcat [arc1 <span class="fu">#</span> translateX (<span class="fu">-</span><span class="dv">1</span>)
-<span class="ot">&gt;</span>                   , vrule (<span class="dv">2</span><span class="fu">*</span>h)
-<span class="ot">&gt;</span>                   , arc1 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) <span class="fu">#</span> translateX <span class="dv">1</span>
-<span class="ot">&gt;</span>                   ]
-<span class="ot">&gt;</span>     <span class="kw">where</span>
-<span class="ot">&gt;</span>       arc1 <span class="fu">=</span> arc' <span class="fl">0.5</span> (xDir <span class="fu">#</span> rotate (<span class="fu">-</span>pi<span class="fu">/</span><span class="dv">3</span> <span class="fu">@@</span> rad)) (<span class="dv">2</span><span class="fu">*</span>pi<span class="fu">/</span><span class="dv">3</span> <span class="fu">@@</span> rad)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="ot">hexagon' ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">hexagon' <span class="fu">=</span> mconcat [arc1 <span class="fu">#</span> translateX (<span class="fu">-</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                  , vrule (<span class="dv">2</span><span class="fu">*</span>h)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                  , arc1 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) <span class="fu">#</span> translateX <span class="dv">1</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                  ]</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">      arc1 <span class="fu">=</span> arc' <span class="fl">0.5</span> (xDir <span class="fu">#</span> rotate (<span class="fu">-</span>pi<span class="fu">/</span><span class="dv">3</span> <span class="fu">@@</span> rad)) (<span class="dv">2</span><span class="fu">*</span>pi<span class="fu">/</span><span class="dv">3</span> <span class="fu">@@</span> rad)</a></code></pre></div>
 <p>In the final tiling, the tiles will be rotated randomly with angles in \(\{0, \frac{2 \pi}{3}, \frac{4 \pi}{3} \}\).</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; rotateHexagon' ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> rotateHexagon' n <span class="fu">=</span> hexagon' <span class="fu">#</span> rotate (n'<span class="fu">*</span><span class="dv">2</span><span class="fu">*</span>pi<span class="fu">/</span><span class="dv">3</span> <span class="fu">@@</span> rad)
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     n' <span class="fu">=</span> fromIntegral n</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">rotateHexagon' ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">rotateHexagon' n <span class="fu">=</span> hexagon' <span class="fu">#</span> rotate (n'<span class="fu">*</span><span class="dv">2</span><span class="fu">*</span>pi<span class="fu">/</span><span class="dv">3</span> <span class="fu">@@</span> rad)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">    n' <span class="fu">=</span> fromIntegral n</a></code></pre></div>
 <p>The tiling is created from a list of centers, defined here:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; centerPosition ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)
-<span class="ot">&gt;</span> centerPosition x y
-<span class="ot">&gt;</span>   <span class="fu">|</span> (x <span class="ot">`mod`</span> <span class="dv">2</span> <span class="fu">==</span> <span class="dv">0</span>) <span class="fu">=</span> ((<span class="dv">2</span><span class="fu">-</span>h')<span class="fu">*</span>x', <span class="dv">2</span><span class="fu">*</span>y'<span class="fu">*</span>h)
-<span class="ot">&gt;</span>   <span class="fu">|</span> otherwise        <span class="fu">=</span> ((<span class="dv">2</span><span class="fu">-</span>h')<span class="fu">*</span>x', (<span class="dv">2</span><span class="fu">*</span>y'<span class="fu">-</span><span class="dv">1</span>)<span class="fu">*</span>h)
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     x' <span class="fu">=</span> fromIntegral x
-<span class="ot">&gt;</span>     y' <span class="fu">=</span> fromIntegral y</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">centerPosition ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">centerPosition x y</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="fu">|</span> (x <span class="ot">`mod`</span> <span class="dv">2</span> <span class="fu">==</span> <span class="dv">0</span>) <span class="fu">=</span> ((<span class="dv">2</span><span class="fu">-</span>h')<span class="fu">*</span>x', <span class="dv">2</span><span class="fu">*</span>y'<span class="fu">*</span>h)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="fu">|</span> otherwise        <span class="fu">=</span> ((<span class="dv">2</span><span class="fu">-</span>h')<span class="fu">*</span>x', (<span class="dv">2</span><span class="fu">*</span>y'<span class="fu">-</span><span class="dv">1</span>)<span class="fu">*</span>h)</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">    x' <span class="fu">=</span> fromIntegral x</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">    y' <span class="fu">=</span> fromIntegral y</a></code></pre></div>
 <p>The function generating random angles with a fixed seed:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; generateAngles ::</span> [<span class="dt">Int</span>]
-<span class="ot">&gt;</span> generateAngles <span class="fu">=</span> randomRs (<span class="dv">0</span>, <span class="dv">2</span>) (mkStdGen <span class="dv">31</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">generateAngles ::</span> [<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">generateAngles <span class="fu">=</span> randomRs (<span class="dv">0</span>, <span class="dv">2</span>) (mkStdGen <span class="dv">31</span>)</a></code></pre></div>
 <p>Finally, the tiling is created here:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; hexVariation ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> hexVariation <span class="fu">=</span> position (zip (map p2 pos) (map rotateHexagon' angles))
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     pos <span class="fu">=</span> [(centerPosition x y) <span class="fu">|</span> x <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="fu">..</span>nb<span class="fu">-</span><span class="dv">1</span>], y <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="fu">..</span>nb<span class="fu">-</span><span class="dv">1</span>]]
-<span class="ot">&gt;</span>     angles <span class="fu">=</span> take ((nb<span class="fu">+</span><span class="dv">1</span>)<span class="fu">*</span>(nb<span class="fu">+</span><span class="dv">1</span>)) <span class="fu">$</span> generateAngles</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">hexVariation ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">hexVariation <span class="fu">=</span> position (zip (map p2 pos) (map rotateHexagon' angles))</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">    pos <span class="fu">=</span> [(centerPosition x y) <span class="fu">|</span> x <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="fu">..</span>nb<span class="fu">-</span><span class="dv">1</span>], y <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="fu">..</span>nb<span class="fu">-</span><span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">    angles <span class="fu">=</span> take ((nb<span class="fu">+</span><span class="dv">1</span>)<span class="fu">*</span>(nb<span class="fu">+</span><span class="dv">1</span>)) <span class="fu">$</span> generateAngles</a></code></pre></div>
 <p>The envelope of our tiling is <code>nb*1.5*side + 0.5*side</code> in width and <code>nb*2*h+h</code> in height. We remove the “corners” to avoid “holes” at the borders of the figure and define the new width and height:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> width' <span class="fu">=</span> nb<span class="fu">*</span><span class="fl">1.5</span> <span class="fu">-</span> <span class="fl">0.5</span>
-<span class="ot">&gt;</span> height' <span class="fu">=</span> nb<span class="fu">*</span><span class="dv">2</span><span class="fu">*</span>h <span class="fu">-</span> h</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1">width' <span class="fu">=</span> nb<span class="fu">*</span><span class="fl">1.5</span> <span class="fu">-</span> <span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">height' <span class="fu">=</span> nb<span class="fu">*</span><span class="dv">2</span><span class="fu">*</span>h <span class="fu">-</span> h</a></code></pre></div>
 <p>Which are used to “clip” the figure here:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> nb <span class="fu">=</span> <span class="dv">12</span>
-<span class="ot">&gt; example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> example <span class="fu">=</span> hexVariation <span class="fu">#</span> center <span class="fu">#</span> rectEnvelope x0 u0 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     x0 <span class="fu">=</span> p2 (<span class="fu">-</span>width'<span class="fu">/</span><span class="dv">2</span>, <span class="fu">-</span>height'<span class="fu">/</span><span class="dv">2</span>)
-<span class="ot">&gt;</span>     u0 <span class="fu">=</span> r2 (width', height')</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1">nb <span class="fu">=</span> <span class="dv">12</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">example <span class="fu">=</span> hexVariation <span class="fu">#</span> center <span class="fu">#</span> rectEnvelope x0 u0 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">    x0 <span class="fu">=</span> p2 (<span class="fu">-</span>width'<span class="fu">/</span><span class="dv">2</span>, <span class="fu">-</span>height'<span class="fu">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">    u0 <span class="fu">=</span> r2 (width', height')</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

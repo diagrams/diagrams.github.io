@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,86 +84,89 @@
 <p>Basic diagram with text, boxes and arrows.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/SymmetryCube.big.png" width="600.0" height="400.0" />
+<img src="../gallery/images/SymmetryCube.big.png" width="600" height="400" />
 </div>
 Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/SymmetryCube.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List.Split</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Maybe</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.BoundingBox</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Graphics.SVGFonts</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Data.List.Split</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Data.Maybe</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Diagrams.BoundingBox</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Graphics.SVGFonts</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Graphics.SVGFonts.ReadFont</span> (<span class="dt">PreparedFont</span>)</a></code></pre></div>
 <p>The diagram is the boxes (the “cube”) and the lines between the boxes.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> <span class="kw">let</span> c <span class="fu">=</span> sCube
-<span class="ot">&gt;</span>           <span class="kw">in</span> pad <span class="fl">1.1</span> <span class="fu">.</span> centerXY <span class="fu">$</span> c <span class="fu">&lt;&gt;</span> drawLines c <span class="fu">&lt;&gt;</span> square <span class="dv">30</span>
-<span class="ot">&gt;</span>                                 <span class="fu">#</span> fc whitesmoke
-<span class="ot">&gt;</span>                                 <span class="fu">#</span> scaleY <span class="fl">0.94</span>
-<span class="ot">&gt;</span>                                 <span class="fu">#</span> translateX <span class="dv">11</span>
-<span class="ot">&gt;</span>                                 <span class="fu">#</span> translateY (<span class="fu">-</span><span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">example <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  font <span class="ot">&lt;-</span> lin2</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="kw">let</span> c <span class="fu">=</span> sCube font</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  return <span class="fu">$</span> pad <span class="fl">1.1</span> <span class="fu">.</span> centerXY <span class="fu">$</span> c <span class="fu">&lt;&gt;</span> drawLines c <span class="fu">&lt;&gt;</span> square <span class="dv">30</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">                                <span class="fu">#</span> fc whitesmoke</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">                                <span class="fu">#</span> scaleY <span class="fl">0.94</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">                                <span class="fu">#</span> translateX <span class="dv">11</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">                                <span class="fu">#</span> translateY (<span class="fu">-</span><span class="dv">3</span>)</a></code></pre></div>
 <p>A “box” is a diagram (the “innards”) surrounded by a rounded rectangle. First the innards are padded by a fixed amount, then we compute its height and width – that’s the size of the surrounding rectangle.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> box innards padding <span class="fu">=</span>
-<span class="ot">&gt;</span>     <span class="kw">let</span> padded <span class="fu">=</span>                  strutY padding
-<span class="ot">&gt;</span>                                        <span class="fu">===</span>
-<span class="ot">&gt;</span>              (strutX padding <span class="fu">|||</span> centerXY innards <span class="fu">|||</span> strutX padding)
-<span class="ot">&gt;</span>                                        <span class="fu">===</span>
-<span class="ot">&gt;</span>                                   strutY padding
-<span class="ot">&gt;</span>         height <span class="fu">=</span> diameter (r2 (<span class="dv">0</span>,<span class="dv">1</span>)) padded
-<span class="ot">&gt;</span>         width  <span class="fu">=</span> diameter (r2 (<span class="dv">1</span>,<span class="dv">0</span>)) padded
-<span class="ot">&gt;</span>     <span class="kw">in</span> centerXY innards <span class="fu">&lt;&gt;</span> roundedRect width height <span class="fl">0.1</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> textOpts n <span class="fu">=</span> <span class="dt">TextOpts</span> lin2 <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> <span class="dv">1</span> n</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">box innards padding <span class="fu">=</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">    <span class="kw">let</span> padded <span class="fu">=</span>                  strutY padding</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                                       <span class="fu">===</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">             (strutX padding <span class="fu">|||</span> centerXY innards <span class="fu">|||</span> strutX padding)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                                       <span class="fu">===</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">                                  strutY padding</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">        height <span class="fu">=</span> diameter (r2 (<span class="dv">0</span>,<span class="dv">1</span>)) padded</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">        width  <span class="fu">=</span> diameter (r2 (<span class="dv">1</span>,<span class="dv">0</span>)) padded</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="kw">in</span> centerXY innards <span class="fu">&lt;&gt;</span> roundedRect width height <span class="fl">0.1</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">textOpts font n <span class="fu">=</span> <span class="dt">TextOpts</span> font <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> <span class="dv">1</span> n</a></code></pre></div>
 <p>A single string of text.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; text' ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> text' s n <span class="fu">=</span> textSVG_ (textOpts n) s <span class="fu">#</span> fc white <span class="fu">#</span> lw none</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="ot">text' ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">text' font s n <span class="fu">=</span> textSVG_ (textOpts font n) s <span class="fu">#</span> fc white <span class="fu">#</span> lw none</a></code></pre></div>
 <p>Several lines of text stacked vertically.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> centredText ls n <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span> <span class="fu">&amp;</span> sep <span class="fu">.~</span> n)
-<span class="ot">&gt;</span>                      (map (\l <span class="ot">-&gt;</span> centerX (text' l n)) ls)
-<span class="ot">&gt;</span> centredText' s <span class="fu">=</span> centredText (splitOn <span class="st">&quot;\n&quot;</span> s)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">centredText font ls n <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span> <span class="fu">&amp;</span> sep <span class="fu">.~</span> n)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                     (map (\l <span class="ot">-&gt;</span> centerX (text' font l n)) ls)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">centredText' font s <span class="fu">=</span> centredText font (splitOn <span class="st">&quot;\n&quot;</span> s)</a></code></pre></div>
 <p>Diagram-specific parameters, including the positioning vectors.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> padAmount <span class="fu">=</span> <span class="fl">0.5</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> down <span class="fu">=</span> r2 (<span class="dv">0</span>, <span class="fu">-</span><span class="dv">10</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> upright <span class="fu">=</span> r2 (<span class="dv">7</span>, <span class="dv">5</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> right <span class="fu">=</span> r2 (<span class="dv">15</span>, <span class="dv">0</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">padAmount <span class="fu">=</span> <span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">down <span class="fu">=</span> r2 (<span class="dv">0</span>, <span class="fu">-</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">upright <span class="fu">=</span> r2 (<span class="dv">7</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">right <span class="fu">=</span> r2 (<span class="dv">15</span>, <span class="dv">0</span>)</a></code></pre></div>
 <p>A box with some interior text and a name.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> mybox s n <span class="fu">=</span> (box (centredText' s <span class="dv">1</span>) padAmount) <span class="fu">#</span> named n</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1">mybox font s n <span class="fu">=</span> (box (centredText' font s <span class="dv">1</span>) padAmount) <span class="fu">#</span> named n</a></code></pre></div>
 <p>The cube is just several boxes superimposed, positioned by adding together some positioning vectors.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; sCube ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> sCube <span class="fu">=</span> fc navy <span class="fu">$</span> mconcat
-<span class="ot">&gt;</span>   [ mybox <span class="st">&quot;Permutation&quot;</span> <span class="st">&quot;perm&quot;</span>
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Permutation\ngroup&quot;</span> <span class="st">&quot;permgroup&quot;</span>                     <span class="fu">#</span> translate right
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Symmetry&quot;</span> <span class="st">&quot;sym&quot;</span>                                     <span class="fu">#</span> translate upright
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\npermutation&quot;</span> <span class="st">&quot;paramperm&quot;</span>             <span class="fu">#</span> translate down
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\npermutation\ngroup&quot;</span> <span class="st">&quot;parampermgroup&quot;</span> <span class="fu">#</span> translate (right <span class="fu">^+^</span> down)
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\nsymmetry&quot;</span> <span class="st">&quot;paramsym&quot;</span>                 <span class="fu">#</span> translate (down <span class="fu">^+^</span> upright)
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Symmetry\ngroup&quot;</span> <span class="st">&quot;symgroup&quot;</span>                         <span class="fu">#</span> translate (upright <span class="fu">^+^</span> right)
-<span class="ot">&gt;</span>   , mybox <span class="st">&quot;Parameterised\nsymmetry\ngroup&quot;</span> <span class="st">&quot;paramsymgroup&quot;</span>     <span class="fu">#</span> translate (down <span class="fu">^+^</span> right <span class="fu">^+^</span> upright)
-<span class="ot">&gt;</span>                ]</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">sCube ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">sCube font <span class="fu">=</span> fc navy <span class="fu">$</span> mconcat</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  [ mybox font <span class="st">&quot;Permutation&quot;</span> <span class="st">&quot;perm&quot;</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  , mybox font <span class="st">&quot;Permutation\ngroup&quot;</span> <span class="st">&quot;permgroup&quot;</span>                     <span class="fu">#</span> translate right</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  , mybox font <span class="st">&quot;Symmetry&quot;</span> <span class="st">&quot;sym&quot;</span>                                     <span class="fu">#</span> translate upright</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  , mybox font <span class="st">&quot;Parameterised\npermutation&quot;</span> <span class="st">&quot;paramperm&quot;</span>             <span class="fu">#</span> translate down</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">  , mybox font <span class="st">&quot;Parameterised\npermutation\ngroup&quot;</span> <span class="st">&quot;parampermgroup&quot;</span> <span class="fu">#</span> translate (right <span class="fu">^+^</span> down)</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">  , mybox font <span class="st">&quot;Parameterised\nsymmetry&quot;</span> <span class="st">&quot;paramsym&quot;</span>                 <span class="fu">#</span> translate (down <span class="fu">^+^</span> upright)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">  , mybox font <span class="st">&quot;Symmetry\ngroup&quot;</span> <span class="st">&quot;symgroup&quot;</span>                         <span class="fu">#</span> translate (upright <span class="fu">^+^</span> right)</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">  , mybox font <span class="st">&quot;Parameterised\nsymmetry\ngroup&quot;</span> <span class="st">&quot;paramsymgroup&quot;</span>     <span class="fu">#</span> translate (down <span class="fu">^+^</span> right <span class="fu">^+^</span> upright)</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">               ]</a></code></pre></div>
 <p>For each pair (a,b) of names, draw an arrow from diagram “a” to diagram “b”.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; drawLines ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> drawLines cube <span class="fu">=</span> foldr (<span class="fu">.</span>) id (map (uncurry
-<span class="ot">&gt;</span>                        (connectOutside' (with
-<span class="ot">&gt;</span>                        <span class="fu">&amp;</span> headLength <span class="fu">.~</span> small
-<span class="ot">&gt;</span>                        <span class="fu">&amp;</span> shaftStyle <span class="fu">%~</span> lw thin))) pairs) cube
-<span class="ot">&gt;</span>   <span class="kw">where</span> pairs <span class="fu">=</span> [ (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;permgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;sym&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;paramperm&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;paramsym&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;symgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)
-<span class="ot">&gt;</span>                 , (<span class="st">&quot;parampermgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)
-<span class="ot">&gt;</span>                 ]</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="ot">drawLines ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">drawLines cube <span class="fu">=</span> foldr (<span class="fu">.</span>) id (map (uncurry</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">                       (connectOutside' (with</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">                       <span class="fu">&amp;</span> headLength <span class="fu">.~</span> small</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">                       <span class="fu">&amp;</span> shaftStyle <span class="fu">%~</span> lw thin))) pairs) cube</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="kw">where</span> pairs <span class="fu">=</span> [ (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;permgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">                , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;sym&quot;</span>)</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">                , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;paramperm&quot;</span>)</a>
+<a class="sourceLine" id="cb10-9" data-line-number="9">                , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)</a>
+<a class="sourceLine" id="cb10-10" data-line-number="10">                , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-11" data-line-number="11">                , (<span class="st">&quot;paramsym&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-12" data-line-number="12">                , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-13" data-line-number="13">                , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-14" data-line-number="14">                , (<span class="st">&quot;symgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-15" data-line-number="15">                , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)</a>
+<a class="sourceLine" id="cb10-16" data-line-number="16">                , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-17" data-line-number="17">                , (<span class="st">&quot;parampermgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</a>
+<a class="sourceLine" id="cb10-18" data-line-number="18">                ]</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,68 +84,68 @@
 <p>Visual solution to the classic Towers of Hanoi puzzle.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Hanoi.big.png" width="400.0" height="600.0" />
+<img src="../gallery/images/Hanoi.big.png" width="400" height="600" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Hanoi.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.SRGB</span> (sRGB24read)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Dia</span> <span class="fu">=</span> <span class="dt">Diagram</span> <span class="dt">B</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.List</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">type</span> <span class="dt">Dia</span> <span class="fu">=</span> <span class="dt">Diagram</span> <span class="dt">B</span></a></code></pre></div>
 <p>First, some colors for our disks, and types to represent the data structures involved.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> colors <span class="fu">=</span> cycle <span class="fu">$</span> map sRGB24read [ <span class="st">&quot;#9FB4CC&quot;</span>, <span class="st">&quot;#CCCC9F&quot;</span>, <span class="st">&quot;#DB4105&quot;</span>, <span class="st">&quot;#FFF8E3&quot;</span>, <span class="st">&quot;#33332D&quot;</span>]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Disk</span>  <span class="fu">=</span> <span class="dt">Int</span>
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Stack</span> <span class="fu">=</span> [<span class="dt">Disk</span>]
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Hanoi</span> <span class="fu">=</span> [<span class="dt">Stack</span>]
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Move</span>  <span class="fu">=</span> (<span class="dt">Int</span>,<span class="dt">Int</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">colors <span class="fu">=</span> cycle <span class="fu">$</span> map sRGB24read [ <span class="st">&quot;#9FB4CC&quot;</span>, <span class="st">&quot;#CCCC9F&quot;</span>, <span class="st">&quot;#DB4105&quot;</span>, <span class="st">&quot;#FFF8E3&quot;</span>, <span class="st">&quot;#33332D&quot;</span>]</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">type</span> <span class="dt">Disk</span>  <span class="fu">=</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">type</span> <span class="dt">Stack</span> <span class="fu">=</span> [<span class="dt">Disk</span>]</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">type</span> <span class="dt">Hanoi</span> <span class="fu">=</span> [<span class="dt">Stack</span>]</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">type</span> <span class="dt">Move</span>  <span class="fu">=</span> (<span class="dt">Int</span>,<span class="dt">Int</span>)</a></code></pre></div>
 <p>To render a single disk, draw a rectangle with width proportional to its disk number, using a color selected from the <code>colors</code> list.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; renderDisk ::</span> <span class="dt">Disk</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> renderDisk n <span class="fu">=</span> rect (fromIntegral n <span class="fu">+</span> <span class="dv">2</span>) <span class="dv">1</span>
-<span class="ot">&gt;</span>                <span class="fu">#</span> lc black
-<span class="ot">&gt;</span>                <span class="fu">#</span> lw thin
-<span class="ot">&gt;</span>                <span class="fu">#</span> fc (colors <span class="fu">!!</span> n)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">renderDisk ::</span> <span class="dt">Disk</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">renderDisk n <span class="fu">=</span> rect (fromIntegral n <span class="fu">+</span> <span class="dv">2</span>) <span class="dv">1</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">               <span class="fu">#</span> lc black</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">               <span class="fu">#</span> lw thin</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">               <span class="fu">#</span> fc (colors <span class="fu">!!</span> n)</a></code></pre></div>
 <p>To render a stack of disks, just stack their renderings on top of a drawing of a peg. We use <code>alignB</code> to place stack of disks at the bottom of the peg.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; renderStack ::</span> <span class="dt">Stack</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> renderStack s <span class="fu">=</span> disks <span class="ot">`atop`</span> post
-<span class="ot">&gt;</span>   <span class="kw">where</span> disks <span class="fu">=</span> (vcat <span class="fu">.</span> map renderDisk <span class="fu">$</span> s)
-<span class="ot">&gt;</span>                 <span class="fu">#</span> alignB
-<span class="ot">&gt;</span>         post  <span class="fu">=</span> rect <span class="fl">0.8</span> <span class="dv">6</span>
-<span class="ot">&gt;</span>                 <span class="fu">#</span> lw none
-<span class="ot">&gt;</span>                 <span class="fu">#</span> fc black
-<span class="ot">&gt;</span>                 <span class="fu">#</span> alignB</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="ot">renderStack ::</span> <span class="dt">Stack</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">renderStack s <span class="fu">=</span> disks <span class="ot">`atop`</span> post</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="kw">where</span> disks <span class="fu">=</span> (vcat <span class="fu">.</span> map renderDisk <span class="fu">$</span> s)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                <span class="fu">#</span> alignB</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">        post  <span class="fu">=</span> rect <span class="fl">0.8</span> <span class="dv">6</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                <span class="fu">#</span> lw none</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">                <span class="fu">#</span> fc black</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">                <span class="fu">#</span> alignB</a></code></pre></div>
 <p>Finally, to render a collection of stacks, lay them out horizontally, using the <code>Distrib</code> method so the pegs end up spaced evenly no matter the width of the disks on any particular peg.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; renderHanoi ::</span> <span class="dt">Hanoi</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> renderHanoi <span class="fu">=</span> hcat' (with <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span> <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">7</span>) <span class="fu">.</span> map renderStack</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">renderHanoi ::</span> <span class="dt">Hanoi</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">renderHanoi <span class="fu">=</span> hcat' (with <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span> <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">7</span>) <span class="fu">.</span> map renderStack</a></code></pre></div>
 <p>Now some code to actually solve the puzzle, generating a list of moves which are then used to simulate the solution and generate a list of configurations.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; solveHanoi ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Move</span>]
-<span class="ot">&gt;</span> solveHanoi n <span class="fu">=</span> solveHanoi' n <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span>
-<span class="ot">&gt;</span>   <span class="kw">where</span> solveHanoi' <span class="dv">0</span> _ _ _ <span class="fu">=</span> []
-<span class="ot">&gt;</span>         solveHanoi' n a b c <span class="fu">=</span> solveHanoi' (n<span class="fu">-</span><span class="dv">1</span>) a c b <span class="fu">++</span> [(a,c)]
-<span class="ot">&gt;</span>                               <span class="fu">++</span> solveHanoi' (n<span class="fu">-</span><span class="dv">1</span>) b a c
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; doMove ::</span> <span class="dt">Move</span> <span class="ot">-&gt;</span> <span class="dt">Hanoi</span> <span class="ot">-&gt;</span> <span class="dt">Hanoi</span>
-<span class="ot">&gt;</span> doMove (x,y) h <span class="fu">=</span> h''
-<span class="ot">&gt;</span>   <span class="kw">where</span> (d,h')         <span class="fu">=</span> removeDisk x h
-<span class="ot">&gt;</span>         h''            <span class="fu">=</span> addDisk y d h'
-<span class="ot">&gt;</span>         removeDisk x h <span class="fu">=</span> (head (h<span class="fu">!!</span>x), modList x tail h)
-<span class="ot">&gt;</span>         addDisk y d    <span class="fu">=</span> modList y (d<span class="fu">:</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> modList i f l  <span class="fu">=</span> <span class="kw">let</span> (xs,(y<span class="fu">:</span>ys)) <span class="fu">=</span> splitAt i l <span class="kw">in</span> xs <span class="fu">++</span> (f y <span class="fu">:</span> ys)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; hanoiSequence ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Hanoi</span>]
-<span class="ot">&gt;</span> hanoiSequence n <span class="fu">=</span> scanl (flip (<span class="fu">$</span>)) [[<span class="dv">0</span><span class="fu">..</span>n<span class="fu">-</span><span class="dv">1</span>], [], []] (map doMove (solveHanoi n))</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">solveHanoi ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Move</span>]</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">solveHanoi n <span class="fu">=</span> solveHanoi' n <span class="dv">0</span> <span class="dv">1</span> <span class="dv">2</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="kw">where</span> solveHanoi' <span class="dv">0</span> _ _ _ <span class="fu">=</span> []</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">        solveHanoi' n a b c <span class="fu">=</span> solveHanoi' (n<span class="fu">-</span><span class="dv">1</span>) a c b <span class="fu">++</span> [(a,c)]</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                              <span class="fu">++</span> solveHanoi' (n<span class="fu">-</span><span class="dv">1</span>) b a c</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="ot">doMove ::</span> <span class="dt">Move</span> <span class="ot">-&gt;</span> <span class="dt">Hanoi</span> <span class="ot">-&gt;</span> <span class="dt">Hanoi</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">doMove (x,y) h <span class="fu">=</span> h''</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">  <span class="kw">where</span> (d,h')         <span class="fu">=</span> removeDisk x h</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">        h''            <span class="fu">=</span> addDisk y d h'</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">        removeDisk x h <span class="fu">=</span> (head (h<span class="fu">!!</span>x), modList x tail h)</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">        addDisk y d    <span class="fu">=</span> modList y (d<span class="fu">:</span>)</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">modList i f l  <span class="fu">=</span> <span class="kw">let</span> (xs,(y<span class="fu">:</span>ys)) <span class="fu">=</span> splitAt i l <span class="kw">in</span> xs <span class="fu">++</span> (f y <span class="fu">:</span> ys)</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="ot">hanoiSequence ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Hanoi</span>]</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">hanoiSequence n <span class="fu">=</span> scanl (flip (<span class="fu">$</span>)) [[<span class="dv">0</span><span class="fu">..</span>n<span class="fu">-</span><span class="dv">1</span>], [], []] (map doMove (solveHanoi n))</a></code></pre></div>
 <p>Finally, we render a sequence of configurations representing a solution by laying them out vertically.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; renderHanoiSeq ::</span> [<span class="dt">Hanoi</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> renderHanoiSeq <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span><span class="dv">2</span>) <span class="fu">.</span> map renderHanoi
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">$</span> renderHanoiSeq (hanoiSequence <span class="dv">4</span>) <span class="fu">#</span> centerXY</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">renderHanoiSeq ::</span> [<span class="dt">Hanoi</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">renderHanoiSeq <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span><span class="dv">2</span>) <span class="fu">.</span> map renderHanoi</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">$</span> renderHanoiSeq (hanoiSequence <span class="dv">4</span>) <span class="fu">#</span> centerXY</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

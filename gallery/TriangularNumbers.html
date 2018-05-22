@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,48 +84,48 @@
 <p>A visual proof of an identity involving triangular numbers, created for <a href="http://mathlesstraveled.com/2011/04/14/triangular-number-equations-via-pictures-solutions/">this blog post</a>, which also contains several other similar proofs.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/TriangularNumbers.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/TriangularNumbers.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/TriangularNumbers.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (dot)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (dot)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Data.Colour</span></a></code></pre></div>
 <p>Draw a group of dots in a triangular array, all with the same color and backed by a solid-colored triangle to visually group them. Note how the dots are laid out by creating a trail called <code>edge</code>, rotating it 60 degrees, and using <code>decorateTrail</code> to lay out the rows of dots.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> mkTri c n <span class="fu">=</span> dots <span class="fu">&lt;&gt;</span> (strokeLoop edges <span class="fu">#</span> lc c <span class="fu">#</span> lw thin <span class="fu">#</span> fcA (c <span class="ot">`withOpacity`</span> <span class="fl">0.5</span>))
-<span class="ot">&gt;</span>   <span class="kw">where</span> rows <span class="fu">=</span> map (hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">1</span> ))
-<span class="ot">&gt;</span>              <span class="fu">.</span> zipWith replicate [n,n<span class="fu">-</span><span class="dv">1</span><span class="fu">..</span><span class="dv">1</span>]
-<span class="ot">&gt;</span>              <span class="fu">.</span> repeat
-<span class="ot">&gt;</span>              <span class="fu">$</span> dot c
-<span class="ot">&gt;</span>         dots <span class="fu">=</span> cat' v (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">3</span> <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span>) rows
-<span class="ot">&gt;</span>         v <span class="fu">=</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) unitX
-<span class="ot">&gt;</span>         edge <span class="fu">=</span> fromOffsets <span class="fu">.</span> replicate (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">$</span> unitX <span class="fu">#</span> scale <span class="dv">3</span>
-<span class="ot">&gt;</span>         edges <span class="fu">=</span> glueLine (edge <span class="fu">&lt;&gt;</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">3</span>) edge <span class="fu">&lt;&gt;</span> rotateBy (<span class="dv">2</span><span class="fu">/</span><span class="dv">3</span>) edge)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> dot c <span class="fu">=</span> unitCircle
-<span class="ot">&gt;</span>       <span class="fu">#</span> lw none
-<span class="ot">&gt;</span>       <span class="fu">#</span> fc c
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> rowSpc <span class="fu">=</span> height (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) <span class="fu">$</span> strutY <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">D</span> <span class="dt">V2</span> <span class="dt">Double</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">mkTri c n <span class="fu">=</span> dots <span class="fu">&lt;&gt;</span> (strokeLoop edges <span class="fu">#</span> lc c <span class="fu">#</span> lw thin <span class="fu">#</span> fcA (c <span class="ot">`withOpacity`</span> <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">where</span> rows <span class="fu">=</span> map (hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">1</span> ))</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">             <span class="fu">.</span> zipWith replicate [n,n<span class="fu">-</span><span class="dv">1</span><span class="fu">..</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">             <span class="fu">.</span> repeat</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">             <span class="fu">$</span> dot c</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">        dots <span class="fu">=</span> cat' v (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">3</span> <span class="fu">&amp;</span> catMethod <span class="fu">.~</span> <span class="dt">Distrib</span>) rows</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">        v <span class="fu">=</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) unitX</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">        edge <span class="fu">=</span> fromOffsets <span class="fu">.</span> replicate (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">$</span> unitX <span class="fu">#</span> scale <span class="dv">3</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">        edges <span class="fu">=</span> glueLine (edge <span class="fu">&lt;&gt;</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">3</span>) edge <span class="fu">&lt;&gt;</span> rotateBy (<span class="dv">2</span><span class="fu">/</span><span class="dv">3</span>) edge)</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">dot c <span class="fu">=</span> unitCircle</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">      <span class="fu">#</span> lw none</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">      <span class="fu">#</span> fc c</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">rowSpc <span class="fu">=</span> height (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>) <span class="fu">$</span> strutY <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">D</span> <span class="dt">V2</span> <span class="dt">Double</span>)</a></code></pre></div>
 <p><code>row k n s c</code> draws a row of <code>k</code> size-<code>n</code> triangles with color <code>c</code>, separated by enough space for <code>s</code> dots.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> row k n s c <span class="fu">=</span> hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">1</span> <span class="fu">+</span> <span class="dv">3</span><span class="fu">*</span>s) (replicate k (mkTri c n))</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">row k n s c <span class="fu">=</span> hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">1</span> <span class="fu">+</span> <span class="dv">3</span><span class="fu">*</span>s) (replicate k (mkTri c n))</a></code></pre></div>
 <p>The visual proof, which simply consists in assembling various sub-triangles into a larger triangle, using appropriately transformed and aligned instances of <code>row</code>.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> law4 k n c1 c2 <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> rowSpc) (map tRow [<span class="dv">1</span><span class="fu">..</span>k])
-<span class="ot">&gt;</span>   <span class="kw">where</span> tRow k <span class="fu">=</span> (row k n <span class="dv">0</span> c1 <span class="fu">#</span> centerX <span class="fu">#</span> alignT)
-<span class="ot">&gt;</span>                  <span class="fu">&lt;&gt;</span>
-<span class="ot">&gt;</span>                  (row (k<span class="fu">-</span><span class="dv">1</span>) (n<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span> c2 <span class="fu">#</span> reflectY <span class="fu">#</span> centerX <span class="fu">#</span> alignT)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">law4 k n c1 c2 <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> rowSpc) (map tRow [<span class="dv">1</span><span class="fu">..</span>k])</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="kw">where</span> tRow k <span class="fu">=</span> (row k n <span class="dv">0</span> c1 <span class="fu">#</span> centerX <span class="fu">#</span> alignT)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                 <span class="fu">&lt;&gt;</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                 (row (k<span class="fu">-</span><span class="dv">1</span>) (n<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span> c2 <span class="fu">#</span> reflectY <span class="fu">#</span> centerX <span class="fu">#</span> alignT)</a></code></pre></div>
 <p>Finally, create a row of diagrams showing the proof at different sizes.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> exampleRow f <span class="fu">=</span> hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">4</span>) <span class="fu">.</span> map f <span class="co">--(alignB . f)</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> law4Dia <span class="fu">=</span> exampleRow law4' [<span class="dv">2</span><span class="fu">..</span><span class="dv">4</span>]
-<span class="ot">&gt;</span>   <span class="kw">where</span> law4' k <span class="fu">=</span> law4 k <span class="dv">3</span> purple gold
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span> law4Dia <span class="fu">#</span> frame <span class="fl">0.2</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">exampleRow f <span class="fu">=</span> hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">4</span>) <span class="fu">.</span> map f <span class="co">--(alignB . f)</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">law4Dia <span class="fu">=</span> exampleRow law4' [<span class="dv">2</span><span class="fu">..</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="kw">where</span> law4' k <span class="fu">=</span> law4 k <span class="dv">3</span> purple gold</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">example <span class="fu">=</span> law4Dia <span class="fu">#</span> frame <span class="fl">0.2</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

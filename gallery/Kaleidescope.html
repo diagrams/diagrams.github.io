@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,66 +84,66 @@
 <p>A three mirror kaleidescope with random confetti.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Kaleidescope.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Kaleidescope.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="https://www.projects.haskell.org/Diagram Bgrams/">Jeffrey Rosenbluth</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Kaleidescope.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Control.Monad</span>                 (replicateM)
-<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Control.Monad.Random</span>
-<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Data.Colour.Palette.ColorSet</span>
-<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Data.List</span>                     (zipWith, zipWith3)
-<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import           </span><span class="dt">System.Random</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span>           <span class="dt">Control.Monad</span>                 (replicateM)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span>           <span class="dt">Control.Monad.Random</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span>           <span class="dt">Data.Colour.Palette.ColorSet</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span>           <span class="dt">Data.List</span>                     (zipWith, zipWith3)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span>           <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">import</span>           <span class="dt">System.Random</span></a></code></pre></div>
 <p>A helper function like <code>iterate</code> but also takes the list index as a parameter.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; iterateIdx ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> [a]
-<span class="ot">&gt;</span> iterateIdx f t <span class="fu">=</span> go f t <span class="dv">0</span>
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     go f t i <span class="fu">=</span> <span class="kw">let</span> t' <span class="fu">=</span> f i t
-<span class="ot">&gt;</span>                <span class="kw">in</span>  t' <span class="fu">:</span> go f t' (i <span class="fu">+</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="ot">iterateIdx ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> [a]</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">iterateIdx f t <span class="fu">=</span> go f t <span class="dv">0</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    go f t i <span class="fu">=</span> <span class="kw">let</span> t' <span class="fu">=</span> f i t</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">               <span class="kw">in</span>  t' <span class="fu">:</span> go f t' (i <span class="fu">+</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>Take any Diagram and cut out an equilateral triangle of side 1 from the center. This is the triangle inside of the three mirrors that make up a kaleidescope. The image is created by first repeatedly refecting this triangle and assembling the resulting triagles into a hexagon. Then the image plane is tiled with this hexagon.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; kaleidoscope ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> kaleidoscope d <span class="fu">=</span> appends hex hexs
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     hexs   <span class="fu">=</span> zip dirs (replicate <span class="dv">6</span> hex)
-<span class="ot">&gt;</span>     dirs   <span class="fu">=</span> iterate (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>)) (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unitX)
-<span class="ot">&gt;</span>     hex    <span class="fu">=</span> mconcat <span class="fu">.</span> take <span class="dv">6</span> <span class="fu">$</span> iterateIdx next tri
-<span class="ot">&gt;</span>     tri    <span class="fu">=</span> alignBR <span class="fu">$</span> cutTriangle d
-<span class="ot">&gt;</span>     next i <span class="fu">=</span> reflectAbout (<span class="dv">0</span> <span class="fu">^&amp;</span> <span class="dv">0</span>) (rotateBy (<span class="fu">-</span> fromIntegral i <span class="fu">/</span> <span class="dv">6</span>) xDir)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; cutTriangle ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> cutTriangle <span class="fu">=</span> clipped (triangle <span class="dv">1</span>) <span class="fu">#</span> lw none</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">kaleidoscope ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">kaleidoscope d <span class="fu">=</span> appends hex hexs</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    hexs   <span class="fu">=</span> zip dirs (replicate <span class="dv">6</span> hex)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    dirs   <span class="fu">=</span> iterate (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">6</span>)) (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unitX)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    hex    <span class="fu">=</span> mconcat <span class="fu">.</span> take <span class="dv">6</span> <span class="fu">$</span> iterateIdx next tri</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    tri    <span class="fu">=</span> alignBR <span class="fu">$</span> cutTriangle d</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    next i <span class="fu">=</span> reflectAbout (<span class="dv">0</span> <span class="fu">^&amp;</span> <span class="dv">0</span>) (rotateBy (<span class="fu">-</span> fromIntegral i <span class="fu">/</span> <span class="dv">6</span>) xDir)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="ot">cutTriangle ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">cutTriangle <span class="fu">=</span> clipped (triangle <span class="dv">1</span>) <span class="fu">#</span> lw none</a></code></pre></div>
 <p>We pass as arguments the number of pieces of confetti <code>n</code> and a random seed <code>r</code>. Between 10 and 100 pieces seem to work nicely.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; confettiScope ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> confettiScope n r
-<span class="ot">&gt;</span>   <span class="fu">=</span> kaleidoscope (mkConfetti n (mkStdGen r))
-<span class="ot">&gt;</span>   <span class="fu">#</span> centerXY <span class="fu">&lt;&gt;</span> (circle <span class="fl">2.75</span> <span class="fu">#</span> fc black)
-<span class="ot">&gt;</span>   <span class="fu">#</span> pad <span class="fl">1.1</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">confettiScope ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">confettiScope n r</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="fu">=</span> kaleidoscope (mkConfetti n (mkStdGen r))</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="fu">#</span> centerXY <span class="fu">&lt;&gt;</span> (circle <span class="fl">2.75</span> <span class="fu">#</span> fc black)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="fu">#</span> pad <span class="fl">1.1</span></a></code></pre></div>
 <p>To create an image for use in the kadeidescope we generate a bunch of disks with random location, size, color, and opacity. This is the confetti used as the image. Of course using circles is arbitrary, any shapes and sizes will do.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; sizeValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span>
-<span class="ot">&gt;</span> sizeValue <span class="fu">=</span> getRandomR (<span class="fl">0.05</span>, <span class="fl">0.25</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; coordValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span>
-<span class="ot">&gt;</span> coordValue <span class="fu">=</span> getRandomR (<span class="fu">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">sizeValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">sizeValue <span class="fu">=</span> getRandomR (<span class="fl">0.05</span>, <span class="fl">0.25</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">coordValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">coordValue <span class="fu">=</span> getRandomR (<span class="fu">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)</a></code></pre></div>
 <p>We use monadRandom to hide the plumbing of the many random numbers we need. The colors are choosen from the 330+ <code>webColors</code> defined in the package <code>Data.Colour.Palette.ColorSet</code>.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; confetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Rand</span> <span class="dt">StdGen</span> (<span class="dt">Diagram</span> <span class="dt">B</span>)
-<span class="ot">&gt;</span> confetti n <span class="fu">=</span> <span class="kw">do</span>
-<span class="ot">&gt;</span>   ss <span class="ot">&lt;-</span> replicateM n sizeValue   <span class="co">-- radius</span>
-<span class="ot">&gt;</span>   cs <span class="ot">&lt;-</span> replicateM n getRandom   <span class="co">-- color index</span>
-<span class="ot">&gt;</span>   as <span class="ot">&lt;-</span> replicateM n getRandom   <span class="co">-- opacity</span>
-<span class="ot">&gt;</span>   xs <span class="ot">&lt;-</span> replicateM n coordValue  <span class="co">-- x coordinate</span>
-<span class="ot">&gt;</span>   ys <span class="ot">&lt;-</span> replicateM n coordValue  <span class="co">-- y coordinate</span>
-<span class="ot">&gt;</span>   <span class="kw">let</span><span class="ot"> mkCirc ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span>       mkCirc s c a <span class="fu">=</span> circle s <span class="fu">#</span> fc (webColors c) <span class="fu">#</span> lw none <span class="fu">#</span> opacity a
-<span class="ot">&gt;</span>       pos <span class="fu">=</span> zipWith mkP2 xs ys
-<span class="ot">&gt;</span>       conf <span class="fu">=</span> zipWith3 mkCirc ss cs as
-<span class="ot">&gt;</span>   return <span class="fu">$</span> position (zip pos conf)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">confetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Rand</span> <span class="dt">StdGen</span> (<span class="dt">Diagram</span> <span class="dt">B</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">confetti n <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  ss <span class="ot">&lt;-</span> replicateM n sizeValue   <span class="co">-- radius</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  cs <span class="ot">&lt;-</span> replicateM n getRandom   <span class="co">-- color index</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  as <span class="ot">&lt;-</span> replicateM n getRandom   <span class="co">-- opacity</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  xs <span class="ot">&lt;-</span> replicateM n coordValue  <span class="co">-- x coordinate</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">  ys <span class="ot">&lt;-</span> replicateM n coordValue  <span class="co">-- y coordinate</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">  <span class="kw">let</span><span class="ot"> mkCirc ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">      mkCirc s c a <span class="fu">=</span> circle s <span class="fu">#</span> fc (webColors c) <span class="fu">#</span> lw none <span class="fu">#</span> opacity a</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">      pos <span class="fu">=</span> zipWith mkP2 xs ys</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">      conf <span class="fu">=</span> zipWith3 mkCirc ss cs as</a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">  return <span class="fu">$</span> position (zip pos conf)</a></code></pre></div>
 <p>Make the confetti diagram and extract it from the monad.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; mkConfetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">StdGen</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>)
-<span class="ot">&gt;</span> mkConfetti n <span class="fu">=</span> evalRand <span class="fu">$</span> confetti n</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> confettiScope <span class="dv">39</span> <span class="dv">0</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="ot">mkConfetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">StdGen</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">mkConfetti n <span class="fu">=</span> evalRand <span class="fu">$</span> confetti n</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1">example <span class="fu">=</span> confettiScope <span class="dv">39</span> <span class="dv">0</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -110,7 +110,7 @@ some special markup.  Inline markup is accomplished by surrounding
 some text in backquotes, followed by a tag surrounded by colons, like
 <code>`some text here`:tag:</code>.</p><ul><li><p>Haskell expressions should be enclosed in single backquotes.  Such
 expressions will be linked to Haddock documentation as appropriate.
-For example, <code>`circle 1`</code> is typeset like this: <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span></code>.</p></li><li><p>For other literal expressions which should be typeset using a
+For example, <code>`circle 1`</code> is typeset like this: <code class="sourceCode">circle <span class="dv">1</span></code>.</p></li><li><p>For other literal expressions which should be typeset using a
 monospaced font, use double backquotes, like <code>``foo``</code>.</p></li><li><p>For embedded \(\LaTeX\) like \(2 + \sqrt{\pi}\), use the
 <code>math</code> tag, as in <code>`2 + \sqrt{\pi}`:math:</code>.  Math is typeset
 using <a class="reference external" href="http://www.mathjax.org/">MathJax</a>.</p></li><li><p>For names of packages on Hackage, use the <code>pkg</code> tag, as in
@@ -118,7 +118,7 @@ using <a class="reference external" href="http://www.mathjax.org/">MathJax</a>.<
 automatically turn into Hackage links, like this: <span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span>.</p></li><li><p>For names of diagrams-related modules, use the <code>mod</code> tag, as in
 <code>`Diagrams.Path`:mod:</code>.  This will turn into a link to the
 Haddock documentation <em>hosted on the diagrams website</em> (not
-Hackage), like this: <span class="module"><a href="../haddock/diagrams-lib/Diagrams-Path.html"><code>Diagrams.Path</code></a></span>. Hence, this should only
+Hackage), like this: <code>Diagrams.Path</code>. Hence, this should only
 be used for modules which are hosted on the diagrams website.</p></li><li><p>To link to a repository in the <code>diagrams</code> github organization, use
 the <code>repo</code> tag.  For example, <code>`diagrams-lib`:repo:</code> turns into
 <span class="repo"><a href="http://github.com/diagrams/diagrams-lib"><code>diagrams-lib</code></a></span>.</p></li></ul></div><div class="section" id="special-containers"><h1><generated classes="sectnum">4   </generated>Special containers</h1><p>Currently, there are three special types of "containers" defined,
@@ -138,7 +138,7 @@ a literal block with the class <code>lhs</code> could be specified as follows:</
 
 > x = 13
 > z = square 2 &lt;> circle 3</code></pre><p>which produces:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> x <span class="fu">=</span> <span class="dv">13</span>
-<span class="ot">></span> z <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Shapes.html#v:square">square</a> <span class="dv">2</span> <span class="fu"><></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">3</span></code></pre></div></div><p>As you can see, the <code>lhs</code> class produces syntax-highlighted and
+<span class="ot">></span> z <span class="fu">=</span> square <span class="dv">2</span> <span class="fu"><></span> circle <span class="dv">3</span></code></pre></div></div><p>As you can see, the <code>lhs</code> class produces syntax-highlighted and
 hyperlinked literate Haskell source.  To include an inline diagram,
 use the <code>dia</code> class and define a diagram named <code>example</code>.  For
 example,</p><pre><code>.. class:: dia
@@ -148,12 +148,12 @@ example,</p><pre><code>.. class:: dia
 > myCircle = circle 1 # fc purple
 > example = hcat (replicate 4 myCircle)</code></pre><p>produces</p><div class="exampleimg"><div style="text-align: center"><img src="images/ed492de066757fa3.png" width="500" height="200" /></div></div><p>When writing <code>dia</code> blocks you can add extra imports and <code>LANGUAGE</code>
 pragmas as necessary.  However, you should not explicitly import
-<span class="module"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html"><code>Diagrams.Prelude</code></a></span> or any diagrams backend.  These
+<code>Diagrams.Prelude</code> or any diagrams backend.  These
 imports are added automatically when the documentation is built,
 depending on what backend is in use.</p><p>Finally, using <code>dia-lhs</code> will produce a diagram <em>and</em> typeset the
 code below it.  For example, changing <code>dia</code> to <code>dia-lhs</code> above
-produces</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/ed492de066757fa3.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> myCircle <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Ellipse.html#v:circle">circle</a> <span class="dv">1</span> <span class="fu"><a href="../haddock/diagrams-lib/Diagrams-Util.html#v:-35-">#</a></span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Attributes.html#v:fc">fc</a> purple
-<span class="ot">></span> example <span class="fu">=</span> <a href="../haddock/diagrams-lib/Diagrams-TwoD-Combinators.html#v:hcat">hcat</a> (replicate <span class="dv">4</span> myCircle)</code></pre></div></div></div></div><div class="section" id="static-images"><h1><generated classes="sectnum">6   </generated>Static images</h1><div style="text-align: center"><img src="../doc/static/phone.png" align="center" uri="/doc/static/phone.png" width="300" /></div><p>If you have some static images (that is, images which are not
+produces</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/ed492de066757fa3.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> myCircle <span class="fu">=</span> circle <span class="dv">1</span> <span class="fu">#</span> fc purple
+<span class="ot">></span> example <span class="fu">=</span> hcat (replicate <span class="dv">4</span> myCircle)</code></pre></div></div></div></div><div class="section" id="static-images"><h1><generated classes="sectnum">6   </generated>Static images</h1><div style="text-align: center"><img src="../doc/static/phone.png" align="center" uri="/doc/static/phone.png" width="300" /></div><p>If you have some static images (that is, images which are not
 generated by diagrams code, but are to be stored explicitly in the
 <span class="repo"><a href="http://github.com/diagrams/diagrams-doc"><code>diagrams-doc</code></a></span> repository), you can put them in the
 <code>doc/static</code> directory, and reference them in several ways.  To

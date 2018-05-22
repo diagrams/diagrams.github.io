@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,33 +84,33 @@
 <p>Fractal construction with pentagons.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Pentaflake.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Pentaflake.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Pentaflake.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a></code></pre></div>
 <p>A \(0\)-pentaflake is just a regular pentagon:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> grad <span class="fu">=</span> defaultRG <span class="fu">&amp;</span> _RG <span class="fu">.</span> rGradStops <span class="fu">.~</span> mkStops [(blue,<span class="dv">0</span>,<span class="dv">1</span>), (crimson,<span class="dv">1</span>,<span class="dv">1</span>)]
-<span class="ot">&gt;</span>                  <span class="fu">&amp;</span> _RG <span class="fu">.</span> rGradRadius1 <span class="fu">.~</span> <span class="dv">50</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> pentaflake' <span class="dv">0</span> <span class="fu">=</span> regPoly <span class="dv">5</span> <span class="dv">1</span> <span class="fu">#</span> lw none</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">grad <span class="fu">=</span> defaultRG <span class="fu">&amp;</span> _RG <span class="fu">.</span> rGradStops <span class="fu">.~</span> mkStops [(blue,<span class="dv">0</span>,<span class="dv">1</span>), (crimson,<span class="dv">1</span>,<span class="dv">1</span>)]</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                 <span class="fu">&amp;</span> _RG <span class="fu">.</span> rGradRadius1 <span class="fu">.~</span> <span class="dv">50</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">pentaflake' <span class="dv">0</span> <span class="fu">=</span> regPoly <span class="dv">5</span> <span class="dv">1</span> <span class="fu">#</span> lw none</a></code></pre></div>
 <p>An <a href="http://mathworld.wolfram.com/Pentaflake.html">\(n\)-pentaflake</a> is an \((n-1)\)-pentaflake surrounded by five more. The <code>appends</code> function is useful here for positioning the five pentaflakes around the central one.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> pentaflake' n <span class="fu">=</span> appends
-<span class="ot">&gt;</span>                   pCenter
-<span class="ot">&gt;</span>                   (zip vs (repeat (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) pOutside)))
-<span class="ot">&gt;</span>   <span class="kw">where</span> vs <span class="fu">=</span> iterateN <span class="dv">5</span> (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">5</span>))
-<span class="ot">&gt;</span>            <span class="fu">.</span> (<span class="kw">if</span> odd n <span class="kw">then</span> negated <span class="kw">else</span> id)
-<span class="ot">&gt;</span>            <span class="fu">$</span> unitY
-<span class="ot">&gt;</span>         pCenter  <span class="fu">=</span> pentaflake' (n<span class="fu">-</span><span class="dv">1</span>)
-<span class="ot">&gt;</span>         pOutside <span class="fu">=</span> pCenter <span class="fu">#</span> opacity (<span class="fl">1.7</span> <span class="fu">/</span> fromIntegral n)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> pentaflake n <span class="fu">=</span> pentaflake' n <span class="fu">#</span> fillTexture grad <span class="fu">#</span> bgFrame <span class="dv">4</span> silver</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">pentaflake' n <span class="fu">=</span> appends</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                  pCenter</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                  (zip vs (repeat (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) pOutside)))</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="kw">where</span> vs <span class="fu">=</span> iterateN <span class="dv">5</span> (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">           <span class="fu">.</span> (<span class="kw">if</span> odd n <span class="kw">then</span> negated <span class="kw">else</span> id)</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">           <span class="fu">$</span> unitY</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">        pCenter  <span class="fu">=</span> pentaflake' (n<span class="fu">-</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">        pOutside <span class="fu">=</span> pCenter <span class="fu">#</span> opacity (<span class="fl">1.7</span> <span class="fu">/</span> fromIntegral n)</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">pentaflake n <span class="fu">=</span> pentaflake' n <span class="fu">#</span> fillTexture grad <span class="fu">#</span> bgFrame <span class="dv">4</span> silver</a></code></pre></div>
 <p>A \(4\)-pentaflake looks nice. Of course there’s an exponential blowup in the number of primitives, so generating higher-order pentaflakes can take a long time!</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> pentaflake <span class="dv">4</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">example <span class="fu">=</span> pentaflake <span class="dv">4</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

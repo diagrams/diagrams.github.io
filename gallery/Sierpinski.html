@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,43 +84,43 @@
 <p>Sierpinski’s classic fractal.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Sierpinski.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Sierpinski.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey, Jeffrey Rosenbluth</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Sierpinski.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a></code></pre></div>
 <p>In the original version from Brent, fractals are placed in a triangular fashion and use recursion :</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="co">-- sierpinski 1 = triangle 1</span>
-<span class="ot">&gt;</span> <span class="co">-- sierpinski n =     s</span>
-<span class="ot">&gt;</span> <span class="co">--                  ===</span>
-<span class="ot">&gt;</span> <span class="co">--               (s ||| s) # centerX</span>
-<span class="ot">&gt;</span> <span class="co">--   where s = sierpinski (n-1)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">-- sierpinski 1 = triangle 1</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">-- sierpinski n =     s</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">--                  ===</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">--               (s ||| s) # centerX</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">--   where s = sierpinski (n-1)</span></a></code></pre></div>
 <p>Another version allow to change color at each level :</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.Palette.BrewerSet</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; clrs ::</span> [<span class="dt">Colour</span> <span class="dt">Double</span>]
-<span class="ot">&gt;</span> clrs <span class="fu">=</span> brewerSet <span class="dt">Purples</span> <span class="dv">9</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; sierpinski ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Colour</span> <span class="dt">Double</span>] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> sierpinski n c <span class="fu">=</span> go n <span class="fu">&lt;&gt;</span> triangle (<span class="dv">2</span><span class="fu">^</span>n) <span class="fu">#</span> fc (clrs <span class="fu">!!</span> <span class="dv">0</span>) <span class="fu">#</span> lw none
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     clrs <span class="fu">=</span> <span class="kw">if</span> null c <span class="kw">then</span> repeat black <span class="kw">else</span> cycle c
-<span class="ot">&gt;</span>     go n
-<span class="ot">&gt;</span>       <span class="fu">|</span> n <span class="fu">==</span> <span class="dv">1</span>    <span class="fu">=</span> t1 <span class="fu">#</span> fc (clrs <span class="fu">!!</span> <span class="dv">1</span>)
-<span class="ot">&gt;</span>       <span class="fu">|</span> otherwise <span class="fu">=</span> appends tri (zip vecs (replicate <span class="dv">3</span> sierp))
-<span class="ot">&gt;</span>       <span class="kw">where</span>
-<span class="ot">&gt;</span>         tri   <span class="fu">=</span> scale (<span class="dv">2</span> <span class="fu">^</span> (n<span class="fu">-</span><span class="dv">1</span>)) <span class="fu">$</span> t1 <span class="fu">#</span> fc (clrs <span class="fu">!!</span> (n<span class="fu">+</span><span class="dv">1</span>))
-<span class="ot">&gt;</span>         vecs  <span class="fu">=</span> [unitY, (rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unitX), (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unit_X)]
-<span class="ot">&gt;</span>         sierp <span class="fu">=</span> go (n<span class="fu">-</span><span class="dv">1</span>)
-<span class="ot">&gt;</span>         t1    <span class="fu">=</span> triangle <span class="dv">1</span> <span class="fu">#</span> reflectY
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span>  sierpinski <span class="dv">7</span> clrs <span class="fu">#</span> lw none <span class="fu">#</span> center <span class="fu">#</span> frame <span class="dv">2</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Data.Colour.Palette.BrewerSet</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="ot">clrs ::</span> [<span class="dt">Colour</span> <span class="dt">Double</span>]</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">clrs <span class="fu">=</span> brewerSet <span class="dt">Purples</span> <span class="dv">9</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="ot">sierpinski ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Colour</span> <span class="dt">Double</span>] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">sierpinski n c <span class="fu">=</span> go n <span class="fu">&lt;&gt;</span> triangle (<span class="dv">2</span><span class="fu">^</span>n) <span class="fu">#</span> fc (clrs <span class="fu">!!</span> <span class="dv">0</span>) <span class="fu">#</span> lw none</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">    clrs <span class="fu">=</span> <span class="kw">if</span> null c <span class="kw">then</span> repeat black <span class="kw">else</span> cycle c</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">    go n</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">      <span class="fu">|</span> n <span class="fu">==</span> <span class="dv">1</span>    <span class="fu">=</span> t1 <span class="fu">#</span> fc (clrs <span class="fu">!!</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">      <span class="fu">|</span> otherwise <span class="fu">=</span> appends tri (zip vecs (replicate <span class="dv">3</span> sierp))</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">      <span class="kw">where</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15">        tri   <span class="fu">=</span> scale (<span class="dv">2</span> <span class="fu">^</span> (n<span class="fu">-</span><span class="dv">1</span>)) <span class="fu">$</span> t1 <span class="fu">#</span> fc (clrs <span class="fu">!!</span> (n<span class="fu">+</span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">        vecs  <span class="fu">=</span> [unitY, (rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unitX), (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">12</span>) unit_X)]</a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">        sierp <span class="fu">=</span> go (n<span class="fu">-</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-18" data-line-number="18">        t1    <span class="fu">=</span> triangle <span class="dv">1</span> <span class="fu">#</span> reflectY</a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">example <span class="fu">=</span>  sierpinski <span class="dv">7</span> clrs <span class="fu">#</span> lw none <span class="fu">#</span> center <span class="fu">#</span> frame <span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

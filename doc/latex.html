@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -131,7 +131,7 @@ like so:</p><pre><code>\begin{diagram}[width=300,height=200]
 are both optional.  Within the block, you can place an arbitrary
 Haskell module (including imports and <code>LANGUAGE</code> pragmas, as
 illustrated above).  Note that the indentation does not matter, as
-long as it is consistent.  Imports of <span class="module"><a href="../haddock/diagrams-lib/Diagrams-Prelude.html"><code>Diagrams.Prelude</code></a></span> and whichever
+long as it is consistent.  Imports of <code>Diagrams.Prelude</code> and whichever
 backend you are using will be added automatically.  The module must
 contain a definition of a diagram named <code class="sourceCode">dia</code>, which will be
 rendered.  It may also contain any other arbitrary helper definitions.</p></div><div class="section" id="running"><h1><generated classes="sectnum">5   </generated>Running</h1><p>To compile your en-diagrammed \(\LaTeX\) document, simply run <code>latex</code>,
@@ -145,7 +145,7 @@ the same directory, and import this module in each <code>diagram</code> block.
 <span class="package"><a href="http://hackage.haskell.org/package/diagrams-builder"><code>diagrams-builder</code></a></span> is smart enough to recompile a diagram when
 its imports have changed.  In general, <span class="package"><a href="http://hackage.haskell.org/package/diagrams-builder"><code>diagrams-builder</code></a></span> tries
 hard to avoid recompiling diagrams when recompilation is not
-necessary, in order to speed build times.</p><p>If you use the PGF backend, any <code class="sourceCode"><a href="../haddock/diagrams-lib/Diagrams-TwoD-Text.html#v:text">text</a></code> diagrams will be typeset by
+necessary, in order to speed build times.</p><p>If you use the PGF backend, any <code class="sourceCode">text</code> diagrams will be typeset by
 \(\LaTeX\).  In particular, if your text contains any sections
 surrounded by dollar signs, these will be typeset in math mode.  For
 example,</p><pre><code>\begin{diagram}[width=300,height=200]

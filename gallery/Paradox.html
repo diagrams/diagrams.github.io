@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,87 +84,87 @@
 <p>A favorite puzzle/paradox of Lewis Carroll based on Fibonacci numbers. The two figures are “obviously” composed of the same pieces, yet they have different areas!</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Paradox.big.png" width="400.0" height="200.0" />
+<img src="../gallery/images/Paradox.big.png" width="400" height="200" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Paradox.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (tri)
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.SRGB</span> (sRGB24read)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (tri)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</a></code></pre></div>
 <p>The standard infinite list of Fibonacci numbers.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; fibs ::</span> [<span class="dt">Int</span>]
-<span class="ot">&gt;</span> fibs <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:</span> <span class="dv">1</span> <span class="fu">:</span> zipWith (<span class="fu">+</span>) fibs (tail fibs)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="ot">fibs ::</span> [<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">fibs <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:</span> <span class="dv">1</span> <span class="fu">:</span> zipWith (<span class="fu">+</span>) fibs (tail fibs)</a></code></pre></div>
 <p>Create a grid by gluing together a bunch of squares.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; grid ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> grid x y <span class="fu">=</span> frame <span class="fu">&lt;&gt;</span> lattice
-<span class="ot">&gt;</span>   <span class="kw">where</span> s       <span class="fu">=</span> unitSquare <span class="fu">#</span> lw thin
-<span class="ot">&gt;</span>         frame   <span class="fu">=</span> rect (fromIntegral x) (fromIntegral y)
-<span class="ot">&gt;</span>                 <span class="fu">#</span> lw thick
-<span class="ot">&gt;</span>         lattice <span class="fu">=</span> centerXY <span class="fu">.</span> vcat <span class="fu">.</span> map hcat <span class="fu">.</span> replicate y <span class="fu">.</span> replicate x <span class="fu">$</span> s</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">grid ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">grid x y <span class="fu">=</span> frame <span class="fu">&lt;&gt;</span> lattice</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">where</span> s       <span class="fu">=</span> unitSquare <span class="fu">#</span> lw thin</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">        frame   <span class="fu">=</span> rect (fromIntegral x) (fromIntegral y)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                <span class="fu">#</span> lw thick</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">        lattice <span class="fu">=</span> centerXY <span class="fu">.</span> vcat <span class="fu">.</span> map hcat <span class="fu">.</span> replicate y <span class="fu">.</span> replicate x <span class="fu">$</span> s</a></code></pre></div>
 <p>The trapezoid and triangle shapes, with sides lengths based on two Fibonacci numbers.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> trap,<span class="ot"> tri ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> trap s1 s2 <span class="fu">=</span> lw none <span class="fu">.</span> strokeLoop <span class="fu">.</span> closeLine
-<span class="ot">&gt;</span>            <span class="fu">.</span> fromOffsets <span class="fu">.</span> map r2 <span class="fu">$</span> [(<span class="dv">0</span>,<span class="fu">-</span>s2), (s2,<span class="dv">0</span>), (<span class="dv">0</span>,s1)]
-<span class="ot">&gt;</span> tri s1 s2  <span class="fu">=</span> lw none <span class="fu">.</span>  strokeLoop <span class="fu">.</span> closeLine
-<span class="ot">&gt;</span>            <span class="fu">.</span> fromOffsets <span class="fu">.</span> map r2 <span class="fu">$</span> [(s1,<span class="dv">0</span>), (<span class="dv">0</span>,s1<span class="fu">+</span>s2)]</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">trap,<span class="ot"> tri ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">trap s1 s2 <span class="fu">=</span> lw none <span class="fu">.</span> strokeLoop <span class="fu">.</span> closeLine</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">           <span class="fu">.</span> fromOffsets <span class="fu">.</span> map r2 <span class="fu">$</span> [(<span class="dv">0</span>,<span class="fu">-</span>s2), (s2,<span class="dv">0</span>), (<span class="dv">0</span>,s1)]</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">tri s1 s2  <span class="fu">=</span> lw none <span class="fu">.</span>  strokeLoop <span class="fu">.</span> closeLine</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">           <span class="fu">.</span> fromOffsets <span class="fu">.</span> map r2 <span class="fu">$</span> [(s1,<span class="dv">0</span>), (<span class="dv">0</span>,s1<span class="fu">+</span>s2)]</a></code></pre></div>
 <p>Draw the paradox diagram based on the nth Fibonacci number.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; paradox ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> paradox n drawDiags <span class="fu">=</span> (sq <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)
-<span class="ot">&gt;</span>                    <span class="fu">|||</span> strutX (s2 <span class="fu">/</span> <span class="dv">2</span>)
-<span class="ot">&gt;</span>                    <span class="fu">|||</span> rect <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)) <span class="fu">#</span> centerXY
-<span class="ot">&gt;</span>   <span class="kw">where</span> f1 <span class="fu">=</span> fibs <span class="fu">!!</span> n
-<span class="ot">&gt;</span>         f2 <span class="fu">=</span> fibs <span class="fu">!!</span> (n<span class="fu">+</span><span class="dv">1</span>)
-<span class="ot">&gt;</span>         s1 <span class="fu">=</span> fromIntegral f1
-<span class="ot">&gt;</span>         s2 <span class="fu">=</span> fromIntegral f2
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>         trap1 <span class="fu">=</span> trap s1 s2 <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#BEC3C7&quot;</span>)
-<span class="ot">&gt;</span>         trap2 <span class="fu">=</span> trap s1 s2 <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#1ABC9C&quot;</span>)
-<span class="ot">&gt;</span>                            <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>         tri1  <span class="fu">=</span> tri s1 s2  <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#FF6666&quot;</span>)
-<span class="ot">&gt;</span>         tri2  <span class="fu">=</span> tri s1 s2  <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#37485D&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">paradox ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">paradox n drawDiags <span class="fu">=</span> (sq <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="fu">|||</span> strutX (s2 <span class="fu">/</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                   <span class="fu">|||</span> rect <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>)) <span class="fu">#</span> centerXY</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="kw">where</span> f1 <span class="fu">=</span> fibs <span class="fu">!!</span> n</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">        f2 <span class="fu">=</span> fibs <span class="fu">!!</span> (n<span class="fu">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">        s1 <span class="fu">=</span> fromIntegral f1</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">        s2 <span class="fu">=</span> fromIntegral f2</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">        trap1 <span class="fu">=</span> trap s1 s2 <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#BEC3C7&quot;</span>)</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">        trap2 <span class="fu">=</span> trap s1 s2 <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#1ABC9C&quot;</span>)</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">                           <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">        tri1  <span class="fu">=</span> tri s1 s2  <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#FF6666&quot;</span>)</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">        tri2  <span class="fu">=</span> tri s1 s2  <span class="fu">#</span> fc (sRGB24read <span class="st">&quot;#37485D&quot;</span>)</a></code></pre></div>
 <p>The four shapes assembled into a square.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>         sq <span class="fu">=</span> (<span class="kw">if</span> drawDiags <span class="kw">then</span> sqDiags <span class="kw">else</span> mempty)
-<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> grid (f1<span class="fu">+</span>f2) (f1<span class="fu">+</span>f2)
-<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> sqShapes
-<span class="ot">&gt;</span>         sqDiags <span class="fu">=</span> (fromVertices [p2 (<span class="dv">0</span>,s2), p2 (s2,s1)] <span class="fu">&lt;&gt;</span>
-<span class="ot">&gt;</span>                    fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s2,s1<span class="fu">+</span>s2)] <span class="fu">&lt;&gt;</span>
-<span class="ot">&gt;</span>                    fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s1<span class="fu">+</span>s2,s1<span class="fu">+</span>s2)])
-<span class="ot">&gt;</span>                 <span class="fu">#</span> strokeP
-<span class="ot">&gt;</span>                 <span class="fu">#</span> lw thick
-<span class="ot">&gt;</span>                 <span class="fu">#</span> centerXY
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>         sqShapes <span class="fu">=</span> (traps <span class="fu">#</span> centerY <span class="fu">|||</span> tris <span class="fu">#</span> centerY)
-<span class="ot">&gt;</span>                  <span class="fu">#</span> centerXY
-<span class="ot">&gt;</span>         traps <span class="fu">=</span> trap2 <span class="fu">#</span> alignL
-<span class="ot">&gt;</span>                       <span class="fu">#</span> translateY (s1 <span class="fu">-</span> s2)
-<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> trap1
-<span class="ot">&gt;</span>         tris  <span class="fu">=</span> tri1 <span class="fu">#</span> alignBL
-<span class="ot">&gt;</span>              <span class="fu">&lt;&gt;</span> tri2 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)
-<span class="ot">&gt;</span>                      <span class="fu">#</span> alignBL</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">        sq <span class="fu">=</span> (<span class="kw">if</span> drawDiags <span class="kw">then</span> sqDiags <span class="kw">else</span> mempty)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">             <span class="fu">&lt;&gt;</span> grid (f1<span class="fu">+</span>f2) (f1<span class="fu">+</span>f2)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">             <span class="fu">&lt;&gt;</span> sqShapes</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">        sqDiags <span class="fu">=</span> (fromVertices [p2 (<span class="dv">0</span>,s2), p2 (s2,s1)] <span class="fu">&lt;&gt;</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                   fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s2,s1<span class="fu">+</span>s2)] <span class="fu">&lt;&gt;</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">                   fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s1<span class="fu">+</span>s2,s1<span class="fu">+</span>s2)])</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">                <span class="fu">#</span> strokeP</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">                <span class="fu">#</span> lw thick</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">                <span class="fu">#</span> centerXY</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">        sqShapes <span class="fu">=</span> (traps <span class="fu">#</span> centerY <span class="fu">|||</span> tris <span class="fu">#</span> centerY)</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">                 <span class="fu">#</span> centerXY</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">        traps <span class="fu">=</span> trap2 <span class="fu">#</span> alignL</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">                      <span class="fu">#</span> translateY (s1 <span class="fu">-</span> s2)</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">             <span class="fu">&lt;&gt;</span> trap1</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">        tris  <span class="fu">=</span> tri1 <span class="fu">#</span> alignBL</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">             <span class="fu">&lt;&gt;</span> tri2 <span class="fu">#</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">                     <span class="fu">#</span> alignBL</a></code></pre></div>
 <p>The four shapes assembled into a rectangle.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>         rect <span class="fu">=</span> (<span class="kw">if</span> drawDiags <span class="kw">then</span> rDiags <span class="kw">else</span> mempty)
-<span class="ot">&gt;</span>                <span class="fu">&lt;&gt;</span> grid (<span class="dv">2</span><span class="fu">*</span>f2 <span class="fu">+</span> f1) f2
-<span class="ot">&gt;</span>                <span class="fu">&lt;&gt;</span> rShapes
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>         rShapes <span class="fu">=</span> (bot <span class="fu">#</span> alignTL <span class="fu">&lt;&gt;</span> top <span class="fu">#</span> alignTL) <span class="fu">#</span> centerXY
-<span class="ot">&gt;</span>         bot <span class="fu">=</span> trap1 <span class="fu">#</span> alignB <span class="fu">|||</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) tri1 <span class="fu">#</span> alignB
-<span class="ot">&gt;</span>         top <span class="fu">=</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) tri2 <span class="fu">#</span> alignT <span class="fu">|||</span> trap2 <span class="fu">#</span> alignT
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>         rDiags <span class="fu">=</span> (fromVertices [p2 (<span class="dv">0</span>,s2), p2 (<span class="dv">2</span><span class="fu">*</span>s2<span class="fu">+</span>s1, <span class="dv">0</span>)] <span class="fu">&lt;&gt;</span>
-<span class="ot">&gt;</span>                   fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s2,s1)] <span class="fu">&lt;&gt;</span>
-<span class="ot">&gt;</span>                   fromVertices [p2 (s1<span class="fu">+</span>s2,s2<span class="fu">-</span>s1), p2 (s1<span class="fu">+</span>s2,s2)]
-<span class="ot">&gt;</span>                   )
-<span class="ot">&gt;</span>                  <span class="fu">#</span> strokeP
-<span class="ot">&gt;</span>                  <span class="fu">#</span> lw thick
-<span class="ot">&gt;</span>                  <span class="fu">#</span> lineCap <span class="dt">LineCapRound</span>
-<span class="ot">&gt;</span>                  <span class="fu">#</span> centerXY</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1">        rect <span class="fu">=</span> (<span class="kw">if</span> drawDiags <span class="kw">then</span> rDiags <span class="kw">else</span> mempty)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">               <span class="fu">&lt;&gt;</span> grid (<span class="dv">2</span><span class="fu">*</span>f2 <span class="fu">+</span> f1) f2</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">               <span class="fu">&lt;&gt;</span> rShapes</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">        rShapes <span class="fu">=</span> (bot <span class="fu">#</span> alignTL <span class="fu">&lt;&gt;</span> top <span class="fu">#</span> alignTL) <span class="fu">#</span> centerXY</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">        bot <span class="fu">=</span> trap1 <span class="fu">#</span> alignB <span class="fu">|||</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) tri1 <span class="fu">#</span> alignB</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">        top <span class="fu">=</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) tri2 <span class="fu">#</span> alignT <span class="fu">|||</span> trap2 <span class="fu">#</span> alignT</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">        rDiags <span class="fu">=</span> (fromVertices [p2 (<span class="dv">0</span>,s2), p2 (<span class="dv">2</span><span class="fu">*</span>s2<span class="fu">+</span>s1, <span class="dv">0</span>)] <span class="fu">&lt;&gt;</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">                  fromVertices [p2 (s2,<span class="dv">0</span>), p2 (s2,s1)] <span class="fu">&lt;&gt;</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">                  fromVertices [p2 (s1<span class="fu">+</span>s2,s2<span class="fu">-</span>s1), p2 (s1<span class="fu">+</span>s2,s2)]</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">                  )</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">                 <span class="fu">#</span> strokeP</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">                 <span class="fu">#</span> lw thick</a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">                 <span class="fu">#</span> lineCap <span class="dt">LineCapRound</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">                 <span class="fu">#</span> centerXY</a></code></pre></div>
 <p>Draw the order-4 diagram with thick lines in the middle. Passing the argument <code>False</code> causes the thick lines to be omitted, revealing the skinny gap in the rectangular assembly. Lower-order diagrams make the gap more obvious; higher-order diagrams make it increasingly less obvious (but make the grid smaller).</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> paradox <span class="dv">4</span> <span class="dt">True</span> <span class="fu">#</span> frame <span class="fl">0.5</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1">example <span class="fu">=</span> paradox <span class="dv">4</span> <span class="dt">True</span> <span class="fu">#</span> frame <span class="fl">0.5</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

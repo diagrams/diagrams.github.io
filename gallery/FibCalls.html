@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,36 +84,36 @@
 <p>The tree of function calls made by a naive Fibonacci implementation.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/FibCalls.big.png" width="800.0" height="400.0" />
+<img src="../gallery/images/FibCalls.big.png" width="800" height="400" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/FibCalls.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a></code></pre></div>
 <p>We make use of a tree layout module from the <code>diagrams-contrib</code> package:</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Layout.Tree</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.TwoD.Layout.Tree</span></a></code></pre></div>
 <p>Generate the tree of naive Fibonacci calls.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; fibCalls ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">BTree</span> <span class="dt">Integer</span>
-<span class="ot">&gt;</span> fibCalls <span class="dv">0</span> <span class="fu">=</span> leaf <span class="dv">0</span>
-<span class="ot">&gt;</span> fibCalls <span class="dv">1</span> <span class="fu">=</span> leaf <span class="dv">1</span>
-<span class="ot">&gt;</span> fibCalls n <span class="fu">=</span> <span class="dt">BNode</span> n (fibCalls (n<span class="fu">-</span><span class="dv">1</span>)) (fibCalls (n<span class="fu">-</span><span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">fibCalls ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">BTree</span> <span class="dt">Integer</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">fibCalls <span class="dv">0</span> <span class="fu">=</span> leaf <span class="dv">0</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">fibCalls <span class="dv">1</span> <span class="fu">=</span> leaf <span class="dv">1</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">fibCalls n <span class="fu">=</span> <span class="dt">BNode</span> n (fibCalls (n<span class="fu">-</span><span class="dv">1</span>)) (fibCalls (n<span class="fu">-</span><span class="dv">2</span>))</a></code></pre></div>
 <p>Lay out the tree and render it by providing a function to render nodes and a function to render edges.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="dt">Just</span> t <span class="fu">=</span> uniqueXLayout <span class="dv">2</span> <span class="dv">2</span> (fibCalls <span class="dv">5</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">.</span> centerXY
-<span class="ot">&gt;</span>         <span class="fu">$</span> renderTree
-<span class="ot">&gt;</span>             (\n <span class="ot">-&gt;</span> (text (<span class="st">&quot;fib &quot;</span> <span class="fu">++</span> show n)
-<span class="ot">&gt;</span>                     <span class="fu">&lt;&gt;</span> roundedRect <span class="dv">3</span> <span class="fl">1.3</span> <span class="fl">0.3</span> <span class="fu">#</span> fc gold)
-<span class="ot">&gt;</span>             )
-<span class="ot">&gt;</span>             (<span class="fu">~~</span>) t
-<span class="ot">&gt;</span>         <span class="ot">`atop`</span> square <span class="dv">1</span> <span class="fu">#</span> scaleY <span class="dv">12</span> <span class="fu">#</span> translateY (<span class="fu">-</span><span class="dv">5</span>)
-<span class="ot">&gt;</span>                         <span class="fu">#</span> scaleX <span class="dv">34</span>
-<span class="ot">&gt;</span>                         <span class="fu">#</span> lw none <span class="fu">#</span> fc whitesmoke</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="dt">Just</span> t <span class="fu">=</span> uniqueXLayout <span class="dv">2</span> <span class="dv">2</span> (fibCalls <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">.</span> centerXY</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">        <span class="fu">$</span> renderTree</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">            (\n <span class="ot">-&gt;</span> (text (<span class="st">&quot;fib &quot;</span> <span class="fu">++</span> show n)</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                    <span class="fu">&lt;&gt;</span> roundedRect <span class="dv">3</span> <span class="fl">1.3</span> <span class="fl">0.3</span> <span class="fu">#</span> fc gold)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">            )</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">            (<span class="fu">~~</span>) t</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">        <span class="ot">`atop`</span> square <span class="dv">1</span> <span class="fu">#</span> scaleY <span class="dv">12</span> <span class="fu">#</span> translateY (<span class="fu">-</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">                        <span class="fu">#</span> scaleX <span class="dv">34</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">                        <span class="fu">#</span> lw none <span class="fu">#</span> fc whitesmoke</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

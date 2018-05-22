@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,141 +84,144 @@
 <p>A simple plot of data series with shapes and colours.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Chart.big.png" width="600.0" height="400.0" />
+<img src="../gallery/images/Chart.big.png" width="600" height="400" />
 </div>
 Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Chart.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Graphics.SVGFonts</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Core.Points</span> <span class="co">-- needed to work around bug in GHC 7.4</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Graphics.SVGFonts</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Graphics.SVGFonts.ReadFont</span> (<span class="dt">PreparedFont</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Diagrams.Core.Points</span> <span class="co">-- needed to work around bug in GHC 7.4</span></a></code></pre></div>
 <p>Each series is a label and a list of points (x-y pairs). Each series will be drawn as a separate line, with its own combination of colour, dashing pattern and shape.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Pt</span> <span class="fu">=</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Points</span> <span class="fu">=</span> [<span class="dt">Pt</span>]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; dataSeries ::</span> [(<span class="dt">String</span>,<span class="dt">Points</span>)]
-<span class="ot">&gt;</span> dataSeries <span class="fu">=</span>
-<span class="ot">&gt;</span>   [ (<span class="st">&quot;upward&quot;</span>,   zip [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>] [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>])
-<span class="ot">&gt;</span>   , (<span class="st">&quot;downward&quot;</span>, zip [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>] [<span class="fl">10.0</span>, <span class="fl">9.0</span> <span class="fu">..</span> <span class="fl">0.0</span>])
-<span class="ot">&gt;</span>   , (<span class="st">&quot;cycle&quot;</span>,    zip [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>] (cycle [<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>]))
-<span class="ot">&gt;</span>   , (<span class="st">&quot;arbitrary&quot;</span>, [(<span class="dv">2</span>,<span class="dv">4</span>), (<span class="dv">4</span>,<span class="dv">2</span>), (<span class="dv">5</span>,<span class="dv">4</span>), (<span class="dv">10</span>,<span class="dv">5</span>)])
-<span class="ot">&gt;</span>   , (<span class="st">&quot;sin&quot;</span>,      map (\x <span class="ot">-&gt;</span> (x, <span class="dv">8</span><span class="fu">+</span>sin x)) [<span class="fl">0.0</span>, <span class="fl">0.5</span> <span class="fu">..</span> <span class="fl">10.0</span>])
-<span class="ot">&gt;</span>   ]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Dia</span> <span class="fu">=</span> <span class="dt">Diagram</span> <span class="dt">B</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">type</span> <span class="dt">Pt</span> <span class="fu">=</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">type</span> <span class="dt">Points</span> <span class="fu">=</span> [<span class="dt">Pt</span>]</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="ot">dataSeries ::</span> [(<span class="dt">String</span>,<span class="dt">Points</span>)]</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">dataSeries <span class="fu">=</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  [ (<span class="st">&quot;upward&quot;</span>,   zip [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>] [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>])</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  , (<span class="st">&quot;downward&quot;</span>, zip [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>] [<span class="fl">10.0</span>, <span class="fl">9.0</span> <span class="fu">..</span> <span class="fl">0.0</span>])</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  , (<span class="st">&quot;cycle&quot;</span>,    zip [<span class="fl">0.0</span>, <span class="fl">1.0</span> <span class="fu">..</span> <span class="fl">10.0</span>] (cycle [<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>]))</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">  , (<span class="st">&quot;arbitrary&quot;</span>, [(<span class="dv">2</span>,<span class="dv">4</span>), (<span class="dv">4</span>,<span class="dv">2</span>), (<span class="dv">5</span>,<span class="dv">4</span>), (<span class="dv">10</span>,<span class="dv">5</span>)])</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">  , (<span class="st">&quot;sin&quot;</span>,      map (\x <span class="ot">-&gt;</span> (x, <span class="dv">8</span><span class="fu">+</span>sin x)) [<span class="fl">0.0</span>, <span class="fl">0.5</span> <span class="fu">..</span> <span class="fl">10.0</span>])</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">  ]</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="kw">type</span> <span class="dt">Dia</span> <span class="fu">=</span> <span class="dt">Diagram</span> <span class="dt">B</span></a></code></pre></div>
 <p>The final diagram is the chart with the legend next to it.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; example ::</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> example <span class="fu">=</span> centerXY <span class="fu">$</span>
-<span class="ot">&gt;</span>     (centerY (chart (map snd dataSeries) plotStyles [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>] [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>])
-<span class="ot">&gt;</span>      <span class="fu">|||</span> strutX <span class="dv">1</span>
-<span class="ot">&gt;</span>      <span class="fu">|||</span> centerY (legend plotStyles (map fst dataSeries)))
-<span class="ot">&gt;</span>      <span class="ot">`atop`</span> square <span class="dv">12</span> <span class="fu">#</span> translateX <span class="dv">5</span> <span class="fu">#</span> scaleY <span class="fl">0.85</span> <span class="co">-- border</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">example ::</span> <span class="dt">IO</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">example <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  lin2_ <span class="ot">&lt;-</span> lin2</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  return <span class="fu">.</span> centerXY <span class="fu">$</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    (centerY (chart lin2_ (map snd dataSeries) plotStyles [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>] [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>])</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">     <span class="fu">|||</span> strutX <span class="dv">1</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">     <span class="fu">|||</span> centerY (legend lin2_ plotStyles (map fst dataSeries)))</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">     <span class="ot">`atop`</span> square <span class="dv">12</span> <span class="fu">#</span> translateX <span class="dv">5</span> <span class="fu">#</span> scaleY <span class="fl">0.85</span> <span class="co">-- border</span></a></code></pre></div>
 <p>The size of the chart, in logical units.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> h,<span class="ot">w ::</span> <span class="dt">Double</span>
-<span class="ot">&gt;</span> h <span class="fu">=</span> <span class="dv">7</span>
-<span class="ot">&gt;</span> w <span class="fu">=</span> <span class="dv">7</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">h,<span class="ot">w ::</span> <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">h <span class="fu">=</span> <span class="dv">7</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">w <span class="fu">=</span> <span class="dv">7</span></a></code></pre></div>
 <p>The chart is made of the data series, the outer box, and the horizontal and vertical axes markings.</p>
 <p>“dataToFrac” converts points from the “data” space [0..10] into the [0..1] range.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; chart ::</span> [<span class="dt">Points</span>] <span class="ot">-&gt;</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> chart series styles xs ys <span class="fu">=</span> mconcat
-<span class="ot">&gt;</span>   [ plotMany styles series dataToFrac
-<span class="ot">&gt;</span>   , horizticks (map (\x <span class="ot">-&gt;</span> ((x<span class="fu">-</span>minx)<span class="fu">/</span>xrange, showFloor x)) xs)
-<span class="ot">&gt;</span>   , vertticks  (map (\y <span class="ot">-&gt;</span> ((y<span class="fu">-</span>miny)<span class="fu">/</span>yrange, showFloor y)) ys)
-<span class="ot">&gt;</span>   , box
-<span class="ot">&gt;</span>   ]
-<span class="ot">&gt;</span>   <span class="kw">where</span> maxx <span class="fu">=</span> last xs
-<span class="ot">&gt;</span>         minx <span class="fu">=</span> head xs
-<span class="ot">&gt;</span>         maxy <span class="fu">=</span> last ys
-<span class="ot">&gt;</span>         miny <span class="fu">=</span> head ys
-<span class="ot">&gt;</span>         xrange <span class="fu">=</span> maxx<span class="fu">-</span>minx
-<span class="ot">&gt;</span>         yrange <span class="fu">=</span> maxy<span class="fu">-</span>miny
-<span class="ot">&gt;</span>         dataToFrac (x,y) <span class="fu">=</span> ((x<span class="fu">-</span>minx)<span class="fu">/</span>xrange, (y<span class="fu">-</span>miny)<span class="fu">/</span>yrange)
-<span class="ot">&gt;</span>         showFloor <span class="fu">=</span> show <span class="fu">.</span> (floor<span class="ot"> ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">chart ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [<span class="dt">Points</span>] <span class="ot">-&gt;</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">chart font series styles xs ys <span class="fu">=</span> mconcat</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  [ plotMany styles series dataToFrac</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  , horizticks font (map (\x <span class="ot">-&gt;</span> ((x<span class="fu">-</span>minx)<span class="fu">/</span>xrange, showFloor x)) xs)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  , vertticks  font (map (\y <span class="ot">-&gt;</span> ((y<span class="fu">-</span>miny)<span class="fu">/</span>yrange, showFloor y)) ys)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  , box</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  ]</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">  <span class="kw">where</span> maxx <span class="fu">=</span> last xs</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">        minx <span class="fu">=</span> head xs</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">        maxy <span class="fu">=</span> last ys</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">        miny <span class="fu">=</span> head ys</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">        xrange <span class="fu">=</span> maxx<span class="fu">-</span>minx</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">        yrange <span class="fu">=</span> maxy<span class="fu">-</span>miny</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">        dataToFrac (x,y) <span class="fu">=</span> ((x<span class="fu">-</span>minx)<span class="fu">/</span>xrange, (y<span class="fu">-</span>miny)<span class="fu">/</span>yrange)</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">        showFloor <span class="fu">=</span> show <span class="fu">.</span> (floor<span class="ot"> ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)</a></code></pre></div>
 <p>Plot a single data series. A “shape” is drawn at every data point, and straight lines are drawn between points.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; plot ::</span> ((<span class="dt">Double</span>, <span class="dt">Double</span>) <span class="ot">-&gt;</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)) <span class="ot">-&gt;</span> <span class="dt">Dia</span> <span class="ot">-&gt;</span> (<span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>) <span class="ot">-&gt;</span> <span class="dt">Points</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> plot dataToFrac shape lineStyle ps <span class="fu">=</span>
-<span class="ot">&gt;</span>     <span class="kw">let</span> scalify (x,y) <span class="fu">=</span> (x<span class="fu">*</span>w,y<span class="fu">*</span>h)
-<span class="ot">&gt;</span>         ps' <span class="fu">=</span> map (p2 <span class="fu">.</span> scalify <span class="fu">.</span> dataToFrac) ps
-<span class="ot">&gt;</span>     <span class="kw">in</span> (strokeP <span class="fu">$</span> fromVertices ps') <span class="fu">#</span> lineStyle
-<span class="ot">&gt;</span>          <span class="ot">`beneath`</span> mconcat [ shape <span class="fu">#</span> moveTo p <span class="fu">|</span> p <span class="ot">&lt;-</span> ps' ]</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">plot ::</span> ((<span class="dt">Double</span>, <span class="dt">Double</span>) <span class="ot">-&gt;</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)) <span class="ot">-&gt;</span> <span class="dt">Dia</span> <span class="ot">-&gt;</span> (<span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>) <span class="ot">-&gt;</span> <span class="dt">Points</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">plot dataToFrac shape lineStyle ps <span class="fu">=</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">    <span class="kw">let</span> scalify (x,y) <span class="fu">=</span> (x<span class="fu">*</span>w,y<span class="fu">*</span>h)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">        ps' <span class="fu">=</span> map (p2 <span class="fu">.</span> scalify <span class="fu">.</span> dataToFrac) ps</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">    <span class="kw">in</span> (strokeP <span class="fu">$</span> fromVertices ps') <span class="fu">#</span> lineStyle</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">         <span class="ot">`beneath`</span> mconcat [ shape <span class="fu">#</span> moveTo p <span class="fu">|</span> p <span class="ot">&lt;-</span> ps' ]</a></code></pre></div>
 <p>Plot many data series using the given list of styles.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; plotMany ::</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">Points</span>] <span class="ot">-&gt;</span> (<span class="dt">Pt</span> <span class="ot">-&gt;</span> <span class="dt">Pt</span>) <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> plotMany styles seriesList dataToFrac <span class="fu">=</span>
-<span class="ot">&gt;</span>     mconcat <span class="fu">$</span> zipWith (uncurry (plot dataToFrac)) (styles <span class="fu">++</span> plotStyles) seriesList</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">plotMany ::</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">Points</span>] <span class="ot">-&gt;</span> (<span class="dt">Pt</span> <span class="ot">-&gt;</span> <span class="dt">Pt</span>) <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">plotMany styles seriesList dataToFrac <span class="fu">=</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">    mconcat <span class="fu">$</span> zipWith (uncurry (plot dataToFrac)) (styles <span class="fu">++</span> plotStyles) seriesList</a></code></pre></div>
 <p>A string of text, converted to a path and filled.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; text' ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> text' s <span class="fu">=</span> (strokeP <span class="fu">$</span> textSVG' (<span class="dt">TextOpts</span> lin2 <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> <span class="fl">0.4</span> <span class="fl">0.4</span>) s) <span class="fu">#</span> fc black <span class="fu">#</span> lw none</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">text' ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">text' font s <span class="fu">=</span> (strokeP <span class="fu">$</span> textSVG' (<span class="dt">TextOpts</span> font <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> <span class="fl">0.4</span> <span class="fl">0.4</span>) s) <span class="fu">#</span> fc black <span class="fu">#</span> lw none</a></code></pre></div>
 <p>The chart’s legend. Each label is drawn next to a little example of how the line looks in the chart.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; legend ::</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> legend styles labels <span class="fu">=</span> centerXY <span class="fu">$</span>
-<span class="ot">&gt;</span>     vcat' with {_sep<span class="fu">=</span><span class="fl">0.15</span>} <span class="fu">$</span>
-<span class="ot">&gt;</span>       map (\(l,s) <span class="ot">-&gt;</span> littleLine s <span class="fu">|||</span> strutX <span class="fl">0.4</span> <span class="fu">|||</span> text' l <span class="fu">#</span> alignL)
-<span class="ot">&gt;</span>         (zip labels (styles <span class="fu">++</span> plotStyles))
-<span class="ot">&gt;</span>   <span class="kw">where</span> littleLine (d,l) <span class="fu">=</span> (strokeP <span class="fu">$</span> fromVertices [ <span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">0</span>, <span class="dv">1</span><span class="fu">^&amp;</span><span class="dv">0</span> ]) <span class="fu">#</span> l
-<span class="ot">&gt;</span>                            <span class="fu">&lt;&gt;</span> d <span class="fu">#</span> moveTo (<span class="fl">0.5</span><span class="fu">^&amp;</span><span class="dv">0</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="ot">legend ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">legend font styles labels <span class="fu">=</span> centerXY <span class="fu">$</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">    vcat' with {_sep<span class="fu">=</span><span class="fl">0.15</span>} <span class="fu">$</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">      map (\(l,s) <span class="ot">-&gt;</span> littleLine s <span class="fu">|||</span> strutX <span class="fl">0.4</span> <span class="fu">|||</span> text' font l <span class="fu">#</span> alignL)</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">        (zip labels (styles <span class="fu">++</span> plotStyles))</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="kw">where</span> littleLine (d,l) <span class="fu">=</span> (strokeP <span class="fu">$</span> fromVertices [ <span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">0</span>, <span class="dv">1</span><span class="fu">^&amp;</span><span class="dv">0</span> ]) <span class="fu">#</span> l</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">                           <span class="fu">&lt;&gt;</span> d <span class="fu">#</span> moveTo (<span class="fl">0.5</span><span class="fu">^&amp;</span><span class="dv">0</span>)</a></code></pre></div>
 <p>The outer box is just a rectangle.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; box ::</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> box <span class="fu">=</span> strokeLoop <span class="fu">.</span> closeLine <span class="fu">.</span> fromVertices <span class="fu">$</span> [ <span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">0</span>, <span class="dv">0</span><span class="fu">^&amp;</span>h, w<span class="fu">^&amp;</span>h, w<span class="fu">^&amp;</span><span class="dv">0</span> ]</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="ot">box ::</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">box <span class="fu">=</span> strokeLoop <span class="fu">.</span> closeLine <span class="fu">.</span> fromVertices <span class="fu">$</span> [ <span class="dv">0</span><span class="fu">^&amp;</span><span class="dv">0</span>, <span class="dv">0</span><span class="fu">^&amp;</span>h, w<span class="fu">^&amp;</span>h, w<span class="fu">^&amp;</span><span class="dv">0</span> ]</a></code></pre></div>
 <p>Each tick on the vertical axis has a text part, a solid line on the left, a solid line on the right, and a long dashed line from left to right.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; vertticks ::</span> [(<span class="dt">Double</span>, <span class="dt">String</span>)] <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> vertticks pairs <span class="fu">=</span>
-<span class="ot">&gt;</span>     <span class="kw">let</span> textBits <span class="fu">=</span> mconcat [ text' t <span class="fu">#</span> alignR <span class="fu">#</span> moveTo ((<span class="fu">-</span><span class="fl">0.2</span>)<span class="fu">^&amp;</span>(y<span class="fu">*</span>h)) <span class="fu">|</span> (y,t) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>         tickBits <span class="fu">=</span>    mconcat [ fromVertices [ <span class="dv">0</span><span class="fu">^&amp;</span>(y<span class="fu">*</span>h), <span class="fl">0.1</span>    <span class="fu">^&amp;</span>(y<span class="fu">*</span>h) ] <span class="fu">|</span> (y,_) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>                    <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ w<span class="fu">^&amp;</span>(y<span class="fu">*</span>h), (w<span class="fu">-</span><span class="fl">0.1</span>)<span class="fu">^&amp;</span>(y<span class="fu">*</span>h) ] <span class="fu">|</span> (y,_) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>                    <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ <span class="dv">0</span><span class="fu">^&amp;</span>(y<span class="fu">*</span>h), w<span class="fu">^&amp;</span>(y<span class="fu">*</span>h)       ] <span class="fu">#</span> lc gray <span class="fu">#</span> dashingG [ <span class="fl">0.1</span>, <span class="fl">0.1</span> ] <span class="dv">0</span> <span class="fu">|</span> (y,_) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>     <span class="kw">in</span> textBits <span class="fu">&lt;&gt;</span> tickBits</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ot">vertticks ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [(<span class="dt">Double</span>, <span class="dt">String</span>)] <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">vertticks font pairs <span class="fu">=</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">    <span class="kw">let</span> textBits <span class="fu">=</span> mconcat [ text' font t <span class="fu">#</span> alignR <span class="fu">#</span> moveTo ((<span class="fu">-</span><span class="fl">0.2</span>)<span class="fu">^&amp;</span>(y<span class="fu">*</span>h)) <span class="fu">|</span> (y,t) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">        tickBits <span class="fu">=</span>    mconcat [ fromVertices [ <span class="dv">0</span><span class="fu">^&amp;</span>(y<span class="fu">*</span>h), <span class="fl">0.1</span>    <span class="fu">^&amp;</span>(y<span class="fu">*</span>h) ] <span class="fu">|</span> (y,_) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">                   <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ w<span class="fu">^&amp;</span>(y<span class="fu">*</span>h), (w<span class="fu">-</span><span class="fl">0.1</span>)<span class="fu">^&amp;</span>(y<span class="fu">*</span>h) ] <span class="fu">|</span> (y,_) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">                   <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ <span class="dv">0</span><span class="fu">^&amp;</span>(y<span class="fu">*</span>h), w<span class="fu">^&amp;</span>(y<span class="fu">*</span>h)       ] <span class="fu">#</span> lc gray <span class="fu">#</span> dashingG [ <span class="fl">0.1</span>, <span class="fl">0.1</span> ] <span class="dv">0</span> <span class="fu">|</span> (y,_) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">    <span class="kw">in</span> textBits <span class="fu">&lt;&gt;</span> tickBits</a></code></pre></div>
 <p>(Similar for the horizontal axis.)</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; horizticks ::</span> [(<span class="dt">Double</span>, <span class="dt">String</span>)] <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> horizticks pairs <span class="fu">=</span>
-<span class="ot">&gt;</span>     <span class="kw">let</span> textBits <span class="fu">=</span> mconcat [ text' t <span class="fu">#</span> moveTo ((x<span class="fu">*</span>w)<span class="fu">^&amp;</span>(<span class="fu">-</span><span class="fl">0.3</span>)) <span class="fu">|</span> (x,t) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>         tickBits <span class="fu">=</span>    mconcat [ fromVertices [ (x<span class="fu">*</span>w)<span class="fu">^&amp;</span><span class="dv">0</span>, (x<span class="fu">*</span>w)<span class="fu">^&amp;</span><span class="fl">0.1</span>     ] <span class="fu">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>                    <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ (x<span class="fu">*</span>w)<span class="fu">^&amp;</span>h, (x<span class="fu">*</span>w)<span class="fu">^&amp;</span>(h<span class="fu">-</span><span class="fl">0.1</span>) ] <span class="fu">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>                    <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ (x<span class="fu">*</span>w)<span class="fu">^&amp;</span><span class="dv">0</span>, (x<span class="fu">*</span>w)<span class="fu">^&amp;</span>h       ] <span class="fu">#</span> lc gray <span class="fu">#</span> dashingG [ <span class="fl">0.1</span>, <span class="fl">0.1</span> ] <span class="dv">0</span> <span class="fu">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]
-<span class="ot">&gt;</span>     <span class="kw">in</span> textBits <span class="fu">&lt;&gt;</span> tickBits</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ot">horizticks ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [(<span class="dt">Double</span>, <span class="dt">String</span>)] <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">horizticks font pairs <span class="fu">=</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">    <span class="kw">let</span> textBits <span class="fu">=</span> mconcat [ text' font t <span class="fu">#</span> moveTo ((x<span class="fu">*</span>w)<span class="fu">^&amp;</span>(<span class="fu">-</span><span class="fl">0.3</span>)) <span class="fu">|</span> (x,t) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">        tickBits <span class="fu">=</span>    mconcat [ fromVertices [ (x<span class="fu">*</span>w)<span class="fu">^&amp;</span><span class="dv">0</span>, (x<span class="fu">*</span>w)<span class="fu">^&amp;</span><span class="fl">0.1</span>     ] <span class="fu">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">                   <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ (x<span class="fu">*</span>w)<span class="fu">^&amp;</span>h, (x<span class="fu">*</span>w)<span class="fu">^&amp;</span>(h<span class="fu">-</span><span class="fl">0.1</span>) ] <span class="fu">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">                   <span class="fu">&lt;&gt;</span> mconcat [ fromVertices [ (x<span class="fu">*</span>w)<span class="fu">^&amp;</span><span class="dv">0</span>, (x<span class="fu">*</span>w)<span class="fu">^&amp;</span>h       ] <span class="fu">#</span> lc gray <span class="fu">#</span> dashingG [ <span class="fl">0.1</span>, <span class="fl">0.1</span> ] <span class="dv">0</span> <span class="fu">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">    <span class="kw">in</span> textBits <span class="fu">&lt;&gt;</span> tickBits</a></code></pre></div>
 <p>A dot style is a shape (any diagram) and a boolean indicating whether the shape should be filled, a line style is a dashing pattern, and a colour style is just a colour. These three combined give a “style”.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">newtype</span> <span class="dt">Fill</span> <span class="fu">=</span> <span class="dt">Fill</span> <span class="dt">Bool</span>
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Shape</span> <span class="fu">=</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">DotStyle</span> <span class="fu">=</span> (<span class="dt">Shape</span>, <span class="dt">Fill</span>)
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">LineStyle</span> <span class="fu">=</span> <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; plotStyles ::</span> [ (<span class="dt">Shape</span>, <span class="dt">LineStyle</span>) ]
-<span class="ot">&gt;</span> plotStyles <span class="fu">=</span> zipWith3 combineStyles dotStyles colourStyles lineStyles
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; combineStyles ::</span> <span class="dt">DotStyle</span> <span class="ot">-&gt;</span> <span class="dt">Colour</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">LineStyle</span> <span class="ot">-&gt;</span> (<span class="dt">Shape</span>, <span class="dt">LineStyle</span>)
-<span class="ot">&gt;</span> combineStyles (d,<span class="dt">Fill</span> f) c l <span class="fu">=</span>
-<span class="ot">&gt;</span>   ( d <span class="fu">#</span> (<span class="kw">if</span> f <span class="kw">then</span> fcA (c <span class="ot">`withOpacity`</span> <span class="fl">0.5</span>) <span class="kw">else</span> id) <span class="fu">#</span> lc c, lc c <span class="fu">.</span> l )</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">newtype</span> <span class="dt">Fill</span> <span class="fu">=</span> <span class="dt">Fill</span> <span class="dt">Bool</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">type</span> <span class="dt">Shape</span> <span class="fu">=</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">type</span> <span class="dt">DotStyle</span> <span class="fu">=</span> (<span class="dt">Shape</span>, <span class="dt">Fill</span>)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw">type</span> <span class="dt">LineStyle</span> <span class="fu">=</span> <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="ot">plotStyles ::</span> [ (<span class="dt">Shape</span>, <span class="dt">LineStyle</span>) ]</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">plotStyles <span class="fu">=</span> zipWith3 combineStyles dotStyles colourStyles lineStyles</a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="ot">combineStyles ::</span> <span class="dt">DotStyle</span> <span class="ot">-&gt;</span> <span class="dt">Colour</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">LineStyle</span> <span class="ot">-&gt;</span> (<span class="dt">Shape</span>, <span class="dt">LineStyle</span>)</a>
+<a class="sourceLine" id="cb14-10" data-line-number="10">combineStyles (d,<span class="dt">Fill</span> f) c l <span class="fu">=</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11">  ( d <span class="fu">#</span> (<span class="kw">if</span> f <span class="kw">then</span> fcA (c <span class="ot">`withOpacity`</span> <span class="fl">0.5</span>) <span class="kw">else</span> id) <span class="fu">#</span> lc c, lc c <span class="fu">.</span> l )</a></code></pre></div>
 <p>The dot styles.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; dotStyles ::</span> [<span class="dt">DotStyle</span>]
-<span class="ot">&gt;</span> dotStyles <span class="fu">=</span> cycle <span class="fu">$</span>
-<span class="ot">&gt;</span>     <span class="kw">let</span> shapes <span class="fu">=</span> map (strokeP)
-<span class="ot">&gt;</span>            [ circle <span class="fl">0.07</span>
-<span class="ot">&gt;</span>            , square <span class="fl">0.1</span>
-<span class="ot">&gt;</span>            , eqTriangle <span class="fl">0.1</span>
-<span class="ot">&gt;</span>            , pentagon <span class="fl">0.1</span>
-<span class="ot">&gt;</span>            , cross <span class="fl">0.07</span>
-<span class="ot">&gt;</span>            , plus <span class="fl">0.07</span>
-<span class="ot">&gt;</span>            , star (<span class="dt">StarSkip</span> <span class="dv">2</span>) (pentagon <span class="fl">0.1</span>)
-<span class="ot">&gt;</span>            ]
-<span class="ot">&gt;</span>     <span class="kw">in</span> [ (s, <span class="dt">Fill</span> b) <span class="fu">|</span> b <span class="ot">&lt;-</span> [<span class="dt">True</span>,<span class="dt">False</span>], s <span class="ot">&lt;-</span> shapes ]</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="ot">dotStyles ::</span> [<span class="dt">DotStyle</span>]</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">dotStyles <span class="fu">=</span> cycle <span class="fu">$</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">    <span class="kw">let</span> shapes <span class="fu">=</span> map (strokeP)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">           [ circle <span class="fl">0.07</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">           , square <span class="fl">0.1</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">           , eqTriangle <span class="fl">0.1</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">           , pentagon <span class="fl">0.1</span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">           , cross <span class="fl">0.07</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9">           , plus <span class="fl">0.07</span></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10">           , star (<span class="dt">StarSkip</span> <span class="dv">2</span>) (pentagon <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb15-11" data-line-number="11">           ]</a>
+<a class="sourceLine" id="cb15-12" data-line-number="12">    <span class="kw">in</span> [ (s, <span class="dt">Fill</span> b) <span class="fu">|</span> b <span class="ot">&lt;-</span> [<span class="dt">True</span>,<span class="dt">False</span>], s <span class="ot">&lt;-</span> shapes ]</a></code></pre></div>
 <p>Some custom shapes.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; cross ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Path</span> <span class="dt">V2</span> <span class="dt">Double</span>
-<span class="ot">&gt;</span> cross x <span class="fu">=</span> fromVertices [ x<span class="fu">^&amp;</span>(<span class="fu">-</span>x) , ((<span class="fu">-</span>x)<span class="fu">^&amp;</span>x) ]
-<span class="ot">&gt;</span>           <span class="fu">&lt;&gt;</span> fromVertices [ x<span class="fu">^&amp;</span>x , ((<span class="fu">-</span>x)<span class="fu">^&amp;</span>(<span class="fu">-</span>x)) ]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; plus ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Path</span> <span class="dt">V2</span> <span class="dt">Double</span>
-<span class="ot">&gt;</span> plus x <span class="fu">=</span> cross x <span class="fu">#</span> rotate (<span class="dv">45</span> <span class="fu">@@</span> deg)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="ot">cross ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Path</span> <span class="dt">V2</span> <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">cross x <span class="fu">=</span> fromVertices [ x<span class="fu">^&amp;</span>(<span class="fu">-</span>x) , ((<span class="fu">-</span>x)<span class="fu">^&amp;</span>x) ]</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">          <span class="fu">&lt;&gt;</span> fromVertices [ x<span class="fu">^&amp;</span>x , ((<span class="fu">-</span>x)<span class="fu">^&amp;</span>(<span class="fu">-</span>x)) ]</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="ot">plus ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Path</span> <span class="dt">V2</span> <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">plus x <span class="fu">=</span> cross x <span class="fu">#</span> rotate (<span class="dv">45</span> <span class="fu">@@</span> deg)</a></code></pre></div>
 <p>The colour styles.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; colourStyles ::</span> [<span class="dt">Colour</span> <span class="dt">Double</span>]
-<span class="ot">&gt;</span> colourStyles <span class="fu">=</span> cycle <span class="fu">$</span> [ red, green, blue, brown ]</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="ot">colourStyles ::</span> [<span class="dt">Colour</span> <span class="dt">Double</span>]</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">colourStyles <span class="fu">=</span> cycle <span class="fu">$</span> [ red, green, blue, brown ]</a></code></pre></div>
 <p>The line styles.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; lineStyles ::</span> [<span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>]
-<span class="ot">&gt;</span> lineStyles <span class="fu">=</span> cycle <span class="fu">$</span>
-<span class="ot">&gt;</span>                [ id, dashingG [<span class="fl">0.1</span>,<span class="fl">0.1</span>] <span class="dv">0</span>, dashingG [<span class="fl">0.02</span>,<span class="fl">0.02</span>] <span class="dv">0</span>
-<span class="ot">&gt;</span>                , dashingG [<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.03</span>,<span class="fl">0.1</span>] <span class="dv">0</span>, dashingG [<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.02</span>,<span class="fl">0.02</span>,<span class="fl">0.02</span>,<span class="fl">0.1</span>] <span class="dv">0</span> ]</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="ot">lineStyles ::</span> [<span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>]</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">lineStyles <span class="fu">=</span> cycle <span class="fu">$</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">               [ id, dashingG [<span class="fl">0.1</span>,<span class="fl">0.1</span>] <span class="dv">0</span>, dashingG [<span class="fl">0.02</span>,<span class="fl">0.02</span>] <span class="dv">0</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">               , dashingG [<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.03</span>,<span class="fl">0.1</span>] <span class="dv">0</span>, dashingG [<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.02</span>,<span class="fl">0.02</span>,<span class="fl">0.02</span>,<span class="fl">0.1</span>] <span class="dv">0</span> ]</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb19-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

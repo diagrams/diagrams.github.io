@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,50 +84,50 @@
 <p>Step-by-step Heighway dragon fractal.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/HeighwayDragon.big.png" width="800.0" height="800.0" />
+<img src="../gallery/images/HeighwayDragon.big.png" width="800" height="800" />
 </div>
 Author: <b><a href="http://github.com/pnutus/">Pontus Granström</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/HeighwayDragon.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE FlexibleContexts #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.TwoD.Layout.Grid</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE FlexibleContexts #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Diagrams.TwoD.Layout.Grid</span></a></code></pre></div>
 <p>One way to define the <a href="https://en.wikipedia.org/wiki/Dragon_curve">Heighway dragon</a> is iteratively. If we have a dragon of a certain level of detail, we can create the next, more detailed, dragon as follows: Take two copies of the previous dragon, rotate them, invert one of them, scale them, and stick them together.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> nextDragon trail <span class="fu">=</span> (trail <span class="fu">#</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">8</span>) 
-<span class="ot">&gt;</span>                     <span class="fu">&lt;&gt;</span> trail <span class="fu">#</span> rotateBy (<span class="dv">5</span><span class="fu">/</span><span class="dv">8</span>) <span class="fu">#</span> reverseTrail) 
-<span class="ot">&gt;</span>                    <span class="fu">#</span> scale (<span class="dv">1</span><span class="fu">/</span>sqrt <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">nextDragon trail <span class="fu">=</span> (trail <span class="fu">#</span> rotateBy (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">8</span>) </a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                    <span class="fu">&lt;&gt;</span> trail <span class="fu">#</span> rotateBy (<span class="dv">5</span><span class="fu">/</span><span class="dv">8</span>) <span class="fu">#</span> reverseTrail) </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                   <span class="fu">#</span> scale (<span class="dv">1</span><span class="fu">/</span>sqrt <span class="dv">2</span>)</a></code></pre></div>
 <p>With this, we can now generate an infinite sequence of increasingly detailed dragon curves, starting with a straight line.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> dragonCurves <span class="fu">=</span> map (trailLike <span class="fu">.</span> (<span class="ot">`at`</span> origin)) (iterate nextDragon initialTrail)
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     initialTrail <span class="fu">=</span> hrule <span class="dv">1</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">dragonCurves <span class="fu">=</span> map (trailLike <span class="fu">.</span> (<span class="ot">`at`</span> origin)) (iterate nextDragon initialTrail)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    initialTrail <span class="fu">=</span> hrule <span class="dv">1</span></a></code></pre></div>
 <p>The above is enough to generate a Heighway dragon of arbitrary level of detail, but let’s go a little further to show the relation of successive curves in the sequence.</p>
 <p><code>withPrevious</code> combines each diagram in a list with a shadow of the previous one.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> withPrevious diagrams <span class="fu">=</span> zipWith (<span class="fu">&lt;&gt;</span>) diagrams (mempty <span class="fu">:</span> diagrams <span class="fu">#</span> opacity <span class="fl">0.2</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">withPrevious diagrams <span class="fu">=</span> zipWith (<span class="fu">&lt;&gt;</span>) diagrams (mempty <span class="fu">:</span> diagrams <span class="fu">#</span> opacity <span class="fl">0.2</span>)</a></code></pre></div>
 <p>We remember the order of the diagrams by giving them names, so that we can lay them out and then show the order with arrows.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; rememberOrder ::</span> [<span class="dt">Diagram</span> <span class="dt">B</span>] <span class="ot">-&gt;</span> [<span class="dt">Diagram</span> <span class="dt">B</span>]
-<span class="ot">&gt;</span> rememberOrder <span class="fu">=</span> zipWith named [<span class="dv">0</span><span class="ot">::</span><span class="dt">Int</span> <span class="fu">..</span>]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; showOrder ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span>
-<span class="ot">&gt;</span> showOrder diagram 
-<span class="ot">&gt;</span>   <span class="fu">=</span> diagram <span class="fu">#</span> applyAll (map addArrow [<span class="dv">0</span> <span class="fu">..</span> length (names diagram)])
-<span class="ot">&gt;</span>   <span class="kw">where</span>
-<span class="ot">&gt;</span>     addArrow n <span class="fu">=</span> connectOutside' opts n (n <span class="fu">+</span> <span class="dv">1</span>)
-<span class="ot">&gt;</span>     opts <span class="fu">=</span> with <span class="fu">&amp;</span> gaps <span class="fu">.~</span> normalized <span class="fl">0.005</span> 
-<span class="ot">&gt;</span>                 <span class="fu">&amp;</span> headLength <span class="fu">.~</span> tiny</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">rememberOrder ::</span> [<span class="dt">Diagram</span> <span class="dt">B</span>] <span class="ot">-&gt;</span> [<span class="dt">Diagram</span> <span class="dt">B</span>]</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">rememberOrder <span class="fu">=</span> zipWith named [<span class="dv">0</span><span class="ot">::</span><span class="dt">Int</span> <span class="fu">..</span>]</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="ot">showOrder ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">showOrder diagram </a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="fu">=</span> diagram <span class="fu">#</span> applyAll (map addArrow [<span class="dv">0</span> <span class="fu">..</span> length (names diagram)])</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">    addArrow n <span class="fu">=</span> connectOutside' opts n (n <span class="fu">+</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">    opts <span class="fu">=</span> with <span class="fu">&amp;</span> gaps <span class="fu">.~</span> normalized <span class="fl">0.005</span> </a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">                <span class="fu">&amp;</span> headLength <span class="fu">.~</span> tiny</a></code></pre></div>
 <p>Finally, we put all of the above together, with some layout tricks to make the diagrams and arrows align properly. <code>gridSnake</code> lays out the diagrams in a “snaking” grid, so that each diagram is adjacent to the previous one.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span> dragonCurves <span class="fu">#</span> withPrevious 
-<span class="ot">&gt;</span>                        <span class="fu">#</span> take <span class="dv">12</span>
-<span class="ot">&gt;</span>                        <span class="fu">#</span> sameBoundingRect
-<span class="ot">&gt;</span>                        <span class="fu">#</span> rememberOrder 
-<span class="ot">&gt;</span>                        <span class="fu">#</span> map (frame <span class="fl">0.1</span>) 
-<span class="ot">&gt;</span>                        <span class="fu">#</span> gridSnake
-<span class="ot">&gt;</span>                        <span class="fu">#</span> showOrder 
-<span class="ot">&gt;</span>                        <span class="fu">#</span> lw ultraThin
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">example <span class="fu">=</span> dragonCurves <span class="fu">#</span> withPrevious </a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">                       <span class="fu">#</span> take <span class="dv">12</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">                       <span class="fu">#</span> sameBoundingRect</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">                       <span class="fu">#</span> rememberOrder </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                       <span class="fu">#</span> map (frame <span class="fl">0.1</span>) </a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">                       <span class="fu">#</span> gridSnake</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">                       <span class="fu">#</span> showOrder </a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">                       <span class="fu">#</span> lw ultraThin</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

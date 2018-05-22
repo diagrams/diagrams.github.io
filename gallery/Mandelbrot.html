@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,45 +84,45 @@
 <p>A discretized version of the familiar Mandelbrot set. Adapted from <a href="http://warp.povusers.org/MandScripts/haskell.html">code written by MathematicalOrchid</a>.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Mandelbrot.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Mandelbrot.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="http://www.cs.rochester.edu/u/ryates/">Ryan Yates</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Mandelbrot.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="co">-- Addapted from: &quot;The MathematicalOrchid, 24 Feb 2007&quot;</span>
-<span class="ot">&gt;</span> <span class="co">--  http://warp.povusers.org/MandScripts/haskell.html</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Complex</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (magnitude,image)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">-- Addapted from: &quot;The MathematicalOrchid, 24 Feb 2007&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">--  http://warp.povusers.org/MandScripts/haskell.html</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Data.Complex</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (magnitude,image)</a></code></pre></div>
 <p>Code to compute orbits of complex numbers under the Mandelbrot transformation, and decide on the magnitude of a pixel based on how slowly its orbit diverges.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> quadratic c z <span class="fu">=</span> z<span class="fu">*</span>z <span class="fu">+</span> c
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; critical_orbit ::</span> <span class="dt">Complex</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [<span class="dt">Complex</span> <span class="dt">Double</span>]
-<span class="ot">&gt;</span> critical_orbit z <span class="fu">=</span> iterate (quadratic z) <span class="dv">0</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> pixel <span class="fu">=</span> length <span class="fu">.</span> takeWhile (\z <span class="ot">-&gt;</span> magnitude z <span class="fu">&lt;=</span> <span class="dv">2</span>) <span class="fu">.</span> take maxIter
-<span class="ot">&gt;</span> maxIter <span class="fu">=</span> <span class="dv">32</span>
-<span class="ot">&gt;</span> edge <span class="fu">=</span> <span class="dv">128</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">quadratic c z <span class="fu">=</span> z<span class="fu">*</span>z <span class="fu">+</span> c</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="ot">critical_orbit ::</span> <span class="dt">Complex</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [<span class="dt">Complex</span> <span class="dt">Double</span>]</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">critical_orbit z <span class="fu">=</span> iterate (quadratic z) <span class="dv">0</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">pixel <span class="fu">=</span> length <span class="fu">.</span> takeWhile (\z <span class="ot">-&gt;</span> magnitude z <span class="fu">&lt;=</span> <span class="dv">2</span>) <span class="fu">.</span> take maxIter</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">maxIter <span class="fu">=</span> <span class="dv">32</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">edge <span class="fu">=</span> <span class="dv">128</span></a></code></pre></div>
 <p>Generate a grid of points of the desired size.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> side n v0 v1 <span class="fu">=</span>
-<span class="ot">&gt;</span>    <span class="kw">let</span> sv <span class="fu">=</span> (v1 <span class="fu">-</span> v0) <span class="fu">/</span> fromIntegral n
-<span class="ot">&gt;</span>    <span class="kw">in</span>  [v0, (v0 <span class="fu">+</span> sv) <span class="fu">..</span> v1]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> sideX <span class="fu">=</span> side edge (<span class="fu">-</span><span class="dv">2</span>) <span class="dv">2</span>
-<span class="ot">&gt;</span> sideY <span class="fu">=</span> side edge (<span class="fu">-</span><span class="dv">2</span>) <span class="dv">2</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> grid <span class="fu">=</span> map (\y <span class="ot">-&gt;</span> map (<span class="fu">:+</span> y) sideX) sideY</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">side n v0 v1 <span class="fu">=</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">   <span class="kw">let</span> sv <span class="fu">=</span> (v1 <span class="fu">-</span> v0) <span class="fu">/</span> fromIntegral n</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">   <span class="kw">in</span>  [v0, (v0 <span class="fu">+</span> sv) <span class="fu">..</span> v1]</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">sideX <span class="fu">=</span> side edge (<span class="fu">-</span><span class="dv">2</span>) <span class="dv">2</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">sideY <span class="fu">=</span> side edge (<span class="fu">-</span><span class="dv">2</span>) <span class="dv">2</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">grid <span class="fu">=</span> map (\y <span class="ot">-&gt;</span> map (<span class="fu">:+</span> y) sideX) sideY</a></code></pre></div>
 <p>Generate the Mandelbrot image as a grid of pixel magnitudes.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> image <span class="fu">=</span> map (map (toSquare <span class="fu">.</span> pixel <span class="fu">.</span> critical_orbit)) grid</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">image <span class="fu">=</span> map (map (toSquare <span class="fu">.</span> pixel <span class="fu">.</span> critical_orbit)) grid</a></code></pre></div>
 <p>To lay out the pixels in a grid we have to make them into a square whose opacity varies with the square root of the pixel value.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> toSquare n <span class="fu">=</span> square <span class="dv">1</span> <span class="fu">#</span> lw medium <span class="fu">#</span> fc black <span class="fu">#</span> opacity (sqrt o)
-<span class="ot">&gt;</span>   <span class="kw">where</span> o <span class="fu">=</span> fromIntegral n <span class="fu">/</span> maxIter
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span> (vcat <span class="fu">.</span> map hcat <span class="fu">$</span> image) <span class="fu">#</span> bgFrame <span class="dv">3</span> pink</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">toSquare n <span class="fu">=</span> square <span class="dv">1</span> <span class="fu">#</span> lw medium <span class="fu">#</span> fc black <span class="fu">#</span> opacity (sqrt o)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw">where</span> o <span class="fu">=</span> fromIntegral n <span class="fu">/</span> maxIter</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">example <span class="fu">=</span> (vcat <span class="fu">.</span> map hcat <span class="fu">$</span> image) <span class="fu">#</span> bgFrame <span class="dv">3</span> pink</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

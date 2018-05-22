@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,141 +84,141 @@
 <p>Quasifuchsian limit circles of Schottky groups of Moebius transformations.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Quasifuchsian.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Quasifuchsian.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="http://apfelmus.nfshost.com/">Heinrich Apfelmus</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Quasifuchsian.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
 <p>Quasifuchsian limit circles of Schottky groups of Moebius transformations. Sounds very pretentious. Connoisseurs may want to direct their monocles towards the tome <a href="http://en.wikipedia.org/wiki/Indra's_Pearls_%28book%29">“Indra’s Pearls: The Vision of Felix Klein”</a> wherein the extraordinary circumstances behind these images are revealed.</p>
 <p>The fractals presented here are a good example why declarative image generation should be done in a full programming language.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>
-<span class="ot">&gt;</span> <span class="kw">import qualified</span> <span class="dt">Data.Colour</span> <span class="kw">as</span> <span class="dt">C</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Colour.SRGB</span> (sRGB24read)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Complex</span> <span class="kw">as</span> <span class="dt">Complex</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Array</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Monoid</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Colour</span> <span class="kw">as</span> <span class="dt">C</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Data.Complex</span> <span class="kw">as</span> <span class="dt">Complex</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">import</span> <span class="dt">Data.Array</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw">import</span> <span class="dt">Data.Monoid</span></a></code></pre></div>
 <h1 id="moebius-transformations">Moebius Transformations</h1>
 <p>We are dealing with complex numbers.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">C</span> <span class="fu">=</span> <span class="dt">Complex</span> <span class="dt">Double</span>
-<span class="ot">&gt;</span> i <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:+</span> <span class="dv">1</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">type</span> <span class="dt">C</span> <span class="fu">=</span> <span class="dt">Complex</span> <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">i <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:+</span> <span class="dv">1</span></a></code></pre></div>
 <p>A <em>Moebius transformation</em> is a mapping of the (projective) complex plane <code>C</code> onto itself, given by a linear fractional transformation \(z \to \frac{az+b}{cz+d}\).</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">data</span> <span class="dt">Moebius</span> <span class="fu">=</span> <span class="dt">M</span> <span class="fu">!</span><span class="dt">C</span> <span class="fu">!</span><span class="dt">C</span> <span class="fu">!</span><span class="dt">C</span> <span class="fu">!</span><span class="dt">C</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>,<span class="dt">Show</span>)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; applyMoebius ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">C</span> <span class="ot">-&gt;</span> <span class="dt">C</span>
-<span class="ot">&gt;</span> applyMoebius (<span class="dt">M</span> a b c d) z <span class="fu">=</span> (a<span class="fu">*</span>z <span class="fu">+</span> b) <span class="fu">/</span> (c<span class="fu">*</span>z <span class="fu">+</span> d)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Moebius</span> <span class="fu">=</span> <span class="dt">M</span> <span class="fu">!</span><span class="dt">C</span> <span class="fu">!</span><span class="dt">C</span> <span class="fu">!</span><span class="dt">C</span> <span class="fu">!</span><span class="dt">C</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>,<span class="dt">Show</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="ot">applyMoebius ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">C</span> <span class="ot">-&gt;</span> <span class="dt">C</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">applyMoebius (<span class="dt">M</span> a b c d) z <span class="fu">=</span> (a<span class="fu">*</span>z <span class="fu">+</span> b) <span class="fu">/</span> (c<span class="fu">*</span>z <span class="fu">+</span> d)</a></code></pre></div>
 <p>Moebius transformations form a <em>group</em>. The composition of Moebius transformations follows the well-known laws for matrix multiplcation</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">Moebius</span> <span class="kw">where</span>
-<span class="ot">&gt;</span>     mempty <span class="fu">=</span> <span class="dt">M</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span>
-<span class="ot">&gt;</span>     mappend (<span class="dt">M</span> a b c d) (<span class="dt">M</span> a1 b1 c1 d1) <span class="fu">=</span>
-<span class="ot">&gt;</span>         <span class="dt">M</span> (a<span class="fu">*</span>a1 <span class="fu">+</span> b<span class="fu">*</span>c1) (a<span class="fu">*</span>b1 <span class="fu">+</span> b<span class="fu">*</span>d1) (c<span class="fu">*</span>a1 <span class="fu">+</span> d<span class="fu">*</span>c1) (c<span class="fu">*</span>b1 <span class="fu">+</span> d<span class="fu">*</span>d1)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">Moebius</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">    mempty <span class="fu">=</span> <span class="dt">M</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">    mappend (<span class="dt">M</span> a b c d) (<span class="dt">M</span> a1 b1 c1 d1) <span class="fu">=</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">        <span class="dt">M</span> (a<span class="fu">*</span>a1 <span class="fu">+</span> b<span class="fu">*</span>c1) (a<span class="fu">*</span>b1 <span class="fu">+</span> b<span class="fu">*</span>d1) (c<span class="fu">*</span>a1 <span class="fu">+</span> d<span class="fu">*</span>c1) (c<span class="fu">*</span>b1 <span class="fu">+</span> d<span class="fu">*</span>d1)</a></code></pre></div>
 <p>and so does taking their inverse.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; inverse ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">Moebius</span>
-<span class="ot">&gt;</span> inverse (<span class="dt">M</span> a b c d) <span class="fu">=</span> <span class="dt">M</span> d (<span class="fu">-</span>b) (<span class="fu">-</span>c) a</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">inverse ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">Moebius</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">inverse (<span class="dt">M</span> a b c d) <span class="fu">=</span> <span class="dt">M</span> d (<span class="fu">-</span>b) (<span class="fu">-</span>c) a</a></code></pre></div>
 <p>Our representation of Moebius transformations has one superfluous degree of freedom: we can scale the numbers \(a,b,c,d\) by a constant amount, but this will not change the transformation at all. The <em>determinant</em> of the matrix can be normalized to 1.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; det ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">C</span>
-<span class="ot">&gt;</span> det (<span class="dt">M</span> a b c d) <span class="fu">=</span> a<span class="fu">*</span>d <span class="fu">-</span> b<span class="fu">*</span>c</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">det ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">C</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">det (<span class="dt">M</span> a b c d) <span class="fu">=</span> a<span class="fu">*</span>d <span class="fu">-</span> b<span class="fu">*</span>c</a></code></pre></div>
 <p>Every Moebius transformation has two fixed points. (They may be located at infinity and they may coincide.)</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; fixpoints ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> (<span class="dt">C</span>,<span class="dt">C</span>)
-<span class="ot">&gt;</span> fixpoints (<span class="dt">M</span> a b c d) <span class="fu">=</span> solveQuadratic c (d<span class="fu">-</span>a) (<span class="fu">-</span>b)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">fixpoints ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> (<span class="dt">C</span>,<span class="dt">C</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">fixpoints (<span class="dt">M</span> a b c d) <span class="fu">=</span> solveQuadratic c (d<span class="fu">-</span>a) (<span class="fu">-</span>b)</a></code></pre></div>
 <p>Moebius transformations can be classified up to conjugation by moving the fixed points to 0 and ∞. For more details, see Note 3.5 in the <a href="http://en.wikipedia.org/wiki/Indra's_Pearls_%28book%29">book</a>.</p>
 <p>The classification also gives a number called the <em>multiplier</em> associated to each Moebius transformation. Here, we only use it to find out which of the fixed points is the attractive fixpoint.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; fixpointAttractive ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">C</span>
-<span class="ot">&gt;</span> fixpointAttractive moebius<span class="fu">@</span>(<span class="dt">M</span> a b c d) <span class="fu">=</span>
-<span class="ot">&gt;</span>         <span class="kw">if</span> Complex.magnitude multiplier <span class="fu">&gt;=</span> <span class="dv">1</span> <span class="kw">then</span> z2 <span class="kw">else</span> z1
-<span class="ot">&gt;</span>     <span class="kw">where</span>
-<span class="ot">&gt;</span>     multiplier <span class="fu">=</span> (a<span class="fu">-</span>c<span class="fu">*</span>z1) <span class="fu">/</span> (a<span class="fu">-</span>c<span class="fu">*</span>z2)
-<span class="ot">&gt;</span>     (z1,z2)    <span class="fu">=</span> fixpoints moebius</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">fixpointAttractive ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">C</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">fixpointAttractive moebius<span class="fu">@</span>(<span class="dt">M</span> a b c d) <span class="fu">=</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">        <span class="kw">if</span> Complex.magnitude multiplier <span class="fu">&gt;=</span> <span class="dv">1</span> <span class="kw">then</span> z2 <span class="kw">else</span> z1</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">    multiplier <span class="fu">=</span> (a<span class="fu">-</span>c<span class="fu">*</span>z1) <span class="fu">/</span> (a<span class="fu">-</span>c<span class="fu">*</span>z2)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">    (z1,z2)    <span class="fu">=</span> fixpoints moebius</a></code></pre></div>
 <h1 id="schottky-groups">Schottky groups</h1>
 <p>In the following, we are concerned with groups generated by two Moebius transformations <code>a</code> and <code>b</code>, so-called Schottky groups. We want to plot the set of <em>limit points</em> of this group, which is the set of points in the complex plane that is left <em>invariant</em> under the action of both <code>a</code> and <code>b</code>. This set is a fractal and it turns out that for special choices of <code>a</code> and <code>b</code>, this set is connected, like a circle. For more on this, you will have to consult the <a href="http://en.wikipedia.org/wiki/Indra's_Pearls_%28book%29">book</a>.</p>
 <p>The generators of the group are labeled with the letters <code>A</code> and <code>B</code>. <code>A1</code> corresponds to the inverse of <code>A</code>.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">data</span> <span class="dt">Letter</span> <span class="fu">=</span> <span class="dt">A</span> <span class="fu">|</span> <span class="dt">B</span> <span class="fu">|</span> <span class="dt">A1</span> <span class="fu">|</span> <span class="dt">B1</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>,<span class="dt">Ord</span>,<span class="dt">Show</span>,<span class="dt">Enum</span>,<span class="dt">Ix</span>)
-<span class="ot">&gt;</span> <span class="kw">type</span> <span class="dt">Word</span>   <span class="fu">=</span> [<span class="dt">Letter</span>]</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Letter</span> <span class="fu">=</span> <span class="dt">A</span> <span class="fu">|</span> <span class="dt">B</span> <span class="fu">|</span> <span class="dt">A1</span> <span class="fu">|</span> <span class="dt">B1</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>,<span class="dt">Ord</span>,<span class="dt">Show</span>,<span class="dt">Enum</span>,<span class="dt">Ix</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">type</span> <span class="dt">Word</span>   <span class="fu">=</span> [<span class="dt">Letter</span>]</a></code></pre></div>
 <p>The <a href="http://en.wikipedia.org/wiki/Indra's_Pearls_%28book%29">book</a> explains in box 13, page 130 that limit points correspond to infinite words. A repeating word corresponds to a fixed point of a Moebius transformation. In other words, we know how to plot some limit points, namely those that correspond to repeating words.</p>
 <p>Moreover, words with the same initial segments tend to be close together. That allows us to plot (an approximation to) the limit set by performing a <em>depth first search</em> (DFS), exploring initial word segments and stopping when their distance becomes small.</p>
 <p>To draw the limit set in one single stroke, we have to enumerate the DFS in the right order. This takes some thought, presented on page 182 of the <a href="http://en.wikipedia.org/wiki/Indra's_Pearls_%28book%29">book</a>. It’s too long to be reproduced here, so you have to trust me on the following code.</p>
 <p>Determine which words to explore next, in the right order</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> next <span class="dt">A</span>  <span class="fu">=</span> [<span class="dt">B1</span>,<span class="dt">A</span>,<span class="dt">B</span>]
-<span class="ot">&gt;</span> next <span class="dt">B1</span> <span class="fu">=</span> [<span class="dt">A1</span>,<span class="dt">B1</span>,<span class="dt">A</span>]
-<span class="ot">&gt;</span> next <span class="dt">A1</span> <span class="fu">=</span> [<span class="dt">B</span>,<span class="dt">A1</span>,<span class="dt">B1</span>]
-<span class="ot">&gt;</span> next <span class="dt">B</span>  <span class="fu">=</span> [<span class="dt">A</span>,<span class="dt">B</span>,<span class="dt">A1</span>]</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> left    [a,b,c] <span class="fu">=</span> a
-<span class="ot">&gt;</span> middle  [a,b,c] <span class="fu">=</span> b
-<span class="ot">&gt;</span> right   [a,b,c] <span class="fu">=</span> c</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1">next <span class="dt">A</span>  <span class="fu">=</span> [<span class="dt">B1</span>,<span class="dt">A</span>,<span class="dt">B</span>]</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">next <span class="dt">B1</span> <span class="fu">=</span> [<span class="dt">A1</span>,<span class="dt">B1</span>,<span class="dt">A</span>]</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">next <span class="dt">A1</span> <span class="fu">=</span> [<span class="dt">B</span>,<span class="dt">A1</span>,<span class="dt">B1</span>]</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">next <span class="dt">B</span>  <span class="fu">=</span> [<span class="dt">A</span>,<span class="dt">B</span>,<span class="dt">A1</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1">left    [a,b,c] <span class="fu">=</span> a</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">middle  [a,b,c] <span class="fu">=</span> b</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">right   [a,b,c] <span class="fu">=</span> c</a></code></pre></div>
 <p>We will seed the plot with fixed points of <em>commutators</em>, for instance <code>[A,B,A1,B1]</code>. The choice of commutator depends on the letter we are currently exploring.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> commutatorLeft  x <span class="fu">=</span> take <span class="dv">4</span> <span class="fu">$</span> iterate (left  <span class="fu">.</span> next) x
-<span class="ot">&gt;</span> commutatorRight x <span class="fu">=</span> take <span class="dv">4</span> <span class="fu">$</span> iterate (right <span class="fu">.</span> next) x</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" data-line-number="1">commutatorLeft  x <span class="fu">=</span> take <span class="dv">4</span> <span class="fu">$</span> iterate (left  <span class="fu">.</span> next) x</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">commutatorRight x <span class="fu">=</span> take <span class="dv">4</span> <span class="fu">$</span> iterate (right <span class="fu">.</span> next) x</a></code></pre></div>
 <p>Now for the function that enumerates points in the limit set</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; limitPoints ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> [<span class="dt">C</span>]
-<span class="ot">&gt;</span> limitPoints eps a b <span class="fu">=</span> points
-<span class="ot">&gt;</span>     <span class="kw">where</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="ot">limitPoints ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> [<span class="dt">C</span>]</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">limitPoints eps a b <span class="fu">=</span> points</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">    <span class="kw">where</span></a></code></pre></div>
 <p>First, we need to map letters to actual group elements</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>     generators   <span class="fu">=</span> array (<span class="dt">A</span>,<span class="dt">B1</span>) [(<span class="dt">A</span>,a),(<span class="dt">B</span>,b),(<span class="dt">A1</span>,inverse a),(<span class="dt">B1</span>,inverse b)]
-<span class="ot">&gt;</span>     fromLetter x <span class="fu">=</span> generators <span class="fu">!</span> x
-<span class="ot">&gt;</span>     fromWord     <span class="fu">=</span> mconcat <span class="fu">.</span> map fromLetter</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1">    generators   <span class="fu">=</span> array (<span class="dt">A</span>,<span class="dt">B1</span>) [(<span class="dt">A</span>,a),(<span class="dt">B</span>,b),(<span class="dt">A1</span>,inverse a),(<span class="dt">B1</span>,inverse b)]</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">    fromLetter x <span class="fu">=</span> generators <span class="fu">!</span> x</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">    fromWord     <span class="fu">=</span> mconcat <span class="fu">.</span> map fromLetter</a></code></pre></div>
 <p>Then, we need the fixpoints of various Moebius transformations that correspond to commutators.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>     mkFixpoints f <span class="fu">=</span> array (<span class="dt">A</span>,<span class="dt">B1</span>)
-<span class="ot">&gt;</span>         [(x, fixpointAttractive <span class="fu">.</span> fromWord <span class="fu">.</span> f <span class="fu">$</span> x) <span class="fu">|</span> x <span class="ot">&lt;-</span> [<span class="dt">A</span> <span class="fu">..</span> <span class="dt">B1</span>]]
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>     commutatorsLeft  <span class="fu">=</span> mkFixpoints commutatorLeft
-<span class="ot">&gt;</span>     commutatorsRight <span class="fu">=</span> mkFixpoints commutatorRight
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span>     pointLeft  x <span class="fu">=</span> commutatorsLeft  <span class="fu">!</span> x
-<span class="ot">&gt;</span>     pointRight x <span class="fu">=</span> commutatorsRight <span class="fu">!</span> x</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb16-1" data-line-number="1">    mkFixpoints f <span class="fu">=</span> array (<span class="dt">A</span>,<span class="dt">B1</span>)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">        [(x, fixpointAttractive <span class="fu">.</span> fromWord <span class="fu">.</span> f <span class="fu">$</span> x) <span class="fu">|</span> x <span class="ot">&lt;-</span> [<span class="dt">A</span> <span class="fu">..</span> <span class="dt">B1</span>]]</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">    commutatorsLeft  <span class="fu">=</span> mkFixpoints commutatorLeft</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">    commutatorsRight <span class="fu">=</span> mkFixpoints commutatorRight</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">    pointLeft  x <span class="fu">=</span> commutatorsLeft  <span class="fu">!</span> x</a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">    pointRight x <span class="fu">=</span> commutatorsRight <span class="fu">!</span> x</a></code></pre></div>
 <p>We can now define the list of limit points</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>     points <span class="fu">=</span> concatMap (\x <span class="ot">-&gt;</span> dfs mempty x <span class="fu">$</span> pointRight x) [<span class="dt">A</span>,<span class="dt">B</span>,<span class="dt">A1</span>,<span class="dt">B1</span>]</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb17-1" data-line-number="1">    points <span class="fu">=</span> concatMap (\x <span class="ot">-&gt;</span> dfs mempty x <span class="fu">$</span> pointRight x) [<span class="dt">A</span>,<span class="dt">B</span>,<span class="dt">A1</span>,<span class="dt">B1</span>]</a></code></pre></div>
 <p>by performing a depth-first search</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;     dfs ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">Letter</span> <span class="ot">-&gt;</span> <span class="dt">C</span> <span class="ot">-&gt;</span> [<span class="dt">C</span>]
-<span class="ot">&gt;</span>     dfs w g z <span class="fu">=</span>
-<span class="ot">&gt;</span>         <span class="kw">if</span> Complex.magnitude (l <span class="fu">-</span> z) <span class="fu">&lt;=</span> eps <span class="kw">then</span>
-<span class="ot">&gt;</span>             [l]
-<span class="ot">&gt;</span>         <span class="kw">else</span>
-<span class="ot">&gt;</span>             <span class="kw">let</span>
-<span class="ot">&gt;</span>                 rs <span class="fu">=</span> dfs w' (right  ns) z
-<span class="ot">&gt;</span>                 ms <span class="fu">=</span> dfs w' (middle ns) (head rs)
-<span class="ot">&gt;</span>                 ls <span class="fu">=</span> dfs w' (left   ns) (head ms)
-<span class="ot">&gt;</span>             <span class="kw">in</span>
-<span class="ot">&gt;</span>                 ls <span class="fu">++</span> ms <span class="fu">++</span> rs
-<span class="ot">&gt;</span>         <span class="kw">where</span>
-<span class="ot">&gt;</span>         l  <span class="fu">=</span> applyMoebius w <span class="fu">$</span> pointLeft g
-<span class="ot">&gt;</span>         w' <span class="fu">=</span> w <span class="ot">`mappend`</span> fromLetter g
-<span class="ot">&gt;</span>         ns <span class="fu">=</span> next g</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="ot">    dfs ::</span> <span class="dt">Moebius</span> <span class="ot">-&gt;</span> <span class="dt">Letter</span> <span class="ot">-&gt;</span> <span class="dt">C</span> <span class="ot">-&gt;</span> [<span class="dt">C</span>]</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">    dfs w g z <span class="fu">=</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">        <span class="kw">if</span> Complex.magnitude (l <span class="fu">-</span> z) <span class="fu">&lt;=</span> eps <span class="kw">then</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">            [l]</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">        <span class="kw">else</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">            <span class="kw">let</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">                rs <span class="fu">=</span> dfs w' (right  ns) z</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">                ms <span class="fu">=</span> dfs w' (middle ns) (head rs)</a>
+<a class="sourceLine" id="cb18-9" data-line-number="9">                ls <span class="fu">=</span> dfs w' (left   ns) (head ms)</a>
+<a class="sourceLine" id="cb18-10" data-line-number="10">            <span class="kw">in</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">                ls <span class="fu">++</span> ms <span class="fu">++</span> rs</a>
+<a class="sourceLine" id="cb18-12" data-line-number="12">        <span class="kw">where</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13">        l  <span class="fu">=</span> applyMoebius w <span class="fu">$</span> pointLeft g</a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">        w' <span class="fu">=</span> w <span class="ot">`mappend`</span> fromLetter g</a>
+<a class="sourceLine" id="cb18-15" data-line-number="15">        ns <span class="fu">=</span> next g</a></code></pre></div>
 <h1 id="utilities">Utilities</h1>
 <p>Solve a quadratic equation.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; solveQuadratic ::</span> <span class="dt">Floating</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> (a,a)
-<span class="ot">&gt;</span> solveQuadratic a b c <span class="fu">=</span> (x1,x2)
-<span class="ot">&gt;</span>     <span class="kw">where</span>
-<span class="ot">&gt;</span>     p2 <span class="fu">=</span> b<span class="fu">/</span>(<span class="dv">2</span><span class="fu">*</span>a)
-<span class="ot">&gt;</span>     q  <span class="fu">=</span> c<span class="fu">/</span>a
-<span class="ot">&gt;</span>     x1 <span class="fu">=</span> <span class="fu">-</span>p2 <span class="fu">+</span> sqrt (p2<span class="fu">*</span>p2 <span class="fu">-</span> q)
-<span class="ot">&gt;</span>     x2 <span class="fu">=</span> <span class="fu">-</span>(<span class="dv">2</span><span class="fu">*</span>p2 <span class="fu">+</span> x1)</code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="ot">solveQuadratic ::</span> <span class="dt">Floating</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> (a,a)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">solveQuadratic a b c <span class="fu">=</span> (x1,x2)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">    p2 <span class="fu">=</span> b<span class="fu">/</span>(<span class="dv">2</span><span class="fu">*</span>a)</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">    q  <span class="fu">=</span> c<span class="fu">/</span>a</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">    x1 <span class="fu">=</span> <span class="fu">-</span>p2 <span class="fu">+</span> sqrt (p2<span class="fu">*</span>p2 <span class="fu">-</span> q)</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">    x2 <span class="fu">=</span> <span class="fu">-</span>(<span class="dv">2</span><span class="fu">*</span>p2 <span class="fu">+</span> x1)</a></code></pre></div>
 <p>Grandma’s special recipe to make two Moebius tranformations from two complex parameters. (Box 21, page 226.)</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; grandma ::</span> <span class="dt">C</span> <span class="ot">-&gt;</span> <span class="dt">C</span> <span class="ot">-&gt;</span> (<span class="dt">Moebius</span>, <span class="dt">Moebius</span>)
-<span class="ot">&gt;</span> grandma ta tb <span class="fu">=</span> (a,b)
-<span class="ot">&gt;</span>     <span class="kw">where</span>
-<span class="ot">&gt;</span>     tab <span class="fu">=</span> snd <span class="fu">$</span> solveQuadratic <span class="dv">1</span> (<span class="fu">-</span>ta<span class="fu">*</span>tb) (ta<span class="fu">*</span>ta <span class="fu">+</span> tb<span class="fu">*</span>tb)
-<span class="ot">&gt;</span>     z0  <span class="fu">=</span> (tab <span class="fu">-</span> <span class="dv">2</span>)<span class="fu">*</span>tb <span class="fu">/</span> (tb<span class="fu">*</span>tab <span class="fu">-</span> <span class="dv">2</span><span class="fu">*</span>ta <span class="fu">+</span> <span class="dv">2</span><span class="fu">*</span>i<span class="fu">*</span>tab)
-<span class="ot">&gt;</span>     b   <span class="fu">=</span> <span class="dt">M</span> ((tb<span class="fu">-</span><span class="dv">2</span><span class="fu">*</span>i)<span class="fu">/</span><span class="dv">2</span>) (tb<span class="fu">/</span><span class="dv">2</span>) (tb<span class="fu">/</span><span class="dv">2</span>) ((tb<span class="fu">+</span><span class="dv">2</span><span class="fu">*</span>i)<span class="fu">/</span><span class="dv">2</span>)
-<span class="ot">&gt;</span>     ab  <span class="fu">=</span> <span class="dt">M</span> (tab<span class="fu">/</span><span class="dv">2</span>) ((tab<span class="fu">-</span><span class="dv">2</span>)<span class="fu">/</span>(<span class="dv">2</span><span class="fu">*</span>z0)) ((tab<span class="fu">+</span><span class="dv">2</span>)<span class="fu">*</span>z0<span class="fu">/</span><span class="dv">2</span>) (tab<span class="fu">/</span><span class="dv">2</span>)
-<span class="ot">&gt;</span>     a   <span class="fu">=</span> ab <span class="ot">`mappend`</span> inverse b</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="ot">grandma ::</span> <span class="dt">C</span> <span class="ot">-&gt;</span> <span class="dt">C</span> <span class="ot">-&gt;</span> (<span class="dt">Moebius</span>, <span class="dt">Moebius</span>)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">grandma ta tb <span class="fu">=</span> (a,b)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">    tab <span class="fu">=</span> snd <span class="fu">$</span> solveQuadratic <span class="dv">1</span> (<span class="fu">-</span>ta<span class="fu">*</span>tb) (ta<span class="fu">*</span>ta <span class="fu">+</span> tb<span class="fu">*</span>tb)</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">    z0  <span class="fu">=</span> (tab <span class="fu">-</span> <span class="dv">2</span>)<span class="fu">*</span>tb <span class="fu">/</span> (tb<span class="fu">*</span>tab <span class="fu">-</span> <span class="dv">2</span><span class="fu">*</span>ta <span class="fu">+</span> <span class="dv">2</span><span class="fu">*</span>i<span class="fu">*</span>tab)</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6">    b   <span class="fu">=</span> <span class="dt">M</span> ((tb<span class="fu">-</span><span class="dv">2</span><span class="fu">*</span>i)<span class="fu">/</span><span class="dv">2</span>) (tb<span class="fu">/</span><span class="dv">2</span>) (tb<span class="fu">/</span><span class="dv">2</span>) ((tb<span class="fu">+</span><span class="dv">2</span><span class="fu">*</span>i)<span class="fu">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">    ab  <span class="fu">=</span> <span class="dt">M</span> (tab<span class="fu">/</span><span class="dv">2</span>) ((tab<span class="fu">-</span><span class="dv">2</span>)<span class="fu">/</span>(<span class="dv">2</span><span class="fu">*</span>z0)) ((tab<span class="fu">+</span><span class="dv">2</span>)<span class="fu">*</span>z0<span class="fu">/</span><span class="dv">2</span>) (tab<span class="fu">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">    a   <span class="fu">=</span> ab <span class="ot">`mappend`</span> inverse b</a></code></pre></div>
 <h1 id="actual-drawing">Actual drawing</h1>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> example <span class="fu">=</span>
-<span class="ot">&gt;</span>     (    diagram <span class="fl">0.01</span> <span class="fl">2.5</span> <span class="fl">2.5</span>
-<span class="ot">&gt;</span>      <span class="fu">|||</span> diagram <span class="fl">0.01</span> (<span class="fl">2.09</span>) (<span class="fl">2.09</span>)
-<span class="ot">&gt;</span>     ) <span class="fu">===</span>
-<span class="ot">&gt;</span>     (    diagram <span class="fl">0.004</span> (<span class="fl">1.9</span> <span class="fu">:+</span> <span class="fl">0.1</span>) (<span class="fl">2.4</span> <span class="fu">:+</span> <span class="fl">0.1</span>)
-<span class="ot">&gt;</span>      <span class="fu">|||</span> diagram <span class="fl">0.004</span> (<span class="dv">2</span> <span class="fu">:+</span> <span class="fl">0.2</span>) (<span class="dv">2</span> <span class="fu">:+</span> (<span class="fu">-</span><span class="fl">0.2</span>))
-<span class="ot">&gt;</span>     )</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> diagram eps ta tb
-<span class="ot">&gt;</span>     <span class="fu">=</span> fc (sRGB24read <span class="st">&quot;#DB4105&quot;</span>) <span class="fu">$</span> lw none <span class="fu">$</span> pad <span class="fl">1.1</span>
-<span class="ot">&gt;</span>     <span class="fu">$</span> strokeT
-<span class="ot">&gt;</span>     <span class="fu">$</span> closeTrail
-<span class="ot">&gt;</span>     <span class="fu">$</span> fromVertices [origin <span class="fu">.+^</span> r2 (x,y) <span class="fu">|</span> x <span class="fu">:+</span> y <span class="ot">&lt;-</span> limitPoints eps a b]
-<span class="ot">&gt;</span>     <span class="kw">where</span> (a,b) <span class="fu">=</span> grandma ta tb</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb21-1" data-line-number="1">example <span class="fu">=</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">    (    diagram <span class="fl">0.01</span> <span class="fl">2.5</span> <span class="fl">2.5</span></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">     <span class="fu">|||</span> diagram <span class="fl">0.01</span> (<span class="fl">2.09</span>) (<span class="fl">2.09</span>)</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">    ) <span class="fu">===</span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">    (    diagram <span class="fl">0.004</span> (<span class="fl">1.9</span> <span class="fu">:+</span> <span class="fl">0.1</span>) (<span class="fl">2.4</span> <span class="fu">:+</span> <span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">     <span class="fu">|||</span> diagram <span class="fl">0.004</span> (<span class="dv">2</span> <span class="fu">:+</span> <span class="fl">0.2</span>) (<span class="dv">2</span> <span class="fu">:+</span> (<span class="fu">-</span><span class="fl">0.2</span>))</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7">    )</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb22-1" data-line-number="1">diagram eps ta tb</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">    <span class="fu">=</span> fc (sRGB24read <span class="st">&quot;#DB4105&quot;</span>) <span class="fu">$</span> lw none <span class="fu">$</span> pad <span class="fl">1.1</span></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">    <span class="fu">$</span> strokeT</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">    <span class="fu">$</span> closeTrail</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">    <span class="fu">$</span> fromVertices [origin <span class="fu">.+^</span> r2 (x,y) <span class="fu">|</span> x <span class="fu">:+</span> y <span class="ot">&lt;-</span> limitPoints eps a b]</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">    <span class="kw">where</span> (a,b) <span class="fu">=</span> grandma ta tb</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb23-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 

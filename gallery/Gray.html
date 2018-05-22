@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
     <link rel="shortcut icon" href="../diagrams.ico" />
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
   </head>
   <body>
@@ -84,41 +84,41 @@
 <p>Circular gray code, like that used on some rotational sensors.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Gray.big.png" width="400.0" height="400.0" />
+<img src="../gallery/images/Gray.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Gray.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Backend.SVG.CmdLine</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Diagrams.Prelude</span>     <span class="kw">hiding</span> (gray)
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List.Split</span>      (chunksOf)
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Maybe</span>           (catMaybes)
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Control.Applicative</span>
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.Monoid</span>          (mconcat)
-<span class="ot">&gt;</span> <span class="kw">import </span><span class="dt">Data.List</span>            (transpose)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span>     <span class="kw">hiding</span> (gray)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.List.Split</span>      (chunksOf)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Data.Maybe</span>           (catMaybes)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Control.Applicative</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Data.Monoid</span>          (mconcat)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">import</span> <span class="dt">Data.List</span>            (transpose)</a></code></pre></div>
 <p><code>gray n</code> recursively generates an n-bit Gray code, where each n-bit binary number differs from the next in exactly one position.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> gray <span class="dv">0</span> <span class="fu">=</span> [[]]
-<span class="ot">&gt;</span> gray n <span class="fu">=</span> map (<span class="dt">False</span><span class="fu">:</span>) g <span class="fu">++</span> map (<span class="dt">True</span><span class="fu">:</span>) (reverse g)
-<span class="ot">&gt;</span>   <span class="kw">where</span> g <span class="fu">=</span> gray (n<span class="fu">-</span><span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">gray <span class="dv">0</span> <span class="fu">=</span> [[]]</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">gray n <span class="fu">=</span> map (<span class="dt">False</span><span class="fu">:</span>) g <span class="fu">++</span> map (<span class="dt">True</span><span class="fu">:</span>) (reverse g)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="kw">where</span> g <span class="fu">=</span> gray (n<span class="fu">-</span><span class="dv">1</span>)</a></code></pre></div>
 <p>Construct a circular diagram from the n-bit gray code: each bit position corresponds to a concentric ring, with black/white indicating 0/1. <code>ringOffsets</code> converts a list of booleans into a list of angular segments corresponding to consecutive runs of <code>True</code>.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> rings n <span class="fu">=</span> mkRingsDia <span class="fu">.</span> map ringOffsets <span class="fu">.</span> transpose <span class="fu">.</span> gray <span class="fu">$</span> n
-<span class="ot">&gt;</span>   <span class="kw">where</span><span class="ot"> ringOffsets ::</span> [<span class="dt">Bool</span>] <span class="ot">-&gt;</span> [(<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>, <span class="dt">Angle</span> <span class="dt">Double</span>)]
-<span class="ot">&gt;</span>         ringOffsets <span class="fu">=</span> map l2t <span class="fu">.</span> chunksOf <span class="dv">2</span> <span class="fu">.</span> findEdges <span class="fu">.</span> zip [rotate α xDir <span class="fu">|</span> α <span class="ot">&lt;-</span> [<span class="dv">0</span> <span class="fu">@@</span> turn, <span class="dv">1</span><span class="fu">/</span>(<span class="dv">2</span><span class="fu">^</span>n) <span class="fu">@@</span> turn <span class="fu">..</span> fullTurn]]
-<span class="ot">&gt;</span>         l2t [x,y] <span class="fu">=</span>  (x, angleBetweenDirs x y)
-<span class="ot">&gt;</span>         l2t [x]   <span class="fu">=</span> (x, angleBetweenDirs x xDir) <span class="co">-- arc angle will never be &gt; fullturn ^/ 2</span>
-<span class="ot">&gt;</span> 
-<span class="ot">&gt; findEdges ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [(<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>, a)] <span class="ot">-&gt;</span> [<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>]
-<span class="ot">&gt;</span> findEdges <span class="fu">=</span> catMaybes <span class="fu">.</span> (zipWith edge <span class="fu">&lt;*&gt;</span> tail)
-<span class="ot">&gt;</span>   <span class="kw">where</span> edge (_,c1) (a,c2) <span class="fu">|</span> c1 <span class="fu">/=</span> c2  <span class="fu">=</span> <span class="dt">Just</span> a
-<span class="ot">&gt;</span>                            <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">rings n <span class="fu">=</span> mkRingsDia <span class="fu">.</span> map ringOffsets <span class="fu">.</span> transpose <span class="fu">.</span> gray <span class="fu">$</span> n</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw">where</span><span class="ot"> ringOffsets ::</span> [<span class="dt">Bool</span>] <span class="ot">-&gt;</span> [(<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>, <span class="dt">Angle</span> <span class="dt">Double</span>)]</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">        ringOffsets <span class="fu">=</span> map l2t <span class="fu">.</span> chunksOf <span class="dv">2</span> <span class="fu">.</span> findEdges <span class="fu">.</span> zip [rotate α xDir <span class="fu">|</span> α <span class="ot">&lt;-</span> [<span class="dv">0</span> <span class="fu">@@</span> turn, <span class="dv">1</span><span class="fu">/</span>(<span class="dv">2</span><span class="fu">^</span>n) <span class="fu">@@</span> turn <span class="fu">..</span> fullTurn]]</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">        l2t [x,y] <span class="fu">=</span>  (x, angleBetweenDirs x y)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">        l2t [x]   <span class="fu">=</span> (x, angleBetweenDirs x xDir) <span class="co">-- arc angle will never be &gt; fullturn ^/ 2</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="ot">findEdges ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [(<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>, a)] <span class="ot">-&gt;</span> [<span class="dt">Direction</span> <span class="dt">V2</span> <span class="dt">Double</span>]</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">findEdges <span class="fu">=</span> catMaybes <span class="fu">.</span> (zipWith edge <span class="fu">&lt;*&gt;</span> tail)</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="kw">where</span> edge (_,c1) (a,c2) <span class="fu">|</span> c1 <span class="fu">/=</span> c2  <span class="fu">=</span> <span class="dt">Just</span> a</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">                           <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span></a></code></pre></div>
 <p>Generate concentric circular arcs from lists of angular segments.</p>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> mkRingsDia <span class="fu">=</span> mconcat <span class="fu">.</span> zipWith mkRingDia [<span class="dv">2</span>,<span class="dv">3</span><span class="fu">..</span>]
-<span class="ot">&gt;</span>   <span class="kw">where</span> mkRingDia r <span class="fu">=</span> lwL <span class="fl">1.05</span> <span class="fu">.</span> mconcat <span class="fu">.</span> map (strokeP <span class="fu">.</span> scale r <span class="fu">.</span> uncurry arc)
-<span class="ot">&gt;</span> 
-<span class="ot">&gt;</span> example <span class="fu">=</span> pad <span class="fl">1.1</span> (rings <span class="dv">10</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">mkRingsDia <span class="fu">=</span> mconcat <span class="fu">.</span> zipWith mkRingDia [<span class="dv">2</span>,<span class="dv">3</span><span class="fu">..</span>]</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="kw">where</span> mkRingDia r <span class="fu">=</span> lwL <span class="fl">1.05</span> <span class="fu">.</span> mconcat <span class="fu">.</span> map (strokeP <span class="fu">.</span> scale r <span class="fu">.</span> uncurry arc)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">example <span class="fu">=</span> pad <span class="fl">1.1</span> (rings <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
 
 </div>
 
