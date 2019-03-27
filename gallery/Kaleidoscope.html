@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Diagrams - Kaleidescope</title>
+    <title>Diagrams - Kaleidoscope</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -81,14 +81,14 @@
     <div class="container" style="padding-top: 60px;">
       <div id="examplesrc">
 
-<p>A three mirror kaleidescope with random confetti.</p>
+<p>A three mirror kaleidoscope with random confetti.</p>
 
 <div class="exampleimg" style="text-align: center">
-<img src="../gallery/images/Kaleidescope.big.png" width="400" height="400" />
+<img src="../gallery/images/Kaleidoscope.big.png" width="400" height="400" />
 </div>
 Author: <b><a href="https://www.projects.haskell.org/Diagram Bgrams/">Jeffrey Rosenbluth</a></b>
 
-<p><span style="font-size: small"><a href="../gallery/Kaleidescope.lhs">Download raw source code</a></span><br /></p>
+<p><span style="font-size: small"><a href="../gallery/Kaleidoscope.lhs">Download raw source code</a></span><br /></p>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
@@ -104,7 +104,7 @@ Author: <b><a href="https://www.projects.haskell.org/Diagram Bgrams/">Jeffrey Ro
 <a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="kw">where</span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">    go f t i <span class="fu">=</span> <span class="kw">let</span> t' <span class="fu">=</span> f i t</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">               <span class="kw">in</span>  t' <span class="fu">:</span> go f t' (i <span class="fu">+</span> <span class="dv">1</span>)</a></code></pre></div>
-<p>Take any Diagram and cut out an equilateral triangle of side 1 from the center. This is the triangle inside of the three mirrors that make up a kaleidescope. The image is created by first repeatedly refecting this triangle and assembling the resulting triagles into a hexagon. Then the image plane is tiled with this hexagon.</p>
+<p>Take any Diagram and cut out an equilateral triangle of side 1 from the center. This is the triangle inside of the three mirrors that make up a kaleidoscope. The image is created by first repeatedly refecting this triangle and assembling the resulting triagles into a hexagon. Then the image plane is tiled with this hexagon.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">kaleidoscope ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">kaleidoscope d <span class="fu">=</span> appends hex hexs</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">where</span></a>
