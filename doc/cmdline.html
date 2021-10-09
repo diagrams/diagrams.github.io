@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -233,14 +232,14 @@ type that it parses:</p><div class="examplesrc"><div class="sourceCode"><pre cla
 <span class="ot">></span>              <span class="fu"><></span> header prog)
 <span class="ot">></span>   (opts,a) <span class="ot"><-</span> execParser p
 <span class="ot">></span>   chooseRender opts (f a)</code></pre></div></div><p>The only parts so far that are backend specific are the type of the final
-diagram and <code class="sourceCode">chooseRender</code>, though we may want other parts may be subject to
+diagram and <code class="sourceCode">chooseRender</code>, though we may want other parts to be subject to
 customization.  We will split this into four parts, the type of the options
 needed, the action of parsing the command-line, the backend specific rendering,
 and an entry point for the library consumer.  We will give this the brilliant
 name <code class="sourceCode"><span class="dt">Mainable</span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">class</span> <span class="dt">Mainable</span> d <span class="kw">where</span>
 <span class="ot">></span>    <span class="kw">type</span> <span class="dt">MainOpts</span><span class="ot"> d ::</span> <span class="fu">*</span>
 <span class="ot">></span>
-<span class="ot">>    mainArgs   ::</span> <span class="dt">Parseable</span> (<span class="dt">MainOpts</span> d) <span class="ot">=></span> d <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt">MainOpts</span> d)
+<span class="ot">>    mainArgs   ::</span> <span class="dt">Parseable</span> (<span class="dt">MainOpts</span> d) <span class="ot">=></span> proxy d <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt">MainOpts</span> d)
 <span class="ot">>    mainRender ::</span> <span class="dt">MainOpts</span> d <span class="ot">-></span> d <span class="ot">-></span> <span class="dt">IO</span> ()
 <span class="ot">>    mainWith   ::</span> <span class="dt">Parseable</span> (<span class="dt">MainOpts</span> d) <span class="ot">=></span> d <span class="ot">-></span> <span class="dt">IO</span> ()</code></pre></div></div><p>There is one associated type and three class methods.  Let's consider the
 instance of <code class="sourceCode"><span class="dt">Mainable</span></code> for a simple diagram with type <code class="sourceCode"><span class="dt">Diagram</span> <span class="dt">Cairo</span> <span class="dt">V2</span> <span class="dt">Double</span></code>:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="kw">instance</span> <span class="dt">Mainable</span> (<span class="dt">Diagram</span> <span class="dt">Cairo</span> <span class="dt">V2</span> <span class="dt">Double</span>) <span class="kw">where</span></code></pre></div></div><p>The associated type indicates what options we will want to be parsed
@@ -254,7 +253,7 @@ additional standard configuration for the program name and the right kind of
 help message.  Running the <code class="sourceCode">mainArgs</code> IO action results in either the program
 quitting with a parse error or help message, or the program continuing with the
 parsed value.  Also note that we need the diagram to be passed to <code class="sourceCode">mainArgs</code>
-only to fix the type so we can use our associated type function <code class="sourceCode"><span class="dt">MainOpts</span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">>     mainArgs ::</span> <span class="dt">Parseable</span> (<span class="dt">MainOpts</span> d) <span class="ot">=></span> d <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt">MainOpts</span> d)
+only to fix the type so we can use our associated type function <code class="sourceCode"><span class="dt">MainOpts</span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">>     mainArgs ::</span> <span class="dt">Parseable</span> (<span class="dt">MainOpts</span> d) <span class="ot">=></span> proxy d <span class="ot">-></span> <span class="dt">IO</span> (<span class="dt">MainOpts</span> d)
 <span class="ot">></span>     mainArgs _ <span class="fu">=</span> <span class="kw">do</span>
 <span class="ot">></span>       prog <span class="ot"><-</span> getProgName
 <span class="ot">></span>       <span class="kw">let</span> p <span class="fu">=</span> info (helper' <span class="fu"><*></span> parser)
@@ -269,7 +268,7 @@ for users of the backend to build their programs.  In this example we take as an
 argument the <code class="sourceCode"><span class="dt">Diagram</span> <span class="dt">Cairo</span> <span class="dt">V2</span> <span class="dt">Double</span></code> and result in a complete program.  Again, we can
 get away with the default implementation.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">>     mainWith ::</span> <span class="dt">Parseable</span> (<span class="dt">MainOpts</span> d) <span class="ot">=></span> d <span class="ot">-></span> <span class="dt">IO</span> ()
 <span class="ot">></span>     mainWith d <span class="fu">=</span> <span class="kw">do</span>
-<span class="ot">></span>         opts <span class="ot"><-</span> mainArgs d
+<span class="ot">></span>         opts <span class="ot"><-</span> mainArgs (<span class="dt">Identity</span> d)
 <span class="ot">></span>         mainRender opts d</code></pre></div></div><p>Now let's try a much harder instance.  We want to be able to handle
 functions whose final result has a <code class="sourceCode"><span class="dt">Mainable</span></code> instance, but require
 some <code class="sourceCode"><span class="dt">Parseable</span></code> arguments first.  The tricky part of this instance is

@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="./diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -112,7 +111,7 @@
 <li><p>New <code>composeAligned</code> combinator for doing composition under an alignment while leaving the local origin unaffected.</p></li>
 <li><p>Add <code>_LocLoop</code> and <code>_LocLine</code> prisms</p></li>
 <li><p>New <code>bspline</code> function for creating uniform cubic B-splines</p></li>
-<li>New 3D features:
+<li><p>New 3D features:</p>
 <ul>
 <li>New <code>Skinned</code> class</li>
 <li>Improved handling of 3D primitives</li>
@@ -135,7 +134,7 @@
 </ul></li>
 <li><p><strong>API changes</strong></p>
 <ul>
-<li><code>snugBL</code>, <code>snugBR</code>, <code>snugTR</code> and <code>snugBR</code> are deprecated. These functions were unintuitive, ad-hoc, and not particularly useful, especially since e.g. <code>snugL</code> and <code>snugB</code> do not commute. You can use something like <code>snugB . snugL</code> directly, or use <code>snug</code> with a direction vector. See <a href="https://github.com/diagrams/diagrams-lib/issues/250">#250</a> for more details.</li>
+<li><code>snugBL</code>, <code>snugBR</code>, <code>snugTR</code> and <code>snugBR</code> are deprecated. These functions were unintuitive, ad-hoc, and not particularly useful, especially since e.g. <code>snugL</code> and <code>snugB</code> do not commute. You can use something like <code>snugB . snugL</code> directly, or use <code>snug</code> with a direction vector. See <a href="https://github.com/diagrams/diagrams-lib/issues/250">#250</a> for more details.</li>
 </ul></li>
 <li><p><strong>Dependency/version changes</strong></p>
 <ul>
@@ -738,7 +737,7 @@
 <li><p><strong>API changes</strong></p>
 <ul>
 <li><p>Export <code>pointDiagram</code> function, which creates an otherwise empty diagram with a point (not empty) envelope</p></li>
-<li>A bunch of stuff now uses machinery from the <code>lens</code> library.
+<li><p>A bunch of stuff now uses machinery from the <code>lens</code> library.</p>
 <ul>
 <li><code>envelope</code>, <code>trace</code>, and <code>subMap</code> are now <code>Lens'</code>es</li>
 <li><code>Wrapped</code> instances for <code>Trace</code>, <code>TransInv</code>, <code>QDiagram</code>, <code>SubMap</code>, <code>Envelope</code>, <code>Style</code>, <code>Query</code>, and <code>Name</code> (replaces <code>Newtype</code> instances)</li>
@@ -905,7 +904,7 @@
 <li><p>Generalize the <code>Color</code> class to absolute colors. This addresses concerns raised in issue #66 by letting the backend choose which color space to render <code>Color</code> instances to. Functions are provided for backwards compatibility with the old semantics.</p></li>
 <li><p>New function <code>scaleInvPrim</code> for creating a diagram from a single scale-invariant primitive.</p></li>
 <li><p>New module <code>Diagrams.Parametric</code>, containing a collection of classes abstracting over “parametric” things: <code>Parametric</code>, <code>DomainBounds</code>, <code>EndValues</code>, <code>Sectionable</code>, and <code>HasArcLength</code>, with instances for segments, trails, and related things.</p></li>
-<li>A big refactoring of segments and trails:
+<li><p>A big refactoring of segments and trails:</p>
 <ul>
 <li>Segments can now be either “closed” or “open”.</li>
 <li>There are now two types of trails: “lines” (which travel from point A to point B) or “loops” (closed curves which end where they started). <code>Trail</code> is now a wrapper type which can contain both loops and lines.</li>
@@ -1008,7 +1007,7 @@
 <li><p><strong>New features</strong></p>
 <ul>
 <li><p>Add <code>hsenv</code> compatibility.</p></li>
-<li>Big improvements in the way rebuilding is handled:
+<li><p>Big improvements in the way rebuilding is handled:</p>
 <ul>
 <li>Strip comments before deciding whether to rebuild, so changing only comments does not trigger a rebuild</li>
 <li>Take local imports into account: if a diagram has an import which corresponds to a local file, rebuild if that file has changed</li>
@@ -1051,7 +1050,7 @@
 <p>Like <code>envelope[VP](May)</code>, but returning a scalar multiple of the input vector.</p></li>
 <li><p>The <code>Graphics.Rendering.Diagrams.Util</code> module has been removed, along with the <code>withLength</code> function. Calls to <code>withLength</code> can be replaced using</p>
 <p><code>withLength s v = s *^ normalized v</code></p></li>
-<li><p>Add needed constraints <code>(InnerSpace v, OrderedField (Scalar v), Monoid' m)</code> to the type of the <code>renderDias</code> method in the <code>MultiBackend</code> class.</p></li>
+<li><p>Add needed constraints <code>(InnerSpace v, OrderedField (Scalar v),     Monoid' m)</code> to the type of the <code>renderDias</code> method in the <code>MultiBackend</code> class.</p></li>
 <li><p>Generalized <code>Transformable</code> instances for pairs and tuples</p>
 <pre><code>      Previously, the components of the tuples were required to have
       the same type; but everything still works as long as they all

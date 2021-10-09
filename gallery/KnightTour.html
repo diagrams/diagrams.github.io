@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -90,72 +89,72 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/KnightTour.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
 <p>A relatively well-known puzzle is to find a sequence of moves by which a knight can visit every square of a chessboard exactly once, without repeating any squares. This example computes such a tour and visualizes the solution.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span>           <span class="dt">Data.List</span>                      (minimumBy, tails, (\\))</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span>           <span class="dt">Data.Ord</span>                       (comparing)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span>           <span class="dt">Diagrams.Prelude</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.List</span>                      (minimumBy, tails, (\\))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.Ord</span>                       (comparing)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Diagrams.Prelude</span></span></code></pre></div>
 <p>First, we compute a tour by a brute force depth-first search (it does not take very long). This code is adapted from the <a href="http://rosettacode.org/wiki/Knight%27s_tour#Haskell">code found here</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">type</span> <span class="dt">Square</span> <span class="fu">=</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="ot">board ::</span> [<span class="dt">Square</span>]</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">board <span class="fu">=</span> [ (x,y) <span class="fu">|</span> x <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">7</span>], y <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="fu">..</span><span class="dv">7</span>] ]</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="ot">knightMoves ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> [<span class="dt">Square</span>]</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">knightMoves (x,y) <span class="fu">=</span> filter (<span class="ot">`elem`</span> board) jumps</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="kw">where</span> jumps <span class="fu">=</span> [ (x<span class="fu">+</span>i,y<span class="fu">+</span>j) <span class="fu">|</span> i <span class="ot">&lt;-</span> jv, j <span class="ot">&lt;-</span> jv, abs i <span class="fu">/=</span> abs j ]</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">        jv    <span class="fu">=</span> [<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="ot">knightTour ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> [<span class="dt">Square</span>]</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">knightTour sq <span class="fu">=</span> knightTour' [sq]</a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">    knightTour' moves<span class="fu">@</span>(lastMove<span class="fu">:</span>_)</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">        <span class="fu">|</span> null candMoves <span class="fu">=</span> reverse moves</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">        <span class="fu">|</span> otherwise <span class="fu">=</span> knightTour' <span class="fu">$</span> newSquare <span class="fu">:</span> moves</a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">      <span class="kw">where</span> newSquare   <span class="fu">=</span> minimumBy (comparing (length <span class="fu">.</span> findMoves)) candMoves</a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">            candMoves   <span class="fu">=</span> findMoves lastMove</a>
-<a class="sourceLine" id="cb3-19" data-line-number="19">            findMoves s <span class="fu">=</span> knightMoves s \\ moves</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Square</span> <span class="ot">=</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ot">board ::</span> [<span class="dt">Square</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>board <span class="ot">=</span> [ (x,y) <span class="op">|</span> x <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="op">..</span><span class="dv">7</span>], y <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="op">..</span><span class="dv">7</span>] ]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ot">knightMoves ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> [<span class="dt">Square</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>knightMoves (x,y) <span class="ot">=</span> <span class="fu">filter</span> (<span class="ot">`elem`</span> board) jumps</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> jumps <span class="ot">=</span> [ (x<span class="op">+</span>i,y<span class="op">+</span>j) <span class="op">|</span> i <span class="ot">&lt;-</span> jv, j <span class="ot">&lt;-</span> jv, <span class="fu">abs</span> i <span class="op">/=</span> <span class="fu">abs</span> j ]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        jv    <span class="ot">=</span> [<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ot">knightTour ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> [<span class="dt">Square</span>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>knightTour sq <span class="ot">=</span> knightTour' [sq]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    knightTour' moves<span class="op">@</span>(lastMove<span class="op">:</span>_)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">|</span> <span class="fu">null</span> candMoves <span class="ot">=</span> <span class="fu">reverse</span> moves</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> knightTour' <span class="op">$</span> newSquare <span class="op">:</span> moves</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span> newSquare   <span class="ot">=</span> minimumBy (comparing (<span class="fu">length</span> <span class="op">.</span> findMoves)) candMoves</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            candMoves   <span class="ot">=</span> findMoves lastMove</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            findMoves s <span class="ot">=</span> knightMoves s \\ moves</span></code></pre></div>
 <p>Now we can go about visualizing a tour. First, let’s draw a chessboard:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">boardSq ::</span> <span class="dt">Colour</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">boardSq c <span class="fu">=</span> square <span class="dv">1</span> <span class="fu">#</span> lw none <span class="fu">#</span> fc c</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="ot">chessBoard ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">chessBoard n</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="fu">=</span> vcat <span class="fu">.</span> map hcat <span class="fu">.</span> map (map boardSq)</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="fu">.</span> take n <span class="fu">.</span> map (take n) <span class="fu">.</span> tails</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="fu">$</span> cycle [antiquewhite, saddlebrown]</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">boardSq ::</span> <span class="dt">Colour</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>boardSq c <span class="ot">=</span> square <span class="dv">1</span> <span class="op">#</span> lw none <span class="op">#</span> fc c</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ot">chessBoard ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>chessBoard n</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> vcat <span class="op">.</span> <span class="fu">map</span> hcat <span class="op">.</span> <span class="fu">map</span> (<span class="fu">map</span> boardSq)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span> <span class="fu">take</span> n <span class="op">.</span> <span class="fu">map</span> (<span class="fu">take</span> n) <span class="op">.</span> tails</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">$</span> <span class="fu">cycle</span> [antiquewhite, saddlebrown]</span></code></pre></div>
 <p>Now, we need a way to convert <code>Square</code> coordinates (a pair of numbers in the range 0-7) into actual coordinates on the chessboard. Since the chessboard ends up with its local origin in the center of the top-left square, all we need to do is negate the \(y\)-coordinate:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="ot">squareToPoint ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> <span class="dt">P2</span> <span class="dt">Double</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">squareToPoint (x,y) <span class="fu">=</span> fromIntegral x <span class="fu">^&amp;</span> negate (fromIntegral y)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">squareToPoint ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> <span class="dt">P2</span> <span class="dt">Double</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>squareToPoint (x,y) <span class="ot">=</span> <span class="fu">fromIntegral</span> x <span class="op">^&amp;</span> <span class="fu">negate</span> (<span class="fu">fromIntegral</span> y)</span></code></pre></div>
 <p>To draw a knight on a given square, we simply translate the given image appropriately:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">knight ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">knight sq knightImg <span class="fu">=</span> knightImg <span class="fu">#</span> moveTo (squareToPoint sq)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">knight ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>knight sq knightImg <span class="ot">=</span> knightImg <span class="op">#</span> moveTo (squareToPoint sq)</span></code></pre></div>
 <p>Given a tour, we turn it into a path using <code>fromVertices</code>, and decorate the vertices with dots.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">drawTour ::</span> [<span class="dt">Square</span>] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">drawTour tour <span class="fu">=</span> tourPoints <span class="fu">&lt;&gt;</span> strokeP tourPath</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">    tourPath   <span class="fu">=</span> fromVertices <span class="fu">.</span> map squareToPoint <span class="fu">$</span> tour</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">    tourPoints <span class="fu">=</span> atPoints (concat <span class="fu">.</span> pathVertices <span class="fu">$</span> tourPath) (repeat dot)</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">    dot <span class="fu">=</span> circle <span class="fl">0.05</span> <span class="fu">#</span> fc black</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">drawTour ::</span> [<span class="dt">Square</span>] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>drawTour tour <span class="ot">=</span> tourPoints <span class="op">&lt;&gt;</span> strokeP tourPath</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    tourPath   <span class="ot">=</span> fromVertices <span class="op">.</span> <span class="fu">map</span> squareToPoint <span class="op">$</span> tour</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    tourPoints <span class="ot">=</span> atPoints (<span class="fu">concat</span> <span class="op">.</span> pathVertices <span class="op">$</span> tourPath) (<span class="fu">repeat</span> dot)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    dot <span class="ot">=</span> circle <span class="fl">0.05</span> <span class="op">#</span> fc black</span></code></pre></div>
 <p>Finally, we load a knight image, size it to fit a square, and then put all the previous pieces together:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1">example <span class="fu">=</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  res <span class="ot">&lt;-</span> loadImageEmb <span class="st">&quot;doc/static/white-knight.png&quot;</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="kw">let</span> knightImg <span class="fu">=</span> <span class="kw">case</span> res <span class="kw">of</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">        <span class="dt">Left</span> _    <span class="ot">-&gt;</span> mempty</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">        <span class="dt">Right</span> img <span class="ot">-&gt;</span> image img <span class="fu">#</span> sized (mkWidth <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">  return <span class="fu">$</span> mconcat</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    [ knight tourStart knightImg</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">    , knight tourEnd knightImg</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">    , drawTour tour</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">    , chessBoard <span class="dv">8</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">    ]</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">    tourStart <span class="fu">=</span> (<span class="dv">1</span>,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">    tour      <span class="fu">=</span> knightTour tourStart</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15">    tourEnd   <span class="fu">=</span> last tour</a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> loadImageEmb <span class="st">&quot;doc/static/white-knight.png&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> knightImg <span class="ot">=</span> <span class="kw">case</span> res <span class="kw">of</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Left</span> _    <span class="ot">-&gt;</span> <span class="fu">mempty</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Right</span> img <span class="ot">-&gt;</span> image img <span class="op">#</span> sized (mkWidth <span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> <span class="op">$</span> <span class="fu">mconcat</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    [ knight tourStart knightImg</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    , knight tourEnd knightImg</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    , drawTour tour</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    , chessBoard <span class="dv">8</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    tourStart <span class="ot">=</span> (<span class="dv">1</span>,<span class="dv">3</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    tour      <span class="ot">=</span> knightTour tourStart</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    tourEnd   <span class="ot">=</span> <span class="fu">last</span> tour</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 

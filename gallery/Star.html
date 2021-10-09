@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -90,28 +89,28 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Star.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction, TupleSections #-}</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (connect)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">colors <span class="fu">=</span> map sRGB24read [<span class="st">&quot;#5E0042&quot;</span>, <span class="st">&quot;#00856A&quot;</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction, TupleSections #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (connect)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">map</span> sRGB24read [<span class="st">&quot;#5E0042&quot;</span>, <span class="st">&quot;#00856A&quot;</span>]</span></code></pre></div>
 <p>To create one quarter of the diagram, we connect the corresponding points with headless arrows and alternate the line colors.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">quarter n <span class="fu">=</span> mconcat [arrowBetween' </a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  (with <span class="fu">&amp;</span> arrowHead <span class="fu">.~</span> noHead</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">        <span class="fu">&amp;</span> shaftStyle <span class="fu">%~</span> lw thin <span class="fu">.</span> lc (colors <span class="fu">!!</span> ((xCoord1 p) <span class="ot">`mod`</span> <span class="dv">2</span>)))</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  (fst p) (snd p) <span class="fu">|</span> p <span class="ot">&lt;-</span> ps]</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">    xCoord1 <span class="fu">=</span> round <span class="fu">.</span> fst <span class="fu">.</span> unp2 <span class="fu">.</span> fst</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">    ps <span class="fu">=</span> zip xs (reverse ys)</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">    (xs, ys) <span class="fu">=</span> pts n</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>quarter n <span class="ot">=</span> <span class="fu">mconcat</span> [arrowBetween' </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  (with <span class="op">&amp;</span> arrowHead <span class="op">.~</span> noHead</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">&amp;</span> shaftStyle <span class="op">%~</span> lw thin <span class="op">.</span> lc (colors <span class="op">!!</span> ((xCoord1 p) <span class="ot">`mod`</span> <span class="dv">2</span>)))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">fst</span> p) (<span class="fu">snd</span> p) <span class="op">|</span> p <span class="ot">&lt;-</span> ps]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    xCoord1 <span class="ot">=</span> <span class="fu">round</span> <span class="op">.</span> <span class="fu">fst</span> <span class="op">.</span> unp2 <span class="op">.</span> <span class="fu">fst</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    ps <span class="ot">=</span> <span class="fu">zip</span> xs (<span class="fu">reverse</span> ys)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    (xs, ys) <span class="ot">=</span> pts n</span></code></pre></div>
 <p>The final diagram is created by assembling four copies of the above.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">d n <span class="fu">=</span> half <span class="fu">===</span> rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">2</span>) half</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">    half <span class="fu">=</span> (rotateBy (<span class="dv">1</span><span class="fu">/</span><span class="dv">4</span>) q <span class="fu">|||</span> q) <span class="fu">#</span> centerX</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">    q <span class="fu">=</span> quarter n</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">pts n <span class="fu">=</span> (map (p2 <span class="fu">.</span> (,<span class="dv">0</span>)) [<span class="dv">0</span><span class="fu">..</span>n], map (p2 <span class="fu">.</span> (<span class="dv">0</span>,)) [<span class="dv">0</span><span class="fu">..</span>n])</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">$</span> d <span class="dv">20</span> <span class="fu">#</span> centerXY <span class="ot">`atop`</span> square <span class="dv">50</span> <span class="fu">#</span> fc whitesmoke</a></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d n <span class="ot">=</span> half <span class="op">===</span> rotateBy (<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) half</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    half <span class="ot">=</span> (rotateBy (<span class="dv">1</span><span class="op">/</span><span class="dv">4</span>) q <span class="op">|||</span> q) <span class="op">#</span> centerX</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    q <span class="ot">=</span> quarter n</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pts n <span class="ot">=</span> (<span class="fu">map</span> (p2 <span class="op">.</span> (,<span class="dv">0</span>)) [<span class="dv">0</span><span class="op">..</span>n], <span class="fu">map</span> (p2 <span class="op">.</span> (<span class="dv">0</span>,)) [<span class="dv">0</span><span class="op">..</span>n])</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> pad <span class="fl">1.1</span> <span class="op">$</span> d <span class="dv">20</span> <span class="op">#</span> centerXY <span class="ot">`atop`</span> square <span class="dv">50</span> <span class="op">#</span> fc whitesmoke</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 

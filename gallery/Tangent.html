@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -90,36 +89,36 @@ Author: <b><a href="https://github.com/pnutus">Pontus Granström</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Tangent.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span></code></pre></div>
 <p>Some arbitrary points, with a cubic curve passing through them.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">pts <span class="fu">=</span> map p2 [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">1</span>,<span class="dv">1</span>), (<span class="dv">2</span>,<span class="dv">1</span>), (<span class="dv">3</span>,<span class="dv">0</span>), (<span class="fl">3.5</span>,<span class="dv">0</span>)]</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="ot">spline ::</span> <span class="dt">Located</span> (<span class="dt">Trail</span> <span class="dt">V2</span> <span class="dt">Double</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">spline <span class="fu">=</span> cubicSpline <span class="dt">False</span> pts</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pts <span class="ot">=</span> <span class="fu">map</span> p2 [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">1</span>,<span class="dv">1</span>), (<span class="dv">2</span>,<span class="dv">1</span>), (<span class="dv">3</span>,<span class="dv">0</span>), (<span class="fl">3.5</span>,<span class="dv">0</span>)]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ot">spline ::</span> <span class="dt">Located</span> (<span class="dt">Trail</span> <span class="dt">V2</span> <span class="dt">Double</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>spline <span class="ot">=</span> cubicSpline <span class="dt">False</span> pts</span></code></pre></div>
 <p>Computing tangent and normal vectors at a particular point on the curve.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">param <span class="fu">=</span> <span class="fl">0.45</span> <span class="co">-- parameter on the curve where the tangent and normal are drawn</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">pt <span class="fu">=</span> atParam spline param</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">tangentVector <span class="fu">=</span> tangentAtParam spline param</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">normalVector <span class="fu">=</span> normalAtParam spline param</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>param <span class="ot">=</span> <span class="fl">0.45</span> <span class="co">-- parameter on the curve where the tangent and normal are drawn</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">=</span> atParam spline param</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>tangentVector <span class="ot">=</span> tangentAtParam spline param</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>normalVector <span class="ot">=</span> normalAtParam spline param</span></code></pre></div>
 <p>We can draw the tangent and normal vectors with lines of twice their length, with a square in between them to denote the right angle.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">symmetricLine v <span class="fu">=</span> fromOffsets [<span class="dv">2</span> <span class="fu">*^</span> v] <span class="fu">#</span> center</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">tangentLine <span class="fu">=</span> symmetricLine tangentVector</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">normalLine <span class="fu">=</span> symmetricLine normalVector</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">rightAngleSquare <span class="fu">=</span> square <span class="fl">0.1</span> <span class="fu">#</span> alignBL <span class="fu">#</span> rotate (signedAngleBetween tangentVector unitX)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>symmetricLine v <span class="ot">=</span> fromOffsets [<span class="dv">2</span> <span class="op">*^</span> v] <span class="op">#</span> center</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tangentLine <span class="ot">=</span> symmetricLine tangentVector</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>normalLine <span class="ot">=</span> symmetricLine normalVector</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>rightAngleSquare <span class="ot">=</span> square <span class="fl">0.1</span> <span class="op">#</span> alignBL <span class="op">#</span> rotate (signedAngleBetween tangentVector unitX)</span></code></pre></div>
 <p>Putting it all together, with some labels.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">example <span class="fu">=</span> frame <span class="fl">0.5</span> <span class="fu">$</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  strokeLocTrail spline</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="fu">&lt;&gt;</span> mconcat</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">     [ tangentLine</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">     , baselineText <span class="st">&quot;tangent&quot;</span> <span class="fu">#</span> translate tangentVector</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">     , normalLine</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">     , topLeftText <span class="st">&quot;normal&quot;</span> <span class="fu">#</span> translate normalVector</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">     , rightAngleSquare</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">     ] <span class="fu">#</span> moveTo pt <span class="fu">#</span> fontSize large</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> frame <span class="fl">0.5</span> <span class="op">$</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  strokeLocTrail spline</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">&lt;&gt;</span> <span class="fu">mconcat</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     [ tangentLine</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     , baselineText <span class="st">&quot;tangent&quot;</span> <span class="op">#</span> translate tangentVector</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>     , normalLine</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>     , topLeftText <span class="st">&quot;normal&quot;</span> <span class="op">#</span> translate normalVector</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>     , rightAngleSquare</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>     ] <span class="op">#</span> moveTo pt <span class="op">#</span> fontSize large</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 

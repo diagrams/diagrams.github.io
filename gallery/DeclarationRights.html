@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -90,89 +89,89 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a>
 
 <p><span style="font-size: small"><a href="../gallery/DeclarationRights.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
 <p>We recreate the <a href="http://recodeproject.com/artwork/v1n2universal-declaration-of-human-rights">“Universal Declaration of Human Rights” by Kenneth Knowlton</a>. The picture is taken from <a href="https://raw.githubusercontent.com/matthewepler/ReCode_Project/master/quin_kennedy/recode_v1n2_universal_declaration_of_human_rights/data/girl_gaze_contrast1_small2.jpg">here</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Codec.Picture</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Codec.Picture.Types</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Data.Colour.CIE</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Data.List.Split</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw">import</span> <span class="dt">Diagrams.Backend.Rasterific.CmdLine</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Codec.Picture</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Codec.Picture.Types</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour.CIE</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.List.Split</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.Rasterific.CmdLine</span></span></code></pre></div>
 <p>The idea is to split the Declaration into a set of lines and apply to each line a gradient corresponding to the picture.</p>
 <p>First, we load an image using <code>JuicyPixels</code>. More precisely, we extract a list of colors. For convenience, we use a custom datatype containing the height, width and the list of colours. To be consistent with diagrams, colors are stored as <code>Colour</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">data</span> <span class="dt">ColourImage</span> b <span class="fu">=</span> <span class="dt">ColourImage</span> {<span class="ot"> cColors ::</span> [<span class="dt">Colour</span> b]</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">                   ,<span class="ot"> cHeight ::</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">                   ,<span class="ot"> cWidth ::</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">                   }</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">ColourImage</span> b <span class="ot">=</span> <span class="dt">ColourImage</span> {<span class="ot"> cColors ::</span> [<span class="dt">Colour</span> b]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                   ,<span class="ot"> cHeight ::</span> <span class="dt">Int</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                   ,<span class="ot"> cWidth ::</span> <span class="dt">Int</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                   }</span></code></pre></div>
 <p>Then we load the image using <code>JuicyPixels</code>, knowing the image is in <code>YcbCr8</code> format (not quite portable…). Each pixel is converted to a <code>Colour</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="ot">getColors ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Maybe</span> (<span class="dt">ColourImage</span> b))</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">getColors fp <span class="fu">=</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">    image <span class="ot">&lt;-</span> readImage fp</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="kw">case</span> image <span class="kw">of</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">        <span class="dt">Left</span> _ <span class="ot">-&gt;</span> return <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">        <span class="dt">Right</span> image' <span class="ot">-&gt;</span> return (getColors' image')</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="ot">getColors' ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">DynamicImage</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> (<span class="dt">ColourImage</span> b)</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">getColors' (<span class="dt">ImageYCbCr8</span> image<span class="fu">@</span>(<span class="dt">Image</span> w h _)) <span class="fu">=</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="dt">Just</span> (<span class="dt">ColourImage</span> colors h w)</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">      <span class="kw">where</span> colors <span class="fu">=</span>  pixelFold (\acc i j pix <span class="ot">-&gt;</span> (ycbcrToRGB pix) <span class="fu">:</span> acc) [] image</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">getColors' _ <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="ot">ycbcrToRGB ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">PixelYCbCr8</span> <span class="ot">-&gt;</span> <span class="dt">Colour</span> b</a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">ycbcrToRGB pix <span class="fu">=</span> sRGB24 r g b</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="kw">where</span> (<span class="dt">PixelRGB8</span> r g b ) <span class="fu">=</span> convertPixel<span class="ot"> pix ::</span> <span class="dt">PixelRGB8</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">getColors ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Maybe</span> (<span class="dt">ColourImage</span> b))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>getColors fp <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    image <span class="ot">&lt;-</span> readImage fp</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">case</span> image <span class="kw">of</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Left</span> _ <span class="ot">-&gt;</span> <span class="fu">return</span> <span class="dt">Nothing</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Right</span> image' <span class="ot">-&gt;</span> <span class="fu">return</span> (getColors' image')</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ot">getColors' ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">DynamicImage</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> (<span class="dt">ColourImage</span> b)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>getColors' (<span class="dt">ImageYCbCr8</span> image<span class="op">@</span>(<span class="dt">Image</span> w h _)) <span class="ot">=</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Just</span> (<span class="dt">ColourImage</span> colors h w)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span> colors <span class="ot">=</span>  pixelFold (\acc i j pix <span class="ot">-&gt;</span> (ycbcrToRGB pix) <span class="op">:</span> acc) [] image</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>getColors' _ <span class="ot">=</span> <span class="dt">Nothing</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ot">ycbcrToRGB ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">PixelYCbCr8</span> <span class="ot">-&gt;</span> <span class="dt">Colour</span> b</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>ycbcrToRGB pix <span class="ot">=</span> sRGB24 r g b</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> (<span class="dt">PixelRGB8</span> r g b ) <span class="ot">=</span> convertPixel<span class="ot"> pix ::</span> <span class="dt">PixelRGB8</span></span></code></pre></div>
 <p>Now we have the colors, we need the text. Knowing the width and height of the picture, we generate a set of lines with constant width from the Declaration:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">  <span class="co">-- We want as many lines as there are pixels lines</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="ot">content ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">T.Text</span>]</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">content w h <span class="fu">=</span> <span class="kw">do</span> </a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">  text1 <span class="ot">&lt;-</span> TIO.readFile <span class="st">&quot;doc/static/Universal Declaration of Human Rights.txt&quot;</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="co">-- At most h repeat as we cannot have &quot;cycle&quot; for Text</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  return <span class="fu">$</span> take h <span class="fu">$</span> T.chunksOf w <span class="fu">$</span> T.replicate h text1</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We want as many lines as there are pixels lines</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">content ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">T.Text</span>]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>content w h <span class="ot">=</span> <span class="kw">do</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  text1 <span class="ot">&lt;-</span> TIO.readFile <span class="st">&quot;doc/static/Universal Declaration of Human Rights.txt&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- At most h repeat as we cannot have &quot;cycle&quot; for Text</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> <span class="op">$</span> <span class="fu">take</span> h <span class="op">$</span> T.chunksOf w <span class="op">$</span> T.replicate h text1</span></code></pre></div>
 <p>Next, we create the gradient. All colors will be split into constant-width “lines” of color. For each line, we create a gradient.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="ot">stops ::</span> <span class="dt">Fractional</span> d <span class="ot">=&gt;</span> [<span class="dt">Colour</span> <span class="dt">Double</span>] <span class="ot">-&gt;</span> d <span class="ot">-&gt;</span> [<span class="dt">GradientStop</span> d]</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">stops colors w <span class="fu">=</span> mkStops stops'</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw">where</span> </a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">    n <span class="fu">=</span> length colors<span class="fu">-</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">    stops' <span class="fu">=</span> map createStop [<span class="dv">0</span><span class="fu">..</span>n]</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">    dx <span class="fu">=</span> <span class="dv">1</span> <span class="fu">/</span> fromIntegral n</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">    createStop i <span class="fu">=</span> (colors <span class="fu">!!</span> i, fromIntegral i <span class="fu">*</span> dx, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">gradient colors w <span class="fu">=</span> </a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">  mkLinearGradient (stops colors w) ((<span class="fu">-</span>frac<span class="fu">*</span>w) <span class="fu">^&amp;</span> <span class="dv">0</span>) ((frac<span class="fu">*</span>w) <span class="fu">^&amp;</span> <span class="dv">0</span>) <span class="dt">GradPad</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">    <span class="kw">where</span> frac <span class="fu">=</span> <span class="fl">0.7</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12">    <span class="co">-- The fraction show only parts of the image here</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">stops ::</span> <span class="dt">Fractional</span> d <span class="ot">=&gt;</span> [<span class="dt">Colour</span> <span class="dt">Double</span>] <span class="ot">-&gt;</span> d <span class="ot">-&gt;</span> [<span class="dt">GradientStop</span> d]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>stops colors w <span class="ot">=</span> mkStops stops'</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">=</span> <span class="fu">length</span> colors<span class="op">-</span><span class="dv">1</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    stops' <span class="ot">=</span> <span class="fu">map</span> createStop [<span class="dv">0</span><span class="op">..</span>n]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    dx <span class="ot">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="fu">fromIntegral</span> n</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    createStop i <span class="ot">=</span> (colors <span class="op">!!</span> i, <span class="fu">fromIntegral</span> i <span class="op">*</span> dx, <span class="dv">1</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>gradient colors w <span class="ot">=</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  mkLinearGradient (stops colors w) ((<span class="op">-</span>frac<span class="op">*</span>w) <span class="op">^&amp;</span> <span class="dv">0</span>) ((frac<span class="op">*</span>w) <span class="op">^&amp;</span> <span class="dv">0</span>) <span class="dt">GradPad</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> frac <span class="ot">=</span> <span class="fl">0.7</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- The fraction show only parts of the image here</span></span></code></pre></div>
 <p>We can now create the line from the text and apply the gradient:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ot">createText ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">createText s <span class="fu">=</span> text (T.unpack s) <span class="fu">#</span> fontSize (local <span class="dv">8</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="ot">createLine ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> ([<span class="dt">Colour</span> <span class="dt">Double</span>], <span class="dt">T.Text</span>) <span class="ot">-&gt;</span>  <span class="dt">Diagram</span> <span class="dt">B</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">createLine w h (colors, s) <span class="fu">=</span> </a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">  (createText s <span class="fu">#</span> fillTexture (gradient colors w')) <span class="ot">`atop`</span> rect w' h' <span class="fu">#</span> fc black</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">    <span class="kw">where</span> (w', h') <span class="fu">=</span> (fromIntegral w, fromIntegral h)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">createText ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>createText s <span class="ot">=</span> text (T.unpack s) <span class="op">#</span> fontSize (local <span class="dv">8</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ot">createLine ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> ([<span class="dt">Colour</span> <span class="dt">Double</span>], <span class="dt">T.Text</span>) <span class="ot">-&gt;</span>  <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>createLine w h (colors, s) <span class="ot">=</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  (createText s <span class="op">#</span> fillTexture (gradient colors w')) <span class="ot">`atop`</span> rect w' h' <span class="op">#</span> fc black</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> (w', h') <span class="ot">=</span> (<span class="fu">fromIntegral</span> w, <span class="fu">fromIntegral</span> h)</span></code></pre></div>
 <p>The final function will load the list of colors and create lines according to the procedure above. As some parts of the picture are pitch black, we still want to see the text, so we define a minimum luminance:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">minLuminance ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">Colour</span> b <span class="ot">-&gt;</span> <span class="dt">Colour</span> b</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">minLuminance c </a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="fu">|</span> (luminance c) <span class="fu">&lt;</span> <span class="fl">0.032</span> <span class="fu">=</span> sRGB24 <span class="dv">50</span> <span class="dv">50</span> <span class="dv">50</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="fu">|</span> otherwise <span class="fu">=</span> c</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="ot">example ::</span> <span class="dt">IO</span> (<span class="dt">Diagram</span> <span class="dt">B</span> )</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">example <span class="fu">=</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">  <span class="dt">Just</span> img <span class="ot">&lt;-</span> getColors <span class="st">&quot;doc/static/girl_gaze_contrast1_small2.jpg&quot;</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">  <span class="kw">let</span> colors' <span class="fu">=</span> map minLuminance <span class="fu">$</span> cColors img</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">  <span class="kw">let</span> (h, w) <span class="fu">=</span> (cHeight img, cWidth img)</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">  <span class="kw">let</span> heightRect <span class="fu">=</span> <span class="dv">15</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">  <span class="kw">let</span> width <span class="fu">=</span> heightRect<span class="fu">*</span>h</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">  <span class="kw">let</span> colors <span class="fu">=</span> chunksOf w colors'</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15">  lines <span class="ot">&lt;-</span> content <span class="dv">280</span> h</a>
-<a class="sourceLine" id="cb8-16" data-line-number="16">  <span class="co">-- We need a rectangle for each line</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">  <span class="kw">let</span> all <span class="fu">=</span> map (createLine width heightRect) <span class="fu">$</span> zip colors<span class="ot"> lines  ::</span> [<span class="dt">Diagram</span> <span class="dt">B</span>]</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">  return <span class="fu">$</span> cat (r2 (<span class="dv">0</span>, <span class="dv">1</span>)) all</a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">minLuminance ::</span> (<span class="dt">Ord</span> b, <span class="dt">Floating</span> b) <span class="ot">=&gt;</span> <span class="dt">Colour</span> b <span class="ot">-&gt;</span> <span class="dt">Colour</span> b</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>minLuminance c </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> (luminance c) <span class="op">&lt;</span> <span class="fl">0.032</span> <span class="ot">=</span> sRGB24 <span class="dv">50</span> <span class="dv">50</span> <span class="dv">50</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> c</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ot">example ::</span> <span class="dt">IO</span> (<span class="dt">Diagram</span> <span class="dt">B</span> )</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Just</span> img <span class="ot">&lt;-</span> getColors <span class="st">&quot;doc/static/girl_gaze_contrast1_small2.jpg&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> colors' <span class="ot">=</span> <span class="fu">map</span> minLuminance <span class="op">$</span> cColors img</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> (h, w) <span class="ot">=</span> (cHeight img, cWidth img)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> heightRect <span class="ot">=</span> <span class="dv">15</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> width <span class="ot">=</span> heightRect<span class="op">*</span>h</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> colors <span class="ot">=</span> chunksOf w colors'</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span> <span class="ot">&lt;-</span> content <span class="dv">280</span> h</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We need a rectangle for each line</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> <span class="fu">all</span> <span class="ot">=</span> <span class="fu">map</span> (createLine width heightRect) <span class="op">$</span> <span class="fu">zip</span> colors<span class="ot"> lines  ::</span> [<span class="dt">Diagram</span> <span class="dt">B</span>]</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> <span class="op">$</span> cat (r2 (<span class="dv">0</span>, <span class="dv">1</span>)) <span class="fu">all</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 

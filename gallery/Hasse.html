@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -90,65 +89,65 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 
 <p><span style="font-size: small"><a href="../gallery/Hasse.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.List</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Data.Ord</span> (comparing)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Data.Function</span> (on)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Data.Maybe</span> (fromMaybe)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">colors <span class="fu">=</span> map sRGB24read[<span class="st">&quot;#000000&quot;</span>, <span class="st">&quot;#D1DBBD&quot;</span>, <span class="st">&quot;#91AA9D&quot;</span>, <span class="st">&quot;#3E606F&quot;</span>, <span class="st">&quot;#193441&quot;</span>, <span class="st">&quot;#000000&quot;</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Ord</span> (comparing)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Function</span> (on)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Maybe</span> (fromMaybe)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">map</span> sRGB24read[<span class="st">&quot;#000000&quot;</span>, <span class="st">&quot;#D1DBBD&quot;</span>, <span class="st">&quot;#91AA9D&quot;</span>, <span class="st">&quot;#3E606F&quot;</span>, <span class="st">&quot;#193441&quot;</span>, <span class="st">&quot;#000000&quot;</span>]</span></code></pre></div>
 <p>A subset is represented by the size of the parent set paired with the list of elements in the subset. <code>isSubset</code> tests whether one set is a subset of another; <code>subsetsBySize</code> lists all the subsets of a set of size <code>n</code>, grouped according to size.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Subset</span> <span class="fu">=</span> <span class="dt">Subset</span> <span class="dt">Int</span> [<span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">(<span class="dt">Subset</span> _ elts1) <span class="ot">`isSubset`</span> (<span class="dt">Subset</span> _ elts2) <span class="fu">=</span> all (<span class="ot">`elem`</span> elts2) elts1</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="ot">subsetsBySize ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [[<span class="dt">Subset</span>]]</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">subsetsBySize n <span class="fu">=</span> map (map (<span class="dt">Subset</span> n))</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">                <span class="fu">.</span> groupBy ((<span class="fu">==</span>) <span class="ot">`on`</span> length)</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">                <span class="fu">.</span> sortBy (comparing length)</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">                <span class="fu">.</span> subsequences</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">                <span class="fu">$</span> [<span class="dv">1</span><span class="fu">..</span>n]</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Subset</span> <span class="ot">=</span> <span class="dt">Subset</span> <span class="dt">Int</span> [<span class="dt">Int</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>(<span class="dt">Subset</span> _ elts1) <span class="ot">`isSubset`</span> (<span class="dt">Subset</span> _ elts2) <span class="ot">=</span> <span class="fu">all</span> (<span class="ot">`elem`</span> elts2) elts1</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ot">subsetsBySize ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [[<span class="dt">Subset</span>]]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>subsetsBySize n <span class="ot">=</span> <span class="fu">map</span> (<span class="fu">map</span> (<span class="dt">Subset</span> n))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span> groupBy ((<span class="op">==</span>) <span class="ot">`on`</span> <span class="fu">length</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span> sortBy (comparing <span class="fu">length</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span> subsequences</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                <span class="op">$</span> [<span class="dv">1</span><span class="op">..</span>n]</span></code></pre></div>
 <p>Draw the elements of a subset, by drawing a colored square for each element present, and leaving a blank space for absent elements.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">drawElts n elts <span class="fu">=</span> hcat</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">                <span class="fu">.</span> map (\i <span class="ot">-&gt;</span> <span class="kw">if</span> i <span class="ot">`elem`</span> elts</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                               <span class="kw">then</span> drawElt i</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">                               <span class="kw">else</span> strutX <span class="dv">1</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">                      )</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">                <span class="fu">$</span> [<span class="dv">1</span><span class="fu">..</span>n]</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">drawElt e <span class="fu">=</span> unitSquare <span class="fu">#</span> fc (colors <span class="fu">!!</span> e) <span class="fu">#</span> lw thin</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>drawElts n elts <span class="ot">=</span> hcat</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span> <span class="fu">map</span> (\i <span class="ot">-&gt;</span> <span class="kw">if</span> i <span class="ot">`elem`</span> elts</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                               <span class="kw">then</span> drawElt i</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                               <span class="kw">else</span> strutX <span class="dv">1</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                <span class="op">$</span> [<span class="dv">1</span><span class="op">..</span>n]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>drawElt e <span class="ot">=</span> unitSquare <span class="op">#</span> fc (colors <span class="op">!!</span> e) <span class="op">#</span> lw thin</span></code></pre></div>
 <p>Draw a subset by drawing a dashed rectangle around the elements. Note that we also assign a name to the rectangle, corresponding to the elements it contains, which we use to draw connections between subsets later.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">drawSet (<span class="dt">Subset</span> n elts) <span class="fu">=</span> (    drawElts n elts <span class="fu">#</span> centerXY</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                            <span class="fu">&lt;&gt;</span> rect (fromIntegral n <span class="fu">+</span> <span class="fl">0.5</span>) <span class="fl">1.5</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                                 <span class="fu">#</span> dashingG [<span class="fl">0.2</span>,<span class="fl">0.2</span>] <span class="dv">0</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">                                 <span class="fu">#</span> lw thin</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">                                 <span class="fu">#</span> named elts</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">                          )</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>drawSet (<span class="dt">Subset</span> n elts) <span class="ot">=</span> (    drawElts n elts <span class="op">#</span> centerXY</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                            <span class="op">&lt;&gt;</span> rect (<span class="fu">fromIntegral</span> n <span class="op">+</span> <span class="fl">0.5</span>) <span class="fl">1.5</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="op">#</span> dashingG [<span class="fl">0.2</span>,<span class="fl">0.2</span>] <span class="dv">0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="op">#</span> lw thin</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="op">#</span> named elts</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                          )</span></code></pre></div>
 <p>Draw a Hasse diagram by drawing subsets grouped by size in rows, and connecting each set to its subsets in the row below. <a href="http://projects.haskell.org/diagrams/manual/diagrams-manual.html#named-subdiagrams">See the user manual</a> for a more in-depth explanation of how names are used to connect subsets.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">hasseRow <span class="fu">=</span> centerX <span class="fu">.</span> hcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> <span class="dv">2</span>) <span class="fu">.</span> map drawSet</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">hasseDiagram n <span class="fu">=</span> setsD <span class="fu">#</span> drawConnections <span class="fu">#</span> centerXY</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="kw">where</span> setsD <span class="fu">=</span> vcat' (with <span class="fu">&amp;</span> sep <span class="fu">.~</span> fromIntegral n)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">              <span class="fu">.</span> map hasseRow</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">              <span class="fu">.</span> reverse</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">              <span class="fu">$</span> subsets</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">        subsets <span class="fu">=</span> subsetsBySize n</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">        drawConnections <span class="fu">=</span> applyAll connections</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hasseRow <span class="ot">=</span> centerX <span class="op">.</span> hcat' (with <span class="op">&amp;</span> sep <span class="op">.~</span> <span class="dv">2</span>) <span class="op">.</span> <span class="fu">map</span> drawSet</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>hasseDiagram n <span class="ot">=</span> setsD <span class="op">#</span> drawConnections <span class="op">#</span> centerXY</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> setsD <span class="ot">=</span> vcat' (with <span class="op">&amp;</span> sep <span class="op">.~</span> <span class="fu">fromIntegral</span> n)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>              <span class="op">.</span> <span class="fu">map</span> hasseRow</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>              <span class="op">.</span> <span class="fu">reverse</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>              <span class="op">$</span> subsets</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        subsets <span class="ot">=</span> subsetsBySize n</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        drawConnections <span class="ot">=</span> applyAll connections</span></code></pre></div>
 <p>To generate all the connections, we apply <code>connectSome</code> to each pair of adjacent rows, which calls <code>connect</code> on those pairs where one is a subset of the other.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1">        connections <span class="fu">=</span> concat <span class="fu">$</span> zipWith connectSome subsets (tail subsets)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">        connectSome subs1 subs2 <span class="fu">=</span> [ connect s1 s2 <span class="fu">|</span> s1 <span class="ot">&lt;-</span> subs1</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">                                                  , s2 <span class="ot">&lt;-</span> subs2</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                                                  , s1 <span class="ot">`isSubset`</span> s2 ]</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>        connections <span class="ot">=</span> <span class="fu">concat</span> <span class="op">$</span> <span class="fu">zipWith</span> connectSome subsets (<span class="fu">tail</span> subsets)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        connectSome subs1 subs2 <span class="ot">=</span> [ connect s1 s2 <span class="op">|</span> s1 <span class="ot">&lt;-</span> subs1</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                                  , s2 <span class="ot">&lt;-</span> subs2</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                                  , s1 <span class="ot">`isSubset`</span> s2 ]</span></code></pre></div>
 <p>Connect two subsets by looking up the subdiagrams named with their elements, and drawing a line from the upper boundary of one to the lower boundary of the other.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1">        connect (<span class="dt">Subset</span> _ elts1) (<span class="dt">Subset</span> _ elts2) <span class="fu">=</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">          withNames [elts1, elts2] <span class="fu">$</span> \[b1, b2] <span class="ot">-&gt;</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">            beneath ((boundaryFrom b1 unitY <span class="fu">~~</span> boundaryFrom b2 unit_Y) <span class="fu">#</span> lw thin)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">example <span class="fu">=</span> pad <span class="fl">1.1</span> <span class="fu">$</span> hasseDiagram <span class="dv">4</span></a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>        connect (<span class="dt">Subset</span> _ elts1) (<span class="dt">Subset</span> _ elts2) <span class="ot">=</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>          withNames [elts1, elts2] <span class="op">$</span> \[b1, b2] <span class="ot">-&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            beneath ((boundaryFrom b1 unitY <span class="op">~~</span> boundaryFrom b2 unit_Y) <span class="op">#</span> lw thin)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> pad <span class="fl">1.1</span> <span class="op">$</span> hasseDiagram <span class="dv">4</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 

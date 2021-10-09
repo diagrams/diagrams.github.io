@@ -19,7 +19,6 @@
     <link rel="shortcut icon" href="../diagrams.ico" />
 
     <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
   </head>
   <body>
 
@@ -90,38 +89,38 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Jeffrey Rosenblu
 
 <p><span style="font-size: small"><a href="../gallery/VectorField.lhs">Download raw source code</a></span><br /></p>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="ot">{-# LANGUAGE FlexibleContexts          #-}</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" data-line-number="1">locs   <span class="fu">=</span> [(x, y) <span class="fu">|</span> x <span class="ot">&lt;-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="fu">..</span> <span class="fl">3.25</span>], y <span class="ot">&lt;-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="fu">..</span> <span class="fl">3.25</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE FlexibleContexts          #-}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>locs   <span class="ot">=</span> [(x, y) <span class="op">|</span> x <span class="ot">&lt;-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="op">..</span> <span class="fl">3.25</span>], y <span class="ot">&lt;-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="op">..</span> <span class="fl">3.25</span>]]</span></code></pre></div>
 <p>Create a list of points where the vectors will be placed.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" data-line-number="1">points <span class="fu">=</span> map p2 locs</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>points <span class="ot">=</span> <span class="fu">map</span> p2 locs</span></code></pre></div>
 <p>The function to use to create the vector field.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" data-line-number="1">vectorField (x, y) <span class="fu">=</span> r2 (sin (y <span class="fu">+</span> <span class="dv">1</span>), sin (x <span class="fu">+</span> <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">arrows <span class="fu">=</span> map arrowAtPoint locs</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">arrowAtPoint (x, y) <span class="fu">=</span> arrowAt' opts (p2 (x, y)) (sL <span class="fu">*^</span> vf) <span class="fu">#</span> alignTL</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">    vf   <span class="fu">=</span> vectorField (x, y)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">    m    <span class="fu">=</span> norm <span class="fu">$</span> vectorField (x, y)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">-- Head size is a function of the length of the vector</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">-- as are tail size and shaft length.</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">    hs   <span class="fu">=</span> <span class="fl">0.02</span> <span class="fu">*</span> m</a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">    sW   <span class="fu">=</span> <span class="fl">0.004</span> <span class="fu">*</span> m</a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">    sL   <span class="fu">=</span> <span class="fl">0.05</span> <span class="fu">+</span> <span class="fl">0.1</span> <span class="fu">*</span> m</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16">    opts <span class="fu">=</span> (with <span class="fu">&amp;</span> arrowHead  <span class="fu">.~</span> spike</a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">                 <span class="fu">&amp;</span> headLength <span class="fu">.~</span> normalized hs</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">                 <span class="fu">&amp;</span> shaftStyle <span class="fu">%~</span> lwN sW)</a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">field   <span class="fu">=</span> position <span class="fu">$</span> zip points arrows</a>
-<a class="sourceLine" id="cb5-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb5-22" data-line-number="22">example <span class="fu">=</span> ( field <span class="fu">#</span> translateY <span class="fl">0.05</span></a>
-<a class="sourceLine" id="cb5-23" data-line-number="23">       <span class="fu">&lt;&gt;</span> ( square <span class="fl">3.5</span> <span class="fu">#</span> lw none <span class="fu">#</span> alignBL))</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode literate haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1">main <span class="fu">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>vectorField (x, y) <span class="ot">=</span> r2 (<span class="fu">sin</span> (y <span class="op">+</span> <span class="dv">1</span>), <span class="fu">sin</span> (x <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>arrows <span class="ot">=</span> <span class="fu">map</span> arrowAtPoint locs</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>arrowAtPoint (x, y) <span class="ot">=</span> arrowAt' opts (p2 (x, y)) (sL <span class="op">*^</span> vf) <span class="op">#</span> alignTL</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    vf   <span class="ot">=</span> vectorField (x, y)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    m    <span class="ot">=</span> norm <span class="op">$</span> vectorField (x, y)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- Head size is a function of the length of the vector</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- as are tail size and shaft length.</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    hs   <span class="ot">=</span> <span class="fl">0.02</span> <span class="op">*</span> m</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    sW   <span class="ot">=</span> <span class="fl">0.004</span> <span class="op">*</span> m</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    sL   <span class="ot">=</span> <span class="fl">0.05</span> <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> m</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    opts <span class="ot">=</span> (with <span class="op">&amp;</span> arrowHead  <span class="op">.~</span> spike</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                 <span class="op">&amp;</span> headLength <span class="op">.~</span> normalized hs</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                 <span class="op">&amp;</span> shaftStyle <span class="op">%~</span> lwN sW)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>field   <span class="ot">=</span> position <span class="op">$</span> <span class="fu">zip</span> points arrows</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> ( field <span class="op">#</span> translateY <span class="fl">0.05</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>       <span class="op">&lt;&gt;</span> ( square <span class="fl">3.5</span> <span class="op">#</span> lw none <span class="op">#</span> alignBL))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 
