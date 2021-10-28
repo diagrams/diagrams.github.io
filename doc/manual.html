@@ -2009,8 +2009,8 @@ associated with its source code.</p></li></ul></li></ul></div><div class="sectio
 using fonts in the SVG format (note that it can be used with <em>any</em>
 backend, not just the SVG backend). Among other things, it provides
 its own <code class="sourceCode">textSVG</code> function which can be used to convert text into a
-<em>path</em> tracing the outline of the text.  Here is a simple example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/28c6a7297555f719.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> text' font d s
-<span class="ot">></span>   <span class="fu">=</span> (strokeP <span class="fu">$</span> SF.textSVG' (<span class="dt">SF.TextOpts</span> font <span class="dt">SF.INSIDE_H</span> <span class="dt">SF.KERN</span> <span class="dt">False</span> d d) s)
+<em>path</em> tracing the outline of the text.  Here is a simple example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/e4e4a386b7bbde1d.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> text' font h s
+<span class="ot">></span>   <span class="fu">=</span> (SF.set_envelope <span class="fu">.</span> SF.fit_height h <span class="fu">.</span> SF.svgText def { SF.textFont <span class="fu">=</span> font } <span class="fu">$</span> s)
 <span class="ot">></span>   <span class="fu">#</span> lw none
 <span class="ot">></span>
 <span class="ot">></span> example <span class="fu">=</span> <span class="kw">do</span>

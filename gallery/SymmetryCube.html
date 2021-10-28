@@ -114,58 +114,56 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                                  strutY padding</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        height <span class="ot">=</span> diameter (r2 (<span class="dv">0</span>,<span class="dv">1</span>)) padded</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        width  <span class="ot">=</span> diameter (r2 (<span class="dv">1</span>,<span class="dv">0</span>)) padded</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span> centerXY innards <span class="op">&lt;&gt;</span> roundedRect width height <span class="fl">0.1</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>textOpts font n <span class="ot">=</span> <span class="dt">TextOpts</span> font <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> <span class="dv">1</span> n</span></code></pre></div>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span> centerXY innards <span class="op">&lt;&gt;</span> roundedRect width height <span class="fl">0.1</span></span></code></pre></div>
 <p>A single string of text.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">text' ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>text' font s n <span class="ot">=</span> textSVG_ (textOpts font n) s <span class="op">#</span> fc white <span class="op">#</span> lw none</span></code></pre></div>
-<p>Several lines of text stacked vertically.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>centredText font ls n <span class="ot">=</span> vcat' (with <span class="op">&amp;</span> catMethod <span class="op">.~</span> <span class="dt">Distrib</span> <span class="op">&amp;</span> sep <span class="op">.~</span> n)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                     (<span class="fu">map</span> (\l <span class="ot">-&gt;</span> centerX (text' font l n)) ls)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>centredText' font s <span class="ot">=</span> centredText font (splitOn <span class="st">&quot;\n&quot;</span> s)</span></code></pre></div>
+<blockquote>
+<p>text’ font s h = (set_envelope . fit_height h . svgText def { textFont = font } $ s) # lw none # fc white Several lines of text stacked vertically.</p>
+</blockquote>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>centredText font ls n <span class="ot">=</span> vcat' (with <span class="op">&amp;</span> catMethod <span class="op">.~</span> <span class="dt">Distrib</span> <span class="op">&amp;</span> sep <span class="op">.~</span> n)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                     (<span class="fu">map</span> (\l <span class="ot">-&gt;</span> centerX (text' font l n)) ls)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>centredText' font s <span class="ot">=</span> centredText font (splitOn <span class="st">&quot;\n&quot;</span> s)</span></code></pre></div>
 <p>Diagram-specific parameters, including the positioning vectors.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>padAmount <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>down <span class="ot">=</span> r2 (<span class="dv">0</span>, <span class="op">-</span><span class="dv">10</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>upright <span class="ot">=</span> r2 (<span class="dv">7</span>, <span class="dv">5</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>right <span class="ot">=</span> r2 (<span class="dv">15</span>, <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>padAmount <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>down <span class="ot">=</span> r2 (<span class="dv">0</span>, <span class="op">-</span><span class="dv">10</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>upright <span class="ot">=</span> r2 (<span class="dv">7</span>, <span class="dv">5</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>right <span class="ot">=</span> r2 (<span class="dv">15</span>, <span class="dv">0</span>)</span></code></pre></div>
 <p>A box with some interior text and a name.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mybox font s n <span class="ot">=</span> (box (centredText' font s <span class="dv">1</span>) padAmount) <span class="op">#</span> named n</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mybox font s n <span class="ot">=</span> (box (centredText' font s <span class="dv">1</span>) padAmount) <span class="op">#</span> named n</span></code></pre></div>
 <p>The cube is just several boxes superimposed, positioned by adding together some positioning vectors.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sCube ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sCube font <span class="ot">=</span> fc navy <span class="op">$</span> <span class="fu">mconcat</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  [ mybox font <span class="st">&quot;Permutation&quot;</span> <span class="st">&quot;perm&quot;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Permutation\ngroup&quot;</span> <span class="st">&quot;permgroup&quot;</span>                     <span class="op">#</span> translate right</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Symmetry&quot;</span> <span class="st">&quot;sym&quot;</span>                                     <span class="op">#</span> translate upright</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\npermutation&quot;</span> <span class="st">&quot;paramperm&quot;</span>             <span class="op">#</span> translate down</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\npermutation\ngroup&quot;</span> <span class="st">&quot;parampermgroup&quot;</span> <span class="op">#</span> translate (right <span class="op">^+^</span> down)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\nsymmetry&quot;</span> <span class="st">&quot;paramsym&quot;</span>                 <span class="op">#</span> translate (down <span class="op">^+^</span> upright)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Symmetry\ngroup&quot;</span> <span class="st">&quot;symgroup&quot;</span>                         <span class="op">#</span> translate (upright <span class="op">^+^</span> right)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\nsymmetry\ngroup&quot;</span> <span class="st">&quot;paramsymgroup&quot;</span>     <span class="op">#</span> translate (down <span class="op">^+^</span> right <span class="op">^+^</span> upright)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>               ]</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sCube ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sCube font <span class="ot">=</span> fc navy <span class="op">$</span> <span class="fu">mconcat</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  [ mybox font <span class="st">&quot;Permutation&quot;</span> <span class="st">&quot;perm&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Permutation\ngroup&quot;</span> <span class="st">&quot;permgroup&quot;</span>                     <span class="op">#</span> translate right</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Symmetry&quot;</span> <span class="st">&quot;sym&quot;</span>                                     <span class="op">#</span> translate upright</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\npermutation&quot;</span> <span class="st">&quot;paramperm&quot;</span>             <span class="op">#</span> translate down</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\npermutation\ngroup&quot;</span> <span class="st">&quot;parampermgroup&quot;</span> <span class="op">#</span> translate (right <span class="op">^+^</span> down)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\nsymmetry&quot;</span> <span class="st">&quot;paramsym&quot;</span>                 <span class="op">#</span> translate (down <span class="op">^+^</span> upright)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Symmetry\ngroup&quot;</span> <span class="st">&quot;symgroup&quot;</span>                         <span class="op">#</span> translate (upright <span class="op">^+^</span> right)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\nsymmetry\ngroup&quot;</span> <span class="st">&quot;paramsymgroup&quot;</span>     <span class="op">#</span> translate (down <span class="op">^+^</span> right <span class="op">^+^</span> upright)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>               ]</span></code></pre></div>
 <p>For each pair (a,b) of names, draw an arrow from diagram “a” to diagram “b”.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">drawLines ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>drawLines cube <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">.</span>) <span class="fu">id</span> (<span class="fu">map</span> (<span class="fu">uncurry</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                       (connectOutside' (with</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                       <span class="op">&amp;</span> headLength <span class="op">.~</span> small</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                       <span class="op">&amp;</span> shaftStyle <span class="op">%~</span> lw thin))) pairs) cube</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> pairs <span class="ot">=</span> [ (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;permgroup&quot;</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;sym&quot;</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;paramperm&quot;</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;paramsym&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;symgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;parampermgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                ]</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ot">drawLines ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>drawLines cube <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">.</span>) <span class="fu">id</span> (<span class="fu">map</span> (<span class="fu">uncurry</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                       (connectOutside' (with</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                       <span class="op">&amp;</span> headLength <span class="op">.~</span> small</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                       <span class="op">&amp;</span> shaftStyle <span class="op">%~</span> lw thin))) pairs) cube</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> pairs <span class="ot">=</span> [ (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;permgroup&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;sym&quot;</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;perm&quot;</span>,<span class="st">&quot;paramperm&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;paramsym&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;symgroup&quot;</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;paramperm&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;symgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;sym&quot;</span>,<span class="st">&quot;paramsym&quot;</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;permgroup&quot;</span>,<span class="st">&quot;parampermgroup&quot;</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                , (<span class="st">&quot;parampermgroup&quot;</span>,<span class="st">&quot;paramsymgroup&quot;</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                ]</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 
 </div>
 

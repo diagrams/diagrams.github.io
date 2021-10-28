@@ -302,8 +302,9 @@ boundaries of the diagrams, using traces to find the intersection
 points.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> connectOutside <span class="st">"diagram1"</span> <span class="st">"diagram2"</span>
 <span class="ot">></span> connectPerim <span class="st">"diagram"</span> <span class="st">"diagram"</span> (<span class="dv">2</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn) (<span class="dv">4</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn)</code></pre></div></div><p>Here is an example of a finite state automata that accepts real numbers.
 The code is a bit longer than what we have seen so far, but still very
-straightforward.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/3102d48f4635f1d1.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> text' font d s <span class="fu">=</span> (strokeP <span class="fu">$</span> textSVG' (<span class="dt">TextOpts</span> font <span class="dt">INSIDE_H</span> <span class="dt">KERN</span> <span class="dt">False</span> d d) s)
-<span class="ot">></span>                <span class="fu">#</span> lw none <span class="fu">#</span> fc black
+straightforward.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/f55b268f071ec326.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> text' font h s
+<span class="ot">></span>   <span class="fu">=</span> (SF.set_envelope <span class="fu">.</span> SF.fit_height h <span class="fu">.</span> SF.svgText def { SF.textFont <span class="fu">=</span> font } <span class="fu">$</span> s)
+<span class="ot">></span>   <span class="fu">#</span> lw none <span class="fu">#</span> fc black <span class="fu">#</span> centerXY
 <span class="ot">></span>
 <span class="ot">></span> stateLabel font <span class="fu">=</span> text' font <span class="dv">6</span>
 <span class="ot">></span> arrowLabel font txt size <span class="fu">=</span> text' font size txt
