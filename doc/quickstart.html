@@ -79,35 +79,21 @@
     
     <div class="container" style="padding-top: 60px;">
       <?xml version="1.0" encoding="UTF-8" ?>
-<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"><ul class="nav"><li><a class="reference internal" href="#introduction">Introduction</a></li><li><a class="reference internal" href="#resources">Resources</a></li><li><a class="reference internal" href="#getting-started">Getting started</a><ul class="nav"><li><a class="reference internal" href="#ghc-the-haskell-platform">GHC/The Haskell Platform</a></li><li><a class="reference internal" href="#installation">Installation</a></li></ul></li><li><a class="reference internal" href="#philosophy">Philosophy</a></li><li><a class="reference internal" href="#your-first-diagram">Your first diagram</a></li><li><a class="reference internal" href="#attributes">Attributes</a></li><li><a class="reference internal" href="#combining-diagrams">Combining diagrams</a><ul class="nav"><li><a class="reference internal" href="#local-origins">Local origins</a></li><li><a class="reference internal" href="#side-by-side">Side-by-side</a></li><li><a class="reference internal" href="#envelopes">Envelopes</a></li></ul></li><li><a class="reference internal" href="#transforming-diagrams">Transforming diagrams</a><ul class="nav"><li><a class="reference internal" href="#translation">Translation</a></li><li><a class="reference internal" href="#aligning">Aligning</a></li></ul></li><li><a class="reference internal" href="#diagrams-as-a-monoid">Diagrams as a monoid</a></li><li><a class="reference internal" href="#a-worked-example">A worked example</a></li><li><a class="reference internal" href="#next-steps">Next steps</a></li></ul></div></div><div class="col-md-9"><h1 class="title">Diagrams Quick Start Tutorial</h1><div class="section" id="introduction"><h1>Introduction</h1><p>This tutorial will walk you through the basics of using the diagrams
+<div class="container bs-docs-container"><div class="row"><div class="col-md-3"><div class="bs-sidebar hidden-print" role="complementary" data-spy="affix"><ul class="nav"><li><a class="reference internal" href="#introduction">Introduction</a></li><li><a class="reference internal" href="#resources">Resources</a></li><li><a class="reference internal" href="#getting-started">Getting started</a><ul class="nav"><li><a class="reference internal" href="#ghc-cabal">GHC/cabal</a></li><li><a class="reference internal" href="#installation">Installation</a></li></ul></li><li><a class="reference internal" href="#philosophy">Philosophy</a></li><li><a class="reference internal" href="#your-first-diagram">Your first diagram</a></li><li><a class="reference internal" href="#attributes">Attributes</a></li><li><a class="reference internal" href="#combining-diagrams">Combining diagrams</a><ul class="nav"><li><a class="reference internal" href="#local-origins">Local origins</a></li><li><a class="reference internal" href="#side-by-side">Side-by-side</a></li><li><a class="reference internal" href="#envelopes">Envelopes</a></li></ul></li><li><a class="reference internal" href="#transforming-diagrams">Transforming diagrams</a><ul class="nav"><li><a class="reference internal" href="#translation">Translation</a></li><li><a class="reference internal" href="#aligning">Aligning</a></li></ul></li><li><a class="reference internal" href="#diagrams-as-a-monoid">Diagrams as a monoid</a></li><li><a class="reference internal" href="#a-worked-example">A worked example</a></li><li><a class="reference internal" href="#next-steps">Next steps</a></li></ul></div></div><div class="col-md-9"><h1 class="title">Diagrams Quick Start Tutorial</h1><div class="section" id="introduction"><h1>Introduction</h1><p>This tutorial will walk you through the basics of using the diagrams
 DSL to create graphics in a powerful, modular, and declarative way.
 There's enough here to get you started quickly; for more in-depth
 information, see the <a class="reference external" href="manual.html">user manual</a>.</p><p>This is not a Haskell tutorial (although a
 Haskell-tutorial-via-diagrams is a fun idea and may happen in the
 future).  For now, we recommend <a class="reference external" href="http://learnyouahaskell.com/">Learn You a Haskell</a> for a nice
 introduction to Haskell; Chapters 1-6 should give you pretty much all
-you need for working with diagrams.</p></div><div class="section" id="resources"><h1>Resources</h1><p>Some resources that may be helpful to you as you learn about diagrams:</p><ul><li><p>The <a class="reference external" href="manual.html">user manual</a></p></li><li><p>The <a class="reference external" href="../haddock/index.html">API documentation</a></p></li><li><p>The <a class="reference external" href="http://groups.google.com/group/diagrams-discuss">diagrams-discuss mailing list</a></p></li><li><p>The <code>#diagrams</code> IRC channel on freenode.org</p></li></ul></div><div class="section" id="getting-started"><h1>Getting started</h1><p>Before getting on with generating beautiful diagrams, you'll need a
-few things:</p><div class="section" id="ghc-the-haskell-platform"><h2>GHC/The Haskell Platform</h2><p>You'll need a recent version of the <a class="reference external" href="http://haskell.org/ghc">Glasgow Haskell Compiler</a> (7.8
+you need for working with diagrams.</p></div><div class="section" id="resources"><h1>Resources</h1><p>Some resources that may be helpful to you as you learn about diagrams:</p><ul><li><p>The <a class="reference external" href="manual.html">user manual</a></p></li><li><p>The <a class="reference external" href="../haddock/index.html">API documentation</a></p></li><li><p>The <a class="reference external" href="http://groups.google.com/group/diagrams-discuss">diagrams-discuss mailing list</a></p></li><li><p>The <code>#diagrams</code> IRC channel on Libera.Chat</p></li></ul></div><div class="section" id="getting-started"><h1>Getting started</h1><p>Before getting on with generating beautiful diagrams, you'll need a
+few things:</p><div class="section" id="ghc-cabal"><h2>GHC/cabal</h2><p>You'll need a recent version of the <a class="reference external" href="http://haskell.org/ghc">Glasgow Haskell Compiler</a> (8.4
 or later), as well as the <a class="reference external" href="http://hackage.haskell.org/trac/hackage/wiki/CabalInstall">cabal-install tool</a>.  If you do not
-already have these, we recommend following the <a class="reference external" href="https://www.haskell.org/downloads#minimal">minimal installer
-instructions</a>.</p></div><div class="section" id="installation"><h2>Installation</h2><p>Once you have the prerequisites, installing the diagrams libraries
-themselves should be a snap. We recommend installing diagrams in a
-sandbox, like so:</p><p>*nix:</p><pre><code>cabal sandbox init
-cabal install diagrams</code></pre><p>Windows:</p><pre><code>cabal update
-cabal sandbox init
-cabal install diagrams -j1</code></pre><p>(The <code class="sourceCode"><span class="fu">-</span>j1</code> flag is necessary in Windows to prevent the <code class="sourceCode">package<span class="fu">.</span>cache</code>
-file from being edited multiple times at once.  See
-[here](<a class="reference external" href="https://github.com/haskell/cabal/issues/4005#issuecomment-275434975">https://github.com/haskell/cabal/issues/4005#issuecomment-275434975</a>)
-and
-[here](<a class="reference external" href="https://github.com/commercialhaskell/stack/issues/2617">https://github.com/commercialhaskell/stack/issues/2617</a>) for
-more information.)</p><p>To make use of the diagrams libraries in the sandbox, you can use
-commands such as</p><p>*nix/cmd.exe:</p><pre><code>cabal exec -- ghc --make MyDiagram.hs</code></pre><p>Powershell:</p><pre><code>cabal exec (ghc --make MyDiagram.hs)</code></pre><p>which will run <code>ghc --make MyDiagram.hs</code> in the sandbox environment.
-Alternatively, on any Unix-ish system you should be able to do
-something like</p><pre><code>cabal exec bash</code></pre><p>(feel free to substitute your favorite shell in place of <code>bash</code>).
-This will start a new shell in an environment with all the diagrams
-packages available to GHC; you can now run <code>ghc</code> normally, without
-the need for <code>cabal exec</code>.  To exit the sandbox, just exit the shell.</p><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams"><code>diagrams</code></a></span> is just a wrapper package which pulls in the following
-four packages:</p><ul><li><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams-core"><code>diagrams-core</code></a></span> contains the core data structures and definitions
+already have these, we recommend installing them via <a class="reference external" href="https://www.haskell.org/ghcup/">ghcup</a>.</p><p>You can also easily work with diagrams using <a class="reference external" href="https://docs.haskellstack.org/en/stable/README/">stack</a>, though that is
+not covered in these instructions.</p></div><div class="section" id="installation"><h2>Installation</h2><p>No special installation is needed — the necessary <code>diagrams</code>
+packages will be automatically downloaded and installed for you by
+<code>cabal</code> or <code>stack</code> once you create a project.  However, it's worth
+mentioning which packages you will likely need:</p><ul><li><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams-core"><code>diagrams-core</code></a></span> contains the core data structures and definitions
 that form the abstract heart of the library.</p></li><li><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams-lib"><code>diagrams-lib</code></a></span> is a standard library of drawing primitives,
 attributes, and combinators built on top of the core library.</p></li><li><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams-contrib"><code>diagrams-contrib</code></a></span> is a library of user-contributed extensions.</p></li><li><p><span class="package"><a href="http://hackage.haskell.org/package/diagrams-svg"><code>diagrams-svg</code></a></span> is a backend which renders diagrams as SVG files.</p></li></ul><p>There are other backends as well; see the <a class="reference external" href="http://hackage.haskell.org/package/diagrams">diagrams package
 documentation</a> and the <a class="reference external" href="http://www.haskell.org/haskellwiki/Diagrams/Projects#Backends">diagrams wiki</a> for more information.</p></div></div><div class="section" id="philosophy"><h1>Philosophy</h1><p>Before diving in to create some diagrams, it's worth taking a minute
@@ -129,8 +115,7 @@ served by looking elsewhere! (With that said, however, we certainly
 are interested in making diagrams as fast as possible without
 sacrificing other features, and there have been several cases of
 people successfully using diagrams for simple real-time graphics
-generation.)</p></li></ul></div><div class="section" id="your-first-diagram"><h1>Your first diagram</h1><p>Create a file called <code class="sourceCode">DiagramsTutorial.lhs</code>
-with the following contents:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
+generation.)</p></li></ul></div><div class="section" id="your-first-diagram"><h1>Your first diagram</h1><p>Create a file called <code>DiagramsTutorial.lhs</code> with the following contents:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> <span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span>
 <span class="ot">></span> <span class="ot">{-# LANGUAGE FlexibleContexts          #-}</span>
 <span class="ot">></span> <span class="ot">{-# LANGUAGE TypeFamilies              #-}</span>
 <span class="ot">></span>
@@ -155,10 +140,19 @@ re-exported for convenience.  The second <code class="sourceCode">import</code> 
 use the SVG backend for rendering diagrams.  Among other things, it
 provides the function <code class="sourceCode">mainWith</code>, which takes a diagram as input (in
 this case, a circle of radius 1) and creates a command-line-driven
-application for rendering it.</p><p>Let's compile and run it:</p><pre><code>$ ghc --make DiagramsTutorial.lhs
-[1 of 1] Compiling Main             ( DiagramsTutorial.lhs, DiagramsTutorial.o )
-Linking DiagramsTutorial ...
-$ ./DiagramsTutorial -o circle.svg -w 400</code></pre><p>If you now view <code class="sourceCode">circle<span class="fu">.</span>svg</code> in your favorite web browser, you should
+application for rendering it.</p><p>To be able to compile and run this code, we'll create a simple
+<code>.cabal</code> file which specifies its dependencies.  Create a file
+called <code>diagrams-tutorial.cabal</code> with the following contents:</p><pre><code>cabal-version:      2.4
+name:               diagrams-tutorial
+version:            0.1.0.0
+executable diagrams-tutorial
+    main-is:          DiagramsTutorial.lhs
+    build-depends:    base, diagrams-lib, diagrams-svg
+    default-language: Haskell2010</code></pre><p>You should now be able to build and run the example using the
+following commands:</p><pre><code>$ cabal build DiagramsTutorial.lhs
+... lots of output while it downloads and builds all the dependencies ...
+
+$ cabal exec diagrams-tutorial -- -o circle.svg -w 400</code></pre><p>If you now view <code>circle.svg</code> in your favorite web browser, you should
 see an unfilled black circle on a white background (actually, it's on
 a transparent background, but most browsers use white):</p><div class="exampleimg"><div style="text-align: center"><img src="images/1d707ce3132f040f.png" width="500" height="200" /></div></div><p>Be careful not to omit the <code>-w 400</code> argument!  This specifies that the
 width of the output file should be 400 units, and the height should
@@ -168,16 +162,16 @@ dimensions of the output image you want (note that the diagram will
 not be stretched; extra padding will be added if the aspect ratios do
 not match).  If you do not specify a width or a height, the absolute
 scale of the diagram itself will be used, which in this case would be
-rather tiny—only 2x2.</p><p>There are several more options besides <code class="sourceCode"><span class="fu">-</span>o</code>, <code class="sourceCode"><span class="fu">-</span>w</code>, and <code class="sourceCode"><span class="fu">-</span>h</code>; you can
-see what they are by typing <code class="sourceCode"><span class="fu">./</span><span class="dt">DiagramsTutorial</span> <span class="co">--help</span></code>.  One
-particularly useful option is <code class="sourceCode"><span class="fu">-</span>l</code>, which puts the program into "looped
+rather tiny—only 2x2.</p><p>There are several more options besides <code>-o</code>, <code>-w</code>, and <code>-h</code>; you can
+see what they are by typing <code>cabal exec diagrams-tutorial -- --help</code>.  One
+particularly useful option is <code>-l</code>, which puts the program into "looped
 mode": it will watch the source file for changes, and then
-automatically recompile and rerun itself, like this:</p><pre><code>augustine :: src/diagrams/tmp » ./DiagramsTutorial -o circle.svg -w 400 -l
+automatically recompile and rerun itself, like this (note that you may
+need to specify the source file explicitly using <code>-s</code>, as shown here):</p><pre><code>$ cabal exec diagrams-tutorial -- -o circle.svg -w 400 -l -s DiagramsTutorial.lhs
 Looping turned on
-Using sandbox /home/brent/build/diagrams/.cabal-sandbox
 Watching source file DiagramsTutorial.lhs
 Compiling target: DiagramsTutorial
-Program args: -o circle.svg -w 400
+Program args: -o circle.svg -w 400 -s DiagramsTutorial.lhs
 Modified 02:41:42 ... compiling ... running ... done.
 Modified 02:41:50 ... compiling ... running ... done.</code></pre><p>With looped mode, you only need to edit and save the source code, then
 reload the image in your browser or image viewer.</p><p>The <code class="sourceCode">mainWith</code> function is also quite a bit more general than
@@ -204,7 +198,7 @@ follow.  We omit <code class="sourceCode"><span class="ot">example ::</span> <sp
 reverse function application, that is,</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> x <span class="fu">#</span> f <span class="fu">=</span> f x</code></pre></div></div><p>Just to illustrate,</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/7df7bc5541499765.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> dashingG [<span class="fl">0.2</span>,<span class="fl">0.05</span>] <span class="dv">0</span> <span class="fu">.</span> lc purple <span class="fu">.</span> lw veryThick <span class="fu">.</span> fc blue
 <span class="ot">></span>         <span class="fu">$</span> circle <span class="dv">1</span></code></pre></div></div></div><p>produces exactly the same diagram as before.  So why bother with
 <code class="sourceCode">(<span class="fu">#</span>)</code>?  First, it's often more natural to write (and easier to read)
-what a diagram <em>is</em> first, and what it is <em>like</em> second.  Second,
+what a diagram <em>is</em> first, and what it is <em>like</em> second.  Also,
 <code class="sourceCode">(<span class="fu">#</span>)</code> has a high precedence (namely, 8), making it more convenient to
 combine diagrams with specified attributes.  For example,</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/d7ad6bc065f64e27.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> circle <span class="dv">1</span> <span class="fu">#</span> fc red <span class="fu">#</span> lw none <span class="fu">|||</span> circle <span class="dv">1</span> <span class="fu">#</span> fc green <span class="fu">#</span> lw none</code></pre></div></div></div><p>places a red circle with no border next to a green circle with no
 border (we'll see more about the <code class="sourceCode">(<span class="fu">|||</span>)</code> operator shortly). Without
@@ -416,7 +410,7 @@ documentation for <code>Diagrams.Prelude</code>, and then drill down from
 there to learn about whatever you are interested in.  If there is
 anything in the API documentation that you find unclear or
 confusing, please <a class="reference external" href="http://github.com/diagrams/diagrams/issues">report it as a bug as well</a>!</p></li><li><p>If you run into difficulty or have any questions, join the
-<code>#diagrams</code> IRC channel on freenode.org, or the <a class="reference external" href="http://groups.google.com/group/diagrams-discuss">diagrams-discuss
+<code>#diagrams</code> IRC channel on Libera.Chat, or the <a class="reference external" href="http://groups.google.com/group/diagrams-discuss">diagrams-discuss
 mailing list</a>.</p></li></ul></div></div></div></div>
 
     </div>

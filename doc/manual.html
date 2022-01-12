@@ -103,7 +103,7 @@ zoom settings, and so on.</p><p>Occasionally content may be missing or incomplet
 light blue box with a "document" icon on the right hand side, like
 this:</p><div class="todo bs-callout bs-callout-info"><ul><li><p>Explain zygohistomorphic prepromorphisms</p></li><li><p>Essay on postmodernist critiques of <code>diagrams</code> vis-a-vis Kant</p></li></ul></div><p>If you see a box like this in the place of something you would really
 like to know about, please bug the developers (using the <code>#diagrams</code> IRC
-channel on Freenode, or the <a class="reference external" href="http://groups.google.com/group/diagrams-discuss?pli=1">diagrams mailing list</a>) so they can
+channel on Libera.Chat, or the <a class="reference external" href="http://groups.google.com/group/diagrams-discuss?pli=1">diagrams mailing list</a>) so they can
 prioritize it!</p><p>Warnings, "gotchas", and other important asides are in a yellow box with
 a "warning" icon, like this:</p><div class="warning bs-callout bs-callout-warning"><p>Diagrams is extremely addictive and may be hazardous to your
 health!</p></div><p>You would do well to pay special attention to the contents of such boxes.</p></div><div class="section" id="other-resources"><h2><generated classes="sectnum">1.3   </generated>Other resources</h2><p>Here are some other resources that may be helpful to you as you learn
@@ -113,7 +113,7 @@ is intended to be high-quality and up-to-date, and is available
 something confusing, please <a class="reference external" href="https://github.com/diagrams/diagrams-doc/issues">report it as a bug</a>!</p></li><li><p>The <code>diagrams</code> <a class="reference external" href="http://projects.haskell.org/diagrams">website</a> has a <a class="reference external" href="http://projects.haskell.org/diagrams/gallery.html">gallery of examples</a> and a
 <a class="reference external" href="http://projects.haskell.org/diagrams/documentation.html">list of tutorials</a>, as well as links to blog posts and
 other documentation.</p></li><li><p>The <a class="reference external" href="https://wiki.haskell.org/Diagrams">diagrams wiki</a> is a good place to find tips and tricks,
-examples, answers to frequently asked questions, and more.</p></li><li><p>The <code>#diagrams</code> IRC channel on Freenode is a friendly place
+examples, answers to frequently asked questions, and more.</p></li><li><p>The <code>#diagrams</code> <a class="reference external" href="https://web.libera.chat">IRC channel on Libera.Chat</a> is a friendly place
 where you can get help from other <code>diagrams</code> users and developers.</p></li><li><p>Consider joining the <a class="reference external" href="http://groups.google.com/group/diagrams-discuss?pli=1">diagrams mailing list</a> for discussions
 and announcements about <code>diagrams</code>.</p></li><li><p>See the issue trackers in the <a class="reference external" href="https://github.com/diagrams/">diagrams organization on github</a>
 for a list of open tickets.  If you find a bug or would like to
@@ -194,7 +194,7 @@ encouraged!  All diagrams-related repositories are in the <a class="reference ex
 organization</a> on github.  The <a class="reference external" href="http://www.haskell.org/haskellwiki/Diagrams/Contributing">Contributing page</a> on the
 diagrams wiki explains how to get the repositories and make
 contributions.  To find out about the latest developments, join the
-<code>#diagrams</code> IRC channel on Freenode, and check out the <a class="reference external" href="https://trello.com/b/pL6YdKgz/diagrams">diagrams
+<code>#diagrams</code> IRC channel on Libera.Chat, and check out the <a class="reference external" href="https://trello.com/b/pL6YdKgz/diagrams">diagrams
 Trello board</a>.</p></div></div><div class="section" id="essential-concepts"><h1><generated classes="sectnum">2   </generated>Essential concepts</h1><p>Before we jump into the main content of the manual, this chapter
 explains a number of general ideas and central concepts that will
 recur throughought.  If you're eager to skip right to the good stuff,
@@ -1953,7 +1953,7 @@ as having an <em>empty</em> envelope.  In particular, they still behave in an
 intuitive manner when included as arguments to things like <code class="sourceCode">hcat</code>.)
 If we omitted the rectangle from the above example, there would be no
 output. Except: the PGF backend has the ability to create enveloped text
-as does the Rasterific backend by using the <code>Diagrams.Backend.Rasterifc.Text</code>
+as does the Rasterific backend by using the <code>Diagrams.Backend.Rasterific.Text</code>
 module.</p><div class="warning bs-callout bs-callout-warning"><p>Text objects take up no space!</p></div><p>The main reason for this is that computing the size of some text in a
 given font is rather complicated, and <code>diagrams</code> cannot (yet) do it
 natively.</p><p>Text is colored with the current fill color (see <a class="reference internal" href="#color-and-opacity">Color and
@@ -2031,7 +2031,7 @@ supports embedded images of many formats and the SVG backend
 supports embedded PNG images.</p><p>To create an embedded diagram from an image file call <code class="sourceCode">loadImageEmb</code>
 to read the image from a file path using <span class="package"><a href="http://hackage.haskell.org/package/JuicyPixels"><code>JuicyPixels</code></a></span> and return
 a <code class="sourceCode"><span class="dt">DImage</span> <span class="dt">Embedded</span></code>. Then use <code class="sourceCode">image</code> to convert the <code class="sourceCode"><span class="dt">DImage</span> <span class="dt">Embedded</span></code>
-to a diagram. You can also create an a diagram with an embedded image
+to a diagram. You can also create a diagram with an embedded image
 by supplying a function that maps pixel coordinates to <code class="sourceCode"><span class="dt">AlphaColour</span></code>s
 plus a width and a height to the <code class="sourceCode">rasterDia</code> function.  For example,
 the below code uses <code class="sourceCode">rasterDia</code> to visualize the multiplication table
