@@ -149,7 +149,7 @@ executable diagrams-tutorial
     main-is:          DiagramsTutorial.lhs
     build-depends:    base, diagrams-lib, diagrams-svg
     default-language: Haskell2010</code></pre><p>You should now be able to build and run the example using the
-following commands:</p><pre><code>$ cabal build DiagramsTutorial.lhs
+following commands:</p><pre><code>$ cabal build
 ... lots of output while it downloads and builds all the dependencies ...
 
 $ cabal exec diagrams-tutorial -- -o circle.svg -w 400</code></pre><p>If you now view <code>circle.svg</code> in your favorite web browser, you should
