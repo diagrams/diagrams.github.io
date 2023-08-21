@@ -92,7 +92,8 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey, Jeffrey Rose
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span></code></pre></div>
-<p>In the original version from Brent, fractals are placed in a triangular fashion and use recursion :</p>
+<p>In the original version from Brent, fractals are placed in a triangular fashion
+and use recursion :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- sierpinski 1 = triangle 1</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- sierpinski n =     s</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">--                  ===</span></span>

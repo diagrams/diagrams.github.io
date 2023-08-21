@@ -90,13 +90,19 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a>
 <p><span style="font-size: small"><a href="../gallery/DiamondTheory.lhs">Download raw source code</a></span><br /></p>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
-<p>We recreate the “diamond theory” by Steven H. Cullinane (see the Recode project http://recodeproject.com/artwork/v2n1diamond-theory).</p>
+<p>We recreate the “diamond theory” by Steven H. Cullinane (see the Recode project
+http://recodeproject.com/artwork/v2n1diamond-theory).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">System.Random</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.List.Split</span></span></code></pre></div>
-<p>The idea is to generate a matrix of tiles, where each tile is a square with random black and white right triangles in it triangle. In practice, each tile is composed of 4 smaller (square) tiles and each of them has 4 very small tiles. We note the tiles “large”, “medium” and “small” respectively in the code.</p>
-<p>We first define the small tile. It is composed of a square split into two right triangles. The upper left triangle is always white, the lower right triangle is always black.</p>
+<p>The idea is to generate a matrix of tiles, where each tile is a square with
+random black and white right triangles in it triangle. In practice, each
+tile is composed of 4 smaller (square) tiles and each of them has 4 very small
+tiles. We note the tiles “large”, “medium” and “small” respectively in the code.</p>
+<p>We first define the small tile. It is composed of a square split into two right
+triangles. The upper left triangle is always white, the lower right triangle is
+always black.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>side <span class="ot">=</span> <span class="fu">sqrt</span> <span class="dv">2</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ot">triangleRect ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>triangleRect <span class="ot">=</span> polygon ( with</span>
@@ -104,25 +110,35 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     [ <span class="dv">135</span> <span class="op">@@</span> deg, <span class="dv">90</span> <span class="op">@@</span> deg]</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>     [ <span class="dv">1</span>        , side      ]</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p>When defining each triangle, the enveloppe do not take the linewidth (lw) into account so we set it to none. This will cause issues later on.</p>
+<p>When defining each triangle, the envelope do not take the linewidth (lw) into
+account so we set it to none. This will cause issues later on.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>triangleLeft <span class="ot">=</span> triangleRect <span class="op">#</span> rotateBy (<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) <span class="op">#</span> fc white <span class="op">#</span> lc white <span class="op">#</span> lw none</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>triangleRight <span class="ot">=</span> triangleRect <span class="op">#</span> fc black <span class="op">#</span>lc black <span class="op">#</span> lw none</span></code></pre></div>
-<p>For the small tile, we enforce the old behaviour for the origin of the tile as we want the triangles to be composed at the point of tangency, enforced by “align”.</p>
+<p>For the small tile, we enforce the old behaviour for the origin of the tile
+as we want the triangles to be composed at the point of tangency, enforced by
+“align”.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>smallTile <span class="ot">=</span> beside (r2 (<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)) (triangleLeft <span class="op">#</span> align (r2 (<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                triangleRight</span></code></pre></div>
-<p>For interesting results, the small tiles are rotated randomly with angles in <code>\{0, \frac{\pi}{2}, \pi, \frac{3 \pi}{2} \}</code>.</p>
+<p>For interesting results, the small tiles are rotated randomly
+with angles in <code>\{0, \frac{\pi}{2}, \pi, \frac{3 \pi}{2} \}</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">smallTile' ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>smallTile' x <span class="ot">=</span> smallTile <span class="op">#</span> rotate x'</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> x' <span class="ot">=</span> <span class="fu">fromIntegral</span> x <span class="op">*</span><span class="fu">pi</span><span class="op">/</span><span class="dv">2</span> <span class="op">@@</span> rad</span></code></pre></div>
-<p>Now we can create the medium tile, where 4 small tiles are placed in a matrix-like fashion. The origin must be placed at the center with align</p>
+<p>Now we can create the medium tile, where 4 small tiles are placed in a
+matrix-like fashion. The origin must be placed at the center with align</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>createMatrix x <span class="ot">=</span> matrix <span class="op">#</span> alignX <span class="dv">0</span> <span class="op">#</span> alignY <span class="dv">0</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> matrix <span class="ot">=</span> (x <span class="op">!!</span> <span class="dv">0</span> <span class="op">|||</span> x <span class="op">!!</span> <span class="dv">1</span> )</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                         <span class="op">===</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 (x <span class="op">!!</span> <span class="dv">2</span> <span class="op">|||</span> x <span class="op">!!</span> <span class="dv">3</span>)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>mediumTile angles <span class="ot">=</span> createMatrix (<span class="fu">map</span> smallTile' angles)</span></code></pre></div>
-<p>We then create the large tiles as a composition of 4 medium tiles. For even more interesting results, we use a random number of axis of symmetry (between 0 and 2). Here, we take list of 16 angles as input, where each angle corresponds to a random rotation for the small tiles. Beware reflectX is actually a reflection in respect to the Y axis, so the naming convention is inverted.</p>
+<p>We then create the large tiles as a composition of 4 medium tiles.
+For even more interesting results, we use a random number of axis of symmetry
+(between 0 and 2). Here, we take list of 16 angles as input, where each angle
+corresponds to a random rotation for the small tiles.
+Beware reflectX is actually a reflection in respect to the Y axis, so the
+naming convention is inverted.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">largeTile ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>largeTile angles xSymmetry ySymmetry <span class="ot">=</span> createMatrix [a, b, c, d]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
@@ -144,7 +160,12 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    nbAxes <span class="ot">=</span> <span class="fu">snd</span> x</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    xSymmetry <span class="ot">=</span> nbAxes <span class="op">==</span> <span class="dv">1</span> <span class="op">||</span> nbAxes <span class="op">==</span> <span class="dv">3</span></span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    ySymmetry <span class="ot">=</span> nbAxes <span class="op">==</span> <span class="dv">2</span> <span class="op">||</span> nbAxes <span class="op">==</span> <span class="dv">3</span></span></code></pre></div>
-<p>Finally, we create an array of large tiles by using <code>position</code>. The random angles and number of axis of symmetries are generated here, at the higher level. This allows us to only generate two random list. However, they must be split into chunks accordingly. As a final note, the bug with the linewidth will most likely appear in the final results as very fine gapes between the small tiles.</p>
+<p>Finally, we create an array of large tiles by using <code>position</code>. The random
+angles and number of axis of symmetries are generated here, at the higher level.
+This allows us to only generate two random list. However, they must be split into
+chunks accordingly.
+As a final note, the bug with the linewidth will most likely appear in the final
+results as very fine gapes between the small tiles.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>centerPos x <span class="ot">=</span> (x<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">4</span> <span class="op">+</span> (x<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span>d</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> d <span class="ot">=</span> <span class="fl">1.5</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>

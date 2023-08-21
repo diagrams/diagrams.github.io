@@ -94,7 +94,8 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (connect)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour.SRGB</span> (sRGB24read)</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">map</span> sRGB24read [<span class="st">&quot;#5E0042&quot;</span>, <span class="st">&quot;#00856A&quot;</span>]</span></code></pre></div>
-<p>To create one quarter of the diagram, we connect the corresponding points with headless arrows and alternate the line colors.</p>
+<p>To create one quarter of the diagram, we connect the corresponding
+points with headless arrows and alternate the line colors.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>quarter n <span class="ot">=</span> <span class="fu">mconcat</span> [arrowBetween' </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  (with <span class="op">&amp;</span> arrowHead <span class="op">.~</span> noHead</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">&amp;</span> shaftStyle <span class="op">%~</span> lw thin <span class="op">.</span> lc (colors <span class="op">!!</span> ((xCoord1 p) <span class="ot">`mod`</span> <span class="dv">2</span>)))</span>

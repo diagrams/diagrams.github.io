@@ -91,24 +91,35 @@ Author: <b><a href="http://diagrams.github.io/">Timo Abele</a></b>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Diagrams.TwoD.Path.Boolean</span> <span class="kw">as</span> <span class="dt">B</span></span></code></pre></div>
-<p>We start with an upright petal defined by an angle. We construct the petal from a <code>wedge</code> and a <code>circle</code> which we position in such a way that the circle touches the wedge right and left of the circle segment.</p>
+<p>We start with an upright petal defined by an angle.
+We construct the petal from a <code>wedge</code> and a <code>circle</code> which we position in
+such a way that the circle touches the wedge right and left of the circle
+segment.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">petal ::</span> <span class="dt">Angle</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>petal angle <span class="ot">=</span> strokePath <span class="op">$</span> B.union <span class="dt">Winding</span> (uprightWedge <span class="op">&lt;&gt;</span> touchingCircle)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> <span class="kw">where</span></span></code></pre></div>
-<p>First we draw an upright wedge by constructing a counterclockwise wedge starting at 12 o’clock, then rotating it clockwise so it is centered.</p>
+<p>First we draw an upright wedge by constructing a counterclockwise wedge
+starting at 12 o’clock, then rotating it clockwise so it is centered.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>   uprightWedge <span class="ot">=</span> wedge <span class="dv">1</span> yDir angle <span class="op">#</span> rotate (negated halfAngle)</span></code></pre></div>
 <p>Next, we draw the circle touching the wedge.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>   touchingCircle <span class="ot">=</span> circle circleRadius <span class="op">#</span> translateY yShift</span></code></pre></div>
-<p>The center (origin) of the wedge, the center of the circle and the point where they touch form a right-angled triange with the hypotenuse being the line from center_circle to center_wegde, and relative to half the wedge’s angle at the origin of the wedge, the adjacent leg is radius_wedge and the opposite opposite leg is radius_circle. Thus, cos halfAngle = radius_wedge(=1) / hypotenuse</p>
+<p>The center (origin) of the wedge, the center of the circle and the
+point where they touch form a right-angled triangle with the hypotenuse
+being the line from center_circle to center_wegde, and relative to
+half the wedge’s angle at the origin of the wedge, the adjacent leg is
+radius_wedge and the opposite opposite leg is radius_circle. Thus,
+cos halfAngle = radius_wedge(=1) / hypotenuse</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   yShift  <span class="ot">=</span> <span class="dv">1</span> <span class="op">/</span> cosA halfAngle</span></code></pre></div>
 <p>and tan halfAngle = radius_circle / radius_wedge.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>   circleRadius <span class="ot">=</span> <span class="dv">1</span> <span class="op">*</span> tanA halfAngle</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>   halfAngle <span class="ot">=</span> (<span class="op">/</span><span class="dv">2</span>) <span class="op">&lt;$&gt;</span> angle</span></code></pre></div>
-<p>For the corolla we want n petals arranged in a circle so each has an angle of 1/n times a full circle.</p>
+<p>For the corolla we want n petals arranged in a circle so each has an angle
+of 1/n times a full circle.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nPetals n <span class="ot">=</span> <span class="fu">mconcat</span> <span class="op">$</span> <span class="fu">take</span> n <span class="op">$</span> <span class="fu">iterate</span> (rotate angle) (petal angle)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> <span class="kw">where</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>   angle <span class="ot">=</span> (<span class="dv">1</span> <span class="op">/</span> <span class="fu">fromIntegral</span> n) <span class="op">@@</span> turn</span></code></pre></div>
-<p>The seal consists of two corollas on top of each other with a small circle on top of them.</p>
+<p>The seal consists of two corollas on top of each other with a small circle
+on top of them.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>imperialSeal <span class="ot">=</span> circle <span class="fl">0.158</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>               <span class="op">&lt;&gt;</span>                                  corolla</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>               <span class="op">&lt;&gt;</span> rotateBy (<span class="dv">1</span><span class="op">/</span> <span class="fu">fromIntegral</span> (<span class="dv">2</span><span class="op">*</span>n)) corolla</span>

@@ -90,13 +90,18 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <p><span style="font-size: small"><a href="../gallery/KnightTour.lhs">Download raw source code</a></span><br /></p>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
-<p>A relatively well-known puzzle is to find a sequence of moves by which a knight can visit every square of a chessboard exactly once, without repeating any squares. This example computes such a tour and visualizes the solution.</p>
+<p>A relatively well-known puzzle is to find a sequence of moves by which
+a knight can visit every square of a chessboard exactly once, without
+repeating any squares. This example computes such a tour and
+visualizes the solution.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.List</span>                      (minimumBy, tails, (\\))</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.Ord</span>                       (comparing)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Diagrams.Prelude</span></span></code></pre></div>
-<p>First, we compute a tour by a brute force depth-first search (it does not take very long). This code is adapted from the <a href="http://rosettacode.org/wiki/Knight%27s_tour#Haskell">code found here</a>.</p>
+<p>First, we compute a tour by a brute force depth-first search (it does
+not take very long). This code is adapted from the <a href="http://rosettacode.org/wiki/Knight%27s_tour#Haskell">code found
+here</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Square</span> <span class="ot">=</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ot">board ::</span> [<span class="dt">Square</span>]</span>
@@ -125,20 +130,25 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> vcat <span class="op">.</span> <span class="fu">map</span> hcat <span class="op">.</span> <span class="fu">map</span> (<span class="fu">map</span> boardSq)</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span> <span class="fu">take</span> n <span class="op">.</span> <span class="fu">map</span> (<span class="fu">take</span> n) <span class="op">.</span> tails</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">$</span> <span class="fu">cycle</span> [antiquewhite, saddlebrown]</span></code></pre></div>
-<p>Now, we need a way to convert <code>Square</code> coordinates (a pair of numbers in the range 0-7) into actual coordinates on the chessboard. Since the chessboard ends up with its local origin in the center of the top-left square, all we need to do is negate the \(y\)-coordinate:</p>
+<p>Now, we need a way to convert <code>Square</code> coordinates (a pair of numbers
+in the range 0-7) into actual coordinates on the chessboard. Since
+the chessboard ends up with its local origin in the center of the
+top-left square, all we need to do is negate the \(y\)-coordinate:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">squareToPoint ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> <span class="dt">P2</span> <span class="dt">Double</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>squareToPoint (x,y) <span class="ot">=</span> <span class="fu">fromIntegral</span> x <span class="op">^&amp;</span> <span class="fu">negate</span> (<span class="fu">fromIntegral</span> y)</span></code></pre></div>
 <p>To draw a knight on a given square, we simply translate the given image appropriately:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">knight ::</span> <span class="dt">Square</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>knight sq knightImg <span class="ot">=</span> knightImg <span class="op">#</span> moveTo (squareToPoint sq)</span></code></pre></div>
-<p>Given a tour, we turn it into a path using <code>fromVertices</code>, and decorate the vertices with dots.</p>
+<p>Given a tour, we turn it into a path using <code>fromVertices</code>,
+and decorate the vertices with dots.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">drawTour ::</span> [<span class="dt">Square</span>] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>drawTour tour <span class="ot">=</span> tourPoints <span class="op">&lt;&gt;</span> strokeP tourPath</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    tourPath   <span class="ot">=</span> fromVertices <span class="op">.</span> <span class="fu">map</span> squareToPoint <span class="op">$</span> tour</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    tourPoints <span class="ot">=</span> atPoints (<span class="fu">concat</span> <span class="op">.</span> pathVertices <span class="op">$</span> tourPath) (<span class="fu">repeat</span> dot)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    dot <span class="ot">=</span> circle <span class="fl">0.05</span> <span class="op">#</span> fc black</span></code></pre></div>
-<p>Finally, we load a knight image, size it to fit a square, and then put all the previous pieces together:</p>
+<p>Finally, we load a knight image, size it to fit a square, and then put all the
+previous pieces together:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> loadImageEmb <span class="st">&quot;doc/static/white-knight.png&quot;</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> knightImg <span class="ot">=</span> <span class="kw">case</span> res <span class="kw">of</span></span>

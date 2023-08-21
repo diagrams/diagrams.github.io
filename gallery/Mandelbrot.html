@@ -91,12 +91,14 @@ Author: <b><a href="http://www.cs.rochester.edu/u/ryates/">Ryan Yates</a></b>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Addapted from: &quot;The MathematicalOrchid, 24 Feb 2007&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Adapted from: &quot;The MathematicalOrchid, 24 Feb 2007&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">--  http://warp.povusers.org/MandScripts/haskell.html</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Complex</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (magnitude,image)</span></code></pre></div>
-<p>Code to compute orbits of complex numbers under the Mandelbrot transformation, and decide on the magnitude of a pixel based on how slowly its orbit diverges.</p>
+<p>Code to compute orbits of complex numbers under the Mandelbrot
+transformation, and decide on the magnitude of a pixel based on how
+slowly its orbit diverges.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>quadratic c z <span class="ot">=</span> z<span class="op">*</span>z <span class="op">+</span> c</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ot">critical_orbit ::</span> <span class="dt">Complex</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [<span class="dt">Complex</span> <span class="dt">Double</span>]</span>
@@ -116,7 +118,8 @@ Author: <b><a href="http://www.cs.rochester.edu/u/ryates/">Ryan Yates</a></b>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="fu">map</span> (\y <span class="ot">-&gt;</span> <span class="fu">map</span> (<span class="op">:+</span> y) sideX) sideY</span></code></pre></div>
 <p>Generate the Mandelbrot image as a grid of pixel magnitudes.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>image <span class="ot">=</span> <span class="fu">map</span> (<span class="fu">map</span> (toSquare <span class="op">.</span> pixel <span class="op">.</span> critical_orbit)) grid</span></code></pre></div>
-<p>To lay out the pixels in a grid we have to make them into a square whose opacity varies with the square root of the pixel value.</p>
+<p>To lay out the pixels in a grid we have to make them into a square
+whose opacity varies with the square root of the pixel value.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>toSquare n <span class="ot">=</span> square <span class="dv">1</span> <span class="op">#</span> lw medium <span class="op">#</span> fc black <span class="op">#</span> opacity (<span class="fu">sqrt</span> o)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> o <span class="ot">=</span> <span class="fu">fromIntegral</span> n <span class="op">/</span> maxIter</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>

@@ -96,9 +96,13 @@ Author: <b><a href="http://www.joachim-breitner.de/">Joachim Breitner</a></b>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour.Palette.BrewerSet</span></span></code></pre></div>
-<p>This code demonstrates the circle-packing layout from the <code>diagrams-contrib</code> package. For more information on the algorithm used, see the <a href="http://hackage.haskell.org/package/circle%2Dpacking"><code>circle-packing</code> package</a>.</p>
+<p>This code demonstrates the circle-packing layout from the <code>diagrams-contrib</code>
+package. For more information on the algorithm used, see the <a href="http://hackage.haskell.org/package/circle%2Dpacking"><code>circle-packing</code>
+package</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.TwoD.Layout.CirclePacking</span></span></code></pre></div>
-<p>Lets collect some objects of varying size and color to draw. They do not need to be single shapes but can be arbitrary complex diagrams, as demonstrated by including some Spierpinsky triangles among them.</p>
+<p>Lets collect some objects of varying size and color to draw. They do not need
+to be single shapes but can be arbitrary complex diagrams, as demonstrated by
+including some Spierpinsky triangles among them.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>colorize <span class="ot">=</span> <span class="fu">zipWith</span> fc <span class="op">$</span> <span class="fu">cycle</span> (brewerSet <span class="dt">Dark2</span> <span class="dv">8</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ot">sierpinski ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>

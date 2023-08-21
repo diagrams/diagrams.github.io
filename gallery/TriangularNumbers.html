@@ -94,7 +94,10 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span> <span class="kw">hiding</span> (dot)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour</span></span></code></pre></div>
-<p>Draw a group of dots in a triangular array, all with the same color and backed by a solid-colored triangle to visually group them. Note how the dots are laid out by creating a trail called <code>edge</code>, rotating it 60 degrees, and using <code>decorateTrail</code> to lay out the rows of dots.</p>
+<p>Draw a group of dots in a triangular array, all with the same color
+and backed by a solid-colored triangle to visually group them. Note
+how the dots are laid out by creating a trail called <code>edge</code>, rotating
+it 60 degrees, and using <code>decorateTrail</code> to lay out the rows of dots.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mkTri c n <span class="ot">=</span> dots <span class="op">&lt;&gt;</span> (strokeLoop edges <span class="op">#</span> lc c <span class="op">#</span> lw thin <span class="op">#</span> fcA (c <span class="ot">`withOpacity`</span> <span class="fl">0.5</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> rows <span class="ot">=</span> <span class="fu">map</span> (hcat' (with <span class="op">&amp;</span> sep <span class="op">.~</span> <span class="dv">1</span> ))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="op">.</span> <span class="fu">zipWith</span> <span class="fu">replicate</span> [n,n<span class="op">-</span><span class="dv">1</span><span class="op">..</span><span class="dv">1</span>]</span>
@@ -110,14 +113,18 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">#</span> fc c</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>rowSpc <span class="ot">=</span> height (rotateBy (<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>) <span class="op">$</span> strutY <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">D</span> <span class="dt">V2</span> <span class="dt">Double</span>)</span></code></pre></div>
-<p><code>row k n s c</code> draws a row of <code>k</code> size-<code>n</code> triangles with color <code>c</code>, separated by enough space for <code>s</code> dots.</p>
+<p><code>row k n s c</code> draws a row of <code>k</code> size-<code>n</code> triangles with color <code>c</code>,
+separated by enough space for <code>s</code> dots.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>row k n s c <span class="ot">=</span> hcat' (with <span class="op">&amp;</span> sep <span class="op">.~</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">3</span><span class="op">*</span>s) (<span class="fu">replicate</span> k (mkTri c n))</span></code></pre></div>
-<p>The visual proof, which simply consists in assembling various sub-triangles into a larger triangle, using appropriately transformed and aligned instances of <code>row</code>.</p>
+<p>The visual proof, which simply consists in assembling various
+sub-triangles into a larger triangle, using appropriately transformed
+and aligned instances of <code>row</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>law4 k n c1 c2 <span class="ot">=</span> vcat' (with <span class="op">&amp;</span> sep <span class="op">.~</span> rowSpc) (<span class="fu">map</span> tRow [<span class="dv">1</span><span class="op">..</span>k])</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> tRow k <span class="ot">=</span> (row k n <span class="dv">0</span> c1 <span class="op">#</span> centerX <span class="op">#</span> alignT)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="op">&lt;&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 (row (k<span class="op">-</span><span class="dv">1</span>) (n<span class="op">-</span><span class="dv">1</span>) <span class="dv">1</span> c2 <span class="op">#</span> reflectY <span class="op">#</span> centerX <span class="op">#</span> alignT)</span></code></pre></div>
-<p>Finally, create a row of diagrams showing the proof at different sizes.</p>
+<p>Finally, create a row of diagrams showing the proof at different
+sizes.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>exampleRow f <span class="ot">=</span> hcat' (with <span class="op">&amp;</span> sep <span class="op">.~</span> <span class="dv">4</span>) <span class="op">.</span> <span class="fu">map</span> f <span class="co">--(alignB . f)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>law4Dia <span class="ot">=</span> exampleRow law4' [<span class="dv">2</span><span class="op">..</span><span class="dv">4</span>]</span>

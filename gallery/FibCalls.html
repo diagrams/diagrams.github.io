@@ -100,7 +100,8 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fibCalls <span class="dv">0</span> <span class="ot">=</span> leaf <span class="dv">0</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fibCalls <span class="dv">1</span> <span class="ot">=</span> leaf <span class="dv">1</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fibCalls n <span class="ot">=</span> <span class="dt">BNode</span> n (fibCalls (n<span class="op">-</span><span class="dv">1</span>)) (fibCalls (n<span class="op">-</span><span class="dv">2</span>))</span></code></pre></div>
-<p>Lay out the tree and render it by providing a function to render nodes and a function to render edges.</p>
+<p>Lay out the tree and render it by providing a function to render nodes
+and a function to render edges.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Just</span> t <span class="ot">=</span> uniqueXLayout <span class="dv">2</span> <span class="dv">2</span> (fibCalls <span class="dv">5</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> pad <span class="fl">1.1</span> <span class="op">.</span> centerXY</span>

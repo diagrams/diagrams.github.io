@@ -103,7 +103,8 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        frame   <span class="ot">=</span> rect (<span class="fu">fromIntegral</span> x) (<span class="fu">fromIntegral</span> y)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="op">#</span> lw thick</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        lattice <span class="ot">=</span> centerXY <span class="op">.</span> vcat <span class="op">.</span> <span class="fu">map</span> hcat <span class="op">.</span> <span class="fu">replicate</span> y <span class="op">.</span> <span class="fu">replicate</span> x <span class="op">$</span> s</span></code></pre></div>
-<p>The trapezoid and triangle shapes, with sides lengths based on two Fibonacci numbers.</p>
+<p>The trapezoid and triangle shapes, with sides lengths based on two
+Fibonacci numbers.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trap,<span class="ot"> tri ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>trap s1 s2 <span class="ot">=</span> lw none <span class="op">.</span> strokeLoop <span class="op">.</span> closeLine</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>           <span class="op">.</span> fromOffsets <span class="op">.</span> <span class="fu">map</span> r2 <span class="op">$</span> [(<span class="dv">0</span>,<span class="op">-</span>s2), (s2,<span class="dv">0</span>), (<span class="dv">0</span>,s1)]</span>
@@ -161,7 +162,11 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                 <span class="op">#</span> lw thick</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>                 <span class="op">#</span> lineCap <span class="dt">LineCapRound</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                 <span class="op">#</span> centerXY</span></code></pre></div>
-<p>Draw the order-4 diagram with thick lines in the middle. Passing the argument <code>False</code> causes the thick lines to be omitted, revealing the skinny gap in the rectangular assembly. Lower-order diagrams make the gap more obvious; higher-order diagrams make it increasingly less obvious (but make the grid smaller).</p>
+<p>Draw the order-4 diagram with thick lines in the middle. Passing the
+argument <code>False</code> causes the thick lines to be omitted, revealing the
+skinny gap in the rectangular assembly. Lower-order diagrams make the
+gap more obvious; higher-order diagrams make it increasingly less
+obvious (but make the grid smaller).</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> paradox <span class="dv">4</span> <span class="dt">True</span> <span class="op">#</span> frame <span class="fl">0.5</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 

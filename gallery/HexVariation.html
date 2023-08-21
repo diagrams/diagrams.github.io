@@ -90,17 +90,22 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a>
 <p><span style="font-size: small"><a href="../gallery/HexVariation.lhs">Download raw source code</a></span><br /></p>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
-<p>This is a transcription in Haskell of “Hex Variation” by William Kolmyjec. The algorithm itself is inspired by <a href="http://recodeproject.com/artwork/v3n4hex-variation">the version of Steve Berrick</a>, from the <a href="http://recodeproject.com">Recode project</a>.</p>
+<p>This is a transcription in Haskell of “Hex Variation” by William Kolmyjec.
+The algorithm itself is inspired by <a href="http://recodeproject.com/artwork/v3n4hex-variation">the version of Steve Berrick</a>, from the
+<a href="http://recodeproject.com">Recode project</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">System.Random</span></span></code></pre></div>
-<p>We first define the parameters of the tile, which is hexagonal. The side of a hexagon is the radius of its circumscribed circle, here taken as 1.</p>
+<p>We first define the parameters of the tile, which is hexagonal. The side of a
+hexagon is the radius of its circumscribed circle, here taken as 1.</p>
 <p>The apothem is the distance from the center to the side:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">3</span>)<span class="op">/</span><span class="dv">2</span></span></code></pre></div>
 <p>We define the difference between the radius and the apothem:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>h' <span class="ot">=</span> <span class="fu">cos</span>(<span class="fu">pi</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<p>We then define a tile. The hexagon is not actually shown but inside are two arcs, along with a vertical line. To see the tiling, you can add an hexagon in the list below:</p>
+<p>We then define a tile. The hexagon is not actually shown but inside are two
+arcs, along with a vertical line. To see the tiling, you can add an hexagon in
+the list below:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">hexagon' ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hexagon' <span class="ot">=</span> <span class="fu">mconcat</span> [arc1 <span class="op">#</span> translateX (<span class="op">-</span><span class="dv">1</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                  , vrule (<span class="dv">2</span><span class="op">*</span>h)</span>
@@ -130,7 +135,9 @@ Author: <b><a href="https://www.projects.haskell.org/diagrams/">Alexis Praga</a>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    pos <span class="ot">=</span> [(centerPosition x y) <span class="op">|</span> x <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="op">..</span>nb<span class="op">-</span><span class="dv">1</span>], y <span class="ot">&lt;-</span> [<span class="dv">0</span><span class="op">..</span>nb<span class="op">-</span><span class="dv">1</span>]]</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    angles <span class="ot">=</span> <span class="fu">take</span> ((nb<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>(nb<span class="op">+</span><span class="dv">1</span>)) <span class="op">$</span> generateAngles</span></code></pre></div>
-<p>The envelope of our tiling is <code>nb*1.5*side + 0.5*side</code> in width and <code>nb*2*h+h</code> in height. We remove the “corners” to avoid “holes” at the borders of the figure and define the new width and height:</p>
+<p>The envelope of our tiling is <code>nb*1.5*side + 0.5*side</code> in width and <code>nb*2*h+h</code> in
+height. We remove the “corners” to avoid “holes” at the borders of the figure
+and define the new width and height:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>width' <span class="ot">=</span> nb<span class="op">*</span><span class="fl">1.5</span> <span class="op">-</span> <span class="fl">0.5</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>height' <span class="ot">=</span> nb<span class="op">*</span><span class="dv">2</span><span class="op">*</span>h <span class="op">-</span> h</span></code></pre></div>
 <p>Which are used to “clip” the figure here:</p>

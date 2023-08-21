@@ -85,7 +85,7 @@ arrows. The diagram below gives a small taste of some of the different
 arrows that can be created easily with <code>diagrams</code>. The
 <code>Diagrams.TwoD.Arrow</code> module, along with
 <code>Diagrams.TwD.Arrowheads</code>, provides a collection of functions and
-options used to make arrows.</p><div class="exampleimg"><div style="text-align: center"><img src="images/205909d09c9cf9af.png" width="500" height="200" /></div></div><div class="section" id="optional-and-named-parameters"><h2>Optional and named parameters</h2><p>Most of the arrow functions take a record argument of optional
+options used to make arrows.</p><div class="exampleimg"><div style="text-align: center"><img src="images/c13c7c42e14ccbcc.png" width="500" height="200" /></div></div><div class="section" id="optional-and-named-parameters"><h2>Optional and named parameters</h2><p>Most of the arrow functions take a record argument of optional
 parameters (see <a class="reference external" href="http://projects.haskell.org/diagrams/doc/manual.html#faking-optional-named-arguments">Faking optional named parameters</a>) of type
 <code class="sourceCode"><span class="dt">ArrowOpts</span></code>. These functions typically have a companion function that
 does not take an options record, and uses a default set of
@@ -112,7 +112,7 @@ This is accomplished using the options <code class="sourceCode">headLength</code
 <code class="sourceCode">tailLength</code> and the <code class="sourceCode">lengths</code> traversal which will be explained
 in the <code class="sourceCode"><span class="dt">Lengths</span> and <span class="dt">Gaps</span></code> section.</p></div><p>A typical use case for an arrow is to connect two points, having an
 arrow pointing from one to the other. The function <code class="sourceCode">arrowBetween</code> (and
-its cousin <code class="sourceCode">arrowBetween'</code>) connects two points.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/28a35d36f3bc242a.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> sPt <span class="fu">=</span> p2 (<span class="fl">0.20</span>, <span class="fl">0.20</span>)
+its cousin <code class="sourceCode">arrowBetween'</code>) connects two points.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/5d8ffbb9217fcc7d.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> sPt <span class="fu">=</span> p2 (<span class="fl">0.20</span>, <span class="fl">0.20</span>)
 <span class="ot">></span> ePt <span class="fu">=</span> p2 (<span class="fl">2.85</span>, <span class="fl">0.85</span>)
 <span class="ot">></span>
 <span class="ot">></span> <span class="co">-- We use small blue and red circles to mark the start and end points.</span>
@@ -146,7 +146,7 @@ being the shape. So, for example, if we set <code class="sourceCode">arrowHead</
 <code class="sourceCode">arrowTail</code> to <code class="sourceCode">quill</code>,</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> arrowBetween' (with <span class="fu">&</span> arrowHead <span class="fu">.~</span> spike
 <span class="ot">></span>                     <span class="fu">&</span> arrowTail <span class="fu">.~</span> quill
 <span class="ot">></span>                     <span class="fu">&</span> lengths   <span class="fu">.~</span> veryLarge)
-<span class="ot">></span>   sPt ePt</code></pre></div></div><p>then the arrow from the previous example looks like this:</p><div class="exampleimg"><div style="text-align: center"><img src="images/cd6a5daec0051854.png" width="500" height="200" /></div></div><p>The <code class="sourceCode"><span class="dt">Arrowheads</span></code> module exports a number of standard arrowheads
+<span class="ot">></span>   sPt ePt</code></pre></div></div><p>then the arrow from the previous example looks like this:</p><div class="exampleimg"><div style="text-align: center"><img src="images/aface8a80dc3e835.png" width="500" height="200" /></div></div><p>The <code class="sourceCode"><span class="dt">Arrowheads</span></code> module exports a number of standard arrowheads
 including <code class="sourceCode">tri</code>, <code class="sourceCode">dart</code>, <code class="sourceCode">spike</code>, <code class="sourceCode">thorn</code>, <code class="sourceCode">dart</code>, <code class="sourceCode">lineHead</code>, and <code class="sourceCode">noHead</code>,
 with <code class="sourceCode">dart</code> being
 the default. Also available are companion functions like <code class="sourceCode">arrowheadDart</code>
@@ -154,7 +154,7 @@ that allow finer control over the shape of a dart style head. For tails,
 in addition to <code class="sourceCode">quill</code> are <code class="sourceCode">block</code>, <code class="sourceCode">lineTail</code>, and <code class="sourceCode">noTail</code>. Again for more control
 are functions like, <code class="sourceCode">arrowtailQuill</code>. Finally, any of the standard arrowheads
 can be used as tails by appending a single quote, so for example:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> arrowBetween' (with <span class="fu">&</span> arrowHead <span class="fu">.~</span> thorn <span class="fu">&</span> arrowTail <span class="fu">.~</span> thorn'
-<span class="ot">></span>                     <span class="fu">&</span> lengths  <span class="fu">.~</span> veryLarge) sPt ePt</code></pre></div></div><p>yields:</p><div class="exampleimg"><div style="text-align: center"><img src="images/f0d8ca25684344a9.png" width="500" height="200" /></div></div></div><div class="section" id="the-shaft"><h2>The shaft</h2><p>The shaft of an arrow can be any arbitrary <code class="sourceCode"><span class="dt">Trail</span> <span class="dt">V2</span> n</code> in addition to a
+<span class="ot">></span>                     <span class="fu">&</span> lengths  <span class="fu">.~</span> veryLarge) sPt ePt</code></pre></div></div><p>yields:</p><div class="exampleimg"><div style="text-align: center"><img src="images/a35c9cf04aea210e.png" width="500" height="200" /></div></div></div><div class="section" id="the-shaft"><h2>The shaft</h2><p>The shaft of an arrow can be any arbitrary <code class="sourceCode"><span class="dt">Trail</span> <span class="dt">V2</span> n</code> in addition to a
 simple straight line. For example, an arc makes a perfectly good
 shaft. The length of the trail is irrelevant, as the arrow is scaled
 to connect the starting point and ending point regardless of the
@@ -165,7 +165,7 @@ will make the arrow shaft into an arc:</p><div class="examplesrc"><div class="so
 <span class="ot">></span>          <span class="fu"><></span> arrowBetween' (with <span class="fu">&</span> arrowHead <span class="fu">.~</span> spike <span class="fu">&</span> arrowTail <span class="fu">.~</span> spike'
 <span class="ot">></span>                                 <span class="fu">&</span> arrowShaft <span class="fu">.~</span> shaft
 <span class="ot">></span>                                 <span class="fu">&</span> lengths <span class="fu">.~</span> veryLarge) sPt ePt
-<span class="ot">></span>           <span class="fu">#</span> frame <span class="fl">0.25</span></code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/4851e015fe209b81.png" width="500" height="200" /></div></div><p>Arrows with curved shafts don't always render the way our intuition
+<span class="ot">></span>           <span class="fu">#</span> frame <span class="fl">0.25</span></code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/2be24f38b767db0e.png" width="500" height="200" /></div></div><p>Arrows with curved shafts don't always render the way our intuition
 may lead us to expect. One could reasonably expect that the arc in the
 above example would produce an arrow curving upwards, not the
 downwards-curving one we see.  To understand what's going on, imagine
@@ -176,18 +176,18 @@ with origin at \((0,0)\). Now suppose we want to connect points
 rotate the arrow about its origin at \((0,0)\) until the tip of
 the head is touching \((1,0)\).  This rotation flips the arrow
 vertically.  To make an arc that runs clockwise from its starting
-point, use a negative <code class="sourceCode"><span class="dt">Angle</span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> shaft <span class="fu">=</span> arc xDir (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">2</span> <span class="fu">@@</span> turn)</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/f2a4641596591c64.png" width="500" height="200" /></div></div><div class="warning bs-callout bs-callout-warning"><p>If an arrow shaft does not appear as you expect, then try using
+point, use a negative <code class="sourceCode"><span class="dt">Angle</span></code>.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> shaft <span class="fu">=</span> arc xDir (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">2</span> <span class="fu">@@</span> turn)</code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/721f4e52400fb9f5.png" width="500" height="200" /></div></div><div class="warning bs-callout bs-callout-warning"><p>If an arrow shaft does not appear as you expect, then try using
 <code class="sourceCode">reverseTrail</code>, or in the case of arcs, multiplying the angle by -1.</p></div><p>Here are some exercises to try.</p><div class="exercises panel panel-success"><div class="panel-body"><p>Construct each of the following arrows pointing from \((1,1)\) to
 \((3,3)\) inside a square with side \(4\).</p><ol><li><p>A straight arrow with no head and a spike shaped tail.</p></li><li><p>An arrow with a \(45\) degree arc for a shaft, triangles for both head
 and tail, curving downwards.</p></li><li><p>The same as above, only now make it curve upwards.</p></li></ol></div></div></div><div class="section" id="lengths-and-gaps"><h2>Lengths and Gaps</h2><p>The fields <code class="sourceCode">headLength</code> and <code class="sourceCode">tailLength</code> are for setting the length of
 the head and tail. The head length is measured from the tip of the
 head to the start of the joint connecting the head to the shaft. The
-tail length is measured in an analagous manner. They have type
+tail length is measured in an analogous manner. They have type
 <code class="sourceCode"><span class="dt">Measure</span> <span class="dt">Double</span></code> and the default is <code class="sourceCode">normal</code>. <code class="sourceCode">headGap</code> and <code class="sourceCode">tailGap</code>
 options are fairly self explanatory: they leave space at the end or
 beginning of the arrow and are also of type <code class="sourceCode"><span class="dt">Mesure</span> <span class="dt">Double</span></code>; the
 default is <code class="sourceCode">none</code>.  Take a look at their effect in the following
-example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/5c0174844ae8e1eb.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> sPt <span class="fu">=</span> p2 (<span class="fl">0.20</span>, <span class="fl">0.50</span>)
+example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/504b03e8805a1432.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> sPt <span class="fu">=</span> p2 (<span class="fl">0.20</span>, <span class="fl">0.50</span>)
 <span class="ot">></span> mPt <span class="fu">=</span> p2 (<span class="fl">1.50</span>, <span class="fl">0.50</span>)
 <span class="ot">></span> ePt <span class="fu">=</span> p2 (<span class="fl">2.80</span>, <span class="fl">0.50</span>)
 <span class="ot">></span>
@@ -212,7 +212,7 @@ modify <code class="sourceCode"><span class="dt">ArrowOpts</span></code> using t
 lenses. <code class="sourceCode">lengths</code> is useful for setting the <code class="sourceCode">headLength</code> and <code class="sourceCode">tailLength</code>
 simultaneously and <code class="sourceCode">gaps</code> can be used to simultaneously set
 the <code class="sourceCode">headGap</code> / <code class="sourceCode">tailGap</code>.</p><p>A useful pattern is to use <code class="sourceCode">lineTail</code> together with <code class="sourceCode">lengths</code> as in the
-following example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/69d44e6a57c43ad7.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> dia <span class="fu">=</span> (rect <span class="dv">5</span> <span class="dv">2</span> <span class="fu">#</span> fc lavender <span class="fu">#</span> alignX (<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> showOrigin <span class="fu">#</span> named <span class="st">"A"</span>)
+following example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/30d4aab6752c5a04.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> dia <span class="fu">=</span> (rect <span class="dv">5</span> <span class="dv">2</span> <span class="fu">#</span> fc lavender <span class="fu">#</span> alignX (<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> showOrigin <span class="fu">#</span> named <span class="st">"A"</span>)
 <span class="ot">></span>        <span class="fu">===</span> strutY <span class="dv">2</span> <span class="fu">===</span>
 <span class="ot">></span>       (rect <span class="dv">5</span> <span class="dv">2</span> <span class="fu">#</span> fc pink <span class="fu">#</span> alignX (<span class="fu">-</span><span class="dv">1</span>) <span class="fu">#</span> showOrigin <span class="fu">#</span> named <span class="st">"B"</span>)
 <span class="ot">></span>
@@ -232,7 +232,7 @@ following example:</p><div class="dia-lhs panel panel-default"><div class="panel
 <span class="ot">></span>   ]
 <span class="ot">></span>   <span class="fu">#</span> frame <span class="fl">0.25</span></code></pre></div></div></div></div><div class="section" id="the-style-options"><h2>The style options</h2><p>By default, arrows are drawn using the current line color (including
 the head and tail).  In addition, the shaft styling is taken from the
-current line styling attributes.  For example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/8945465139a39725.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> mconcat
+current line styling attributes.  For example:</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/3eed549e7a6ba7c6.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> example <span class="fu">=</span> mconcat
 <span class="ot">></span>   [ square <span class="dv">2</span>
 <span class="ot">></span>   , arrowAt' (with <span class="fu">&</span> headLength <span class="fu">.~</span> veryLarge) origin unitX
 <span class="ot">></span>     <span class="fu">#</span> lc blue <span class="fu">#</span> lw thick
@@ -245,7 +245,7 @@ example:</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCo
 <span class="ot">></span>                                   <span class="fu">&</span> headTexture <span class="fu">.~</span> solid blue <span class="fu">&</span> tailTexture <span class="fu">.~</span> solid orange
 <span class="ot">></span>                                   <span class="fu">&</span> shaftStyle <span class="fu">%~</span> dashingG [<span class="fl">0.04</span>, <span class="fl">0.02</span>] <span class="dv">0</span>
 <span class="ot">></span>                                   <span class="fu">.</span> lw thick) sPt ePt
-<span class="ot">></span></code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/6aa6143c0878f345.png" width="500" height="200" /></div></div><p>Note that when setting a style, one must generally use the <code class="sourceCode"><span class="fu">%~</span></code>
+<span class="ot">></span></code></pre></div></div><div class="exampleimg"><div style="text-align: center"><img src="images/fd8bb4ff0f371776.png" width="500" height="200" /></div></div><p>Note that when setting a style, one must generally use the <code class="sourceCode"><span class="fu">%~</span></code>
 operator in order to apply something like <code class="sourceCode">dashingG [<span class="fl">0.04</span>, <span class="fl">0.02</span>] <span class="dv">0</span></code>
 which is a <em>function</em> that changes the style.</p><div class="warning bs-callout bs-callout-warning"><p>By default, the ambient line color is used for the head, tail, and
 shaft of an arrow.  However, when setting the styles individually,
@@ -253,7 +253,7 @@ the fill color should be used for the head and tail, and line color
 for the shaft.</p></div></div></div><div class="section" id="placing-an-arrow-at-a-point"><h1>Placing an arrow at a point</h1><p>Sometimes we prefer to specify a starting point and vector from which the arrow
 takes its magnitude and direction. The <code class="sourceCode">arrowAt'</code> and
 <code class="sourceCode">arrowAt</code> functions are useful in this regard. The example below demonstrates
-how we might create a vector field using the <code class="sourceCode">arrowAt'</code> function.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/7bc215b1f1ed6121.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> locs   <span class="fu">=</span> [(x, y) <span class="fu">|</span> x <span class="ot"><-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="fu">..</span> <span class="fl">3.25</span>], y <span class="ot"><-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="fu">..</span> <span class="fl">3.25</span>]]
+how we might create a vector field using the <code class="sourceCode">arrowAt'</code> function.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/b514a829cf8b22e8.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> locs   <span class="fu">=</span> [(x, y) <span class="fu">|</span> x <span class="ot"><-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="fu">..</span> <span class="fl">3.25</span>], y <span class="ot"><-</span> [<span class="fl">0.1</span>, <span class="fl">0.3</span> <span class="fu">..</span> <span class="fl">3.25</span>]]
 <span class="ot">></span>
 <span class="ot">></span> <span class="co">-- create a list of points where the vectors will be place.</span>
 <span class="ot">></span> points <span class="fu">=</span> map p2 locs
@@ -282,7 +282,7 @@ how we might create a vector field using the <code class="sourceCode">arrowAt'</
 function. <code class="sourceCode">connect'</code> takes an options record and the names of two
 diagrams, and places an arrow starting at the origin of the first
 diagram and ending at the origin of the second (unless gaps are
-specified).</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/ce9281e367e56602.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> s  <span class="fu">=</span> square <span class="dv">2</span> <span class="fu">#</span> showOrigin <span class="fu">#</span> lw thick
+specified).</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/68c2a5a4aa68d391.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> s  <span class="fu">=</span> square <span class="dv">2</span> <span class="fu">#</span> showOrigin <span class="fu">#</span> lw thick
 <span class="ot">></span> ds <span class="fu">=</span> (s <span class="fu">#</span> named <span class="st">"1"</span>) <span class="fu">|||</span> strutX <span class="dv">3</span> <span class="fu">|||</span> (s <span class="fu">#</span> named <span class="st">"2"</span>)
 <span class="ot">></span> t  <span class="fu">=</span> cubicSpline <span class="dt">False</span> (map p2 [(<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">1</span>, <span class="dv">0</span>), (<span class="dv">1</span>, <span class="fl">0.2</span>), (<span class="dv">2</span>, <span class="fl">0.2</span>)])
 <span class="ot">></span>
@@ -302,7 +302,7 @@ boundaries of the diagrams, using traces to find the intersection
 points.</p><div class="examplesrc"><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> connectOutside <span class="st">"diagram1"</span> <span class="st">"diagram2"</span>
 <span class="ot">></span> connectPerim <span class="st">"diagram"</span> <span class="st">"diagram"</span> (<span class="dv">2</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn) (<span class="dv">4</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn)</code></pre></div></div><p>Here is an example of a finite state automata that accepts real numbers.
 The code is a bit longer than what we have seen so far, but still very
-straightforward.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/f55b268f071ec326.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> text' font h s
+straightforward.</p><div class="dia-lhs panel panel-default"><div class="panel-body"><div style="text-align: center"><img src="images/7bc2f0a69415bddf.png" width="500" height="200" /></div><div class="sourceCode"><pre class="sourceCode"><code class="sourceCode"><span class="ot">></span> text' font h s
 <span class="ot">></span>   <span class="fu">=</span> (SF.set_envelope <span class="fu">.</span> SF.fit_height h <span class="fu">.</span> SF.svgText def { SF.textFont <span class="fu">=</span> font } <span class="fu">$</span> s)
 <span class="ot">></span>   <span class="fu">#</span> lw none <span class="fu">#</span> fc black <span class="fu">#</span> centerXY
 <span class="ot">></span>
@@ -354,7 +354,7 @@ straightforward.</p><div class="dia-lhs panel panel-default"><div class="panel-b
 <span class="ot">></span>     <span class="fu">#</span> connectPerim'   arrowStyle2 <span class="st">"3"</span> <span class="st">"3"</span> (<span class="dv">4</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn) (<span class="dv">2</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn)
 <span class="ot">></span>     <span class="fu">#</span> connectOutside' arrowStyle1 <span class="st">"4"</span> <span class="st">"5"</span>
 <span class="ot">></span>     <span class="fu">#</span> connectPerim'   arrowStyle2 <span class="st">"5"</span> <span class="st">"5"</span> (<span class="dv">1</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn) (<span class="fu">-</span><span class="dv">1</span><span class="fu">/</span><span class="dv">12</span> <span class="fu">@@</span> turn)</code></pre></div></div></div><p>In the following exercise you can try <code class="sourceCode">connectPerim'</code> for yourself.</p><div class="exercises panel panel-success"><div class="panel-body"><p>Create a torus (donut) with \(16\) curved arrows pointing from the
-outer ring to the inner ring at the same angle every <code class="sourceCode"><span class="dv">1</span><span class="fu">/</span><span class="dv">16</span> <span class="fu">@@</span> turn</code>.</p><blockquote><div class="exampleimg"><div style="text-align: center"><img src="images/168cbe071e4a7e6a.png" width="500" height="200" /></div></div></blockquote></div></div></div></div></div></div>
+outer ring to the inner ring at the same angle every <code class="sourceCode"><span class="dv">1</span><span class="fu">/</span><span class="dv">16</span> <span class="fu">@@</span> turn</code>.</p><blockquote><div class="exampleimg"><div style="text-align: center"><img src="images/52b107c6ab76399d.png" width="500" height="200" /></div></div></blockquote></div></div></div></div></div></div>
 
     </div>
 

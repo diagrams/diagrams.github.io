@@ -1,7 +1,7 @@
 > import Diagrams.Backend.SVG.CmdLine
 
 > {-# LANGUAGE NoMonomorphismRestriction #-}
-> -- Addapted from: "The MathematicalOrchid, 24 Feb 2007"
+> -- Adapted from: "The MathematicalOrchid, 24 Feb 2007"
 > --  http://warp.povusers.org/MandScripts/haskell.html
 >
 > import Data.Complex

@@ -96,7 +96,10 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>grad <span class="ot">=</span> defaultRG <span class="op">&amp;</span> _RG <span class="op">.</span> rGradStops <span class="op">.~</span> mkStops [(blue,<span class="dv">0</span>,<span class="dv">1</span>), (crimson,<span class="dv">1</span>,<span class="dv">1</span>)]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                 <span class="op">&amp;</span> _RG <span class="op">.</span> rGradRadius1 <span class="op">.~</span> <span class="dv">50</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pentaflake' <span class="dv">0</span> <span class="ot">=</span> regPoly <span class="dv">5</span> <span class="dv">1</span> <span class="op">#</span> lw none</span></code></pre></div>
-<p>An <a href="http://mathworld.wolfram.com/Pentaflake.html">\(n\)-pentaflake</a> is an \((n-1)\)-pentaflake surrounded by five more. The <code>appends</code> function is useful here for positioning the five pentaflakes around the central one.</p>
+<p>An <a href="http://mathworld.wolfram.com/Pentaflake.html">\(n\)-pentaflake</a>
+is an \((n-1)\)-pentaflake surrounded by five more. The <code>appends</code>
+function is useful here for positioning the five pentaflakes around
+the central one.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pentaflake' n <span class="ot">=</span> appends</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                  pCenter</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                  (<span class="fu">zip</span> vs (<span class="fu">repeat</span> (rotateBy (<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) pOutside)))</span>
@@ -107,7 +110,9 @@ Author: <b><a href="http://ozark.hendrix.edu/~yorgey">Brent Yorgey</a></b>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        pOutside <span class="ot">=</span> pCenter <span class="op">#</span> opacity (<span class="fl">1.7</span> <span class="op">/</span> <span class="fu">fromIntegral</span> n)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>pentaflake n <span class="ot">=</span> pentaflake' n <span class="op">#</span> fillTexture grad <span class="op">#</span> bgFrame <span class="dv">4</span> silver</span></code></pre></div>
-<p>A \(4\)-pentaflake looks nice. Of course there’s an exponential blowup in the number of primitives, so generating higher-order pentaflakes can take a long time!</p>
+<p>A \(4\)-pentaflake looks nice. Of course there’s an exponential
+blowup in the number of primitives, so generating higher-order
+pentaflakes can take a long time!</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> pentaflake <span class="dv">4</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> mainWith (<span class="ot">example ::</span> <span class="dt">Diagram</span> <span class="dt">B</span>)</span></code></pre></div>
 

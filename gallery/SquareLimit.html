@@ -90,20 +90,32 @@ Author: <b><a href="https://www.cs.ox.ac.uk/people/jeremy.gibbons/">Jeremy Gibbo
 <p><span style="font-size: small"><a href="../gallery/SquareLimit.lhs">Download raw source code</a></span><br /></p>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
-<p>This is a reconstruction of <a href="http://www.wikipaintings.org/en/m-c-escher/square-limit">M C Escher’s print “Square Limit”</a>. It is based on the classic paper “Functional Geometry” by Peter Henderson (in Lisp and Functional Programming, 1982). But we take a slightly different approach: using lazy evaluation, we construct an infinite diagram, then prune it to some finite depth before writing out as SVG—Henderson’s code hardwired an unrolling to a particular depth.</p>
+<p>This is a reconstruction of <a href="http://www.wikipaintings.org/en/m-c-escher/square-limit">M C Escher’s print “Square
+Limit”</a>. It
+is based on the classic paper “Functional Geometry” by Peter Henderson
+(in Lisp and Functional Programming, 1982). But we take a slightly
+different approach: using lazy evaluation, we construct an infinite
+diagram, then prune it to some finite depth before writing out as
+SVG—Henderson’s code hardwired an unrolling to a particular depth.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Prelude</span> <span class="kw">hiding</span> (cycle)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span></code></pre></div>
-<p>The type signatures are more specific than necessary, but perhaps easier to understand this way.</p>
-<p>The diagram is constructed from five basic tiles: four with specific markings on, and a fifth which is blank, all \(16 \times 16\). The actual markings are defined at the end of the file.</p>
+<p>The type signatures are more specific than necessary, but perhaps
+easier to understand this way.</p>
+<p>The diagram is constructed from five basic tiles: four with specific
+markings on, and a fifth which is blank, all \(16 \times 16\). The actual
+markings are defined at the end of the file.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">blank ::</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>blank <span class="ot">=</span> lw none <span class="op">$</span> square <span class="dv">16</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">makeTile ::</span> [[<span class="dt">P2</span> <span class="dt">Double</span>]] <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>makeTile <span class="ot">=</span> showOrigin <span class="op">.</span> lw thin <span class="op">.</span> centerXY <span class="op">.</span> <span class="fu">mconcat</span> <span class="op">.</span> <span class="fu">map</span> fromVertices <span class="kw">where</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>markingsP, markingsQ, markingsR,<span class="ot"> markingsS ::</span> [[<span class="dt">P2</span> <span class="dt">Double</span>]]</span></code></pre></div>
-<p>Here is an algenraic datatype of pictures. Composition is by juxtaposition, which requires bounding boxes. In order to achieve this even with infinite pictures, we make all pictures the same size (\(16 \times 16\)), by scaling.</p>
+<p>Here is an algenraic datatype of pictures. Composition is by
+juxtaposition, which requires bounding boxes. In order to achieve this
+even with infinite pictures, we make all pictures the same size
+(\(16 \times 16\)), by scaling.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Picture</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="dt">Blank</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">Single</span> [[<span class="dt">P2</span> <span class="dt">Double</span>]]</span>
@@ -113,7 +125,16 @@ Author: <b><a href="https://www.cs.ox.ac.uk/people/jeremy.gibbons/">Jeremy Gibbo
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">VPair</span> <span class="dt">Picture</span> <span class="dt">Picture</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">Quartet</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">SkewQuartet</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="dt">Picture</span> <span class="co">-- left column and bottom row half size</span></span></code></pre></div>
-<p><code>Blank</code> and <code>Single</code> correspond to the basic tiles. <code>Rot</code> rotates by \(90\) degrees, anticlockwise. <code>Cycle</code> puts together four half-size copies of a picture: unrotated at top right, and each one anticlockwise from there rotated by a further quarter turn. <code>HPair</code> puts two pictures side by side, and <code>VPair</code> one above another; each picture is scaled by a half in one dimension. <code>Quartet</code> puts together four pictures at half size. <code>SkewQuartet</code> does similarly, but in a \(2:1\) size ratio: the left column is half the width and the bottom row half the right of the right column and the top row. These maintain the invariant at all pictures are the same size.</p>
+<p><code>Blank</code> and <code>Single</code> correspond to the basic tiles. <code>Rot</code> rotates by \(90\)
+degrees, anticlockwise. <code>Cycle</code> puts together four half-size copies of a
+picture: unrotated at top right, and each one anticlockwise from there
+rotated by a further quarter turn. <code>HPair</code> puts two pictures side by
+side, and <code>VPair</code> one above another; each picture is scaled by a half in
+one dimension. <code>Quartet</code> puts together four pictures at half
+size. <code>SkewQuartet</code> does similarly, but in a \(2:1\) size ratio: the left
+column is half the width and the bottom row half the right of the
+right column and the top row. These maintain the invariant at all
+pictures are the same size.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rot p <span class="ot">=</span> rotateBy (<span class="dv">1</span><span class="op">/</span><span class="dv">4</span>) p</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cycle</span> p <span class="ot">=</span> quartet (rot p) p (rot <span class="op">$</span> rot p) (rot <span class="op">$</span> rot <span class="op">$</span> rot p)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>hpair p q <span class="ot">=</span> scaleX (<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) <span class="op">$</span> centerXY (p <span class="op">|||</span> q)</span>
@@ -133,7 +154,11 @@ Author: <b><a href="https://www.cs.ox.ac.uk/people/jeremy.gibbons/">Jeremy Gibbo
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> quartet (drawPicture p) (drawPicture q) (drawPicture r) (drawPicture s)</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>drawPicture (<span class="dt">SkewQuartet</span> p q r s)</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> skewquartet (drawPicture p) (drawPicture q) (drawPicture r) (drawPicture s)</span></code></pre></div>
-<p>Pruning with <code>prune s p</code> cuts off a picture <code>p</code> when its scale gets below \(1/s\). We keep track of the scale in \(x\) and \(y\) separately, to cope with the non-homogeneous scaling in <code>HPair</code> and <code>VPair</code>. The definition only works properly if <code>Cycles</code> are scaled only homogenously; that is the case in Escher’s picture.</p>
+<p>Pruning with <code>prune s p</code> cuts off a picture <code>p</code> when its scale gets
+below \(1/s\). We keep track of the scale in \(x\) and \(y\) separately, to cope
+with the non-homogeneous scaling in <code>HPair</code> and <code>VPair</code>. The definition
+only works properly if <code>Cycles</code> are scaled only homogeneously; that is
+the case in Escher’s picture.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ot">prune ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Picture</span> <span class="ot">-&gt;</span> <span class="dt">Picture</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>prune s p <span class="ot">=</span> prune' (s,s) p <span class="kw">where</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  prune' (x,y) p <span class="op">|</span> <span class="fu">min</span> x y <span class="op">&lt;</span> <span class="dv">1</span> <span class="ot">=</span> <span class="dt">Blank</span> <span class="co">-- cut off when either factor &lt;1</span></span>
@@ -150,7 +175,8 @@ Author: <b><a href="https://www.cs.ox.ac.uk/people/jeremy.gibbons/">Jeremy Gibbo
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="dt">SkewQuartet</span> (prune' (x3,y32) p) (prune' (x32,y32) q)</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                  (prune' (x3,y3) r) (prune' (x32,y3) s)</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span> (x3,y3,x32,y32) <span class="ot">=</span> (x<span class="op">/</span><span class="dv">3</span>,y<span class="op">/</span><span class="dv">3</span>,x3<span class="op">*</span><span class="dv">2</span>,y3<span class="op">*</span><span class="dv">2</span>)</span></code></pre></div>
-<p>Now for the construction of Escher’s Square Limit. The four basic tiles are as follows:</p>
+<p>Now for the construction of Escher’s Square Limit. The four basic
+tiles are as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fishP <span class="ot">=</span> <span class="dt">Single</span> markingsP</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fishQ <span class="ot">=</span> <span class="dt">Single</span> markingsQ</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>fishR <span class="ot">=</span> <span class="dt">Single</span> markingsR</span>
@@ -172,7 +198,8 @@ Author: <b><a href="https://www.cs.ox.ac.uk/people/jeremy.gibbons/">Jeremy Gibbo
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>example <span class="ot">=</span> drawPicture (prune <span class="dv">24</span> squarelimit) <span class="ot">`atop`</span> square <span class="fl">14.5</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">#</span> fc darkseagreen</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">#</span> opacity <span class="fl">0.5</span></span></code></pre></div>
-<p>The markings on the four basic tiles are taken from <a href="http://www.frank-buss.de/lisp/functional.html">a note by Frank Buss</a>.</p>
+<p>The markings on the four basic tiles are taken from <a href="http://www.frank-buss.de/lisp/functional.html">a note by Frank
+Buss</a>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>markingsP <span class="ot">=</span> [</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  [ (<span class="dv">4</span><span class="op">^&amp;</span><span class="dv">4</span>), (<span class="dv">6</span><span class="op">^&amp;</span><span class="dv">0</span>) ],</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  [ (<span class="dv">0</span><span class="op">^&amp;</span><span class="dv">3</span>), (<span class="dv">3</span><span class="op">^&amp;</span><span class="dv">4</span>), (<span class="dv">0</span><span class="op">^&amp;</span><span class="dv">8</span>), (<span class="dv">0</span><span class="op">^&amp;</span><span class="dv">3</span>) ],</span>

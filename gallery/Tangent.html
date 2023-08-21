@@ -101,7 +101,8 @@ Author: <b><a href="https://github.com/pnutus">Pontus Granström</a></b>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">=</span> atParam spline param</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>tangentVector <span class="ot">=</span> tangentAtParam spline param</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>normalVector <span class="ot">=</span> normalAtParam spline param</span></code></pre></div>
-<p>We can draw the tangent and normal vectors with lines of twice their length, with a square in between them to denote the right angle.</p>
+<p>We can draw the tangent and normal vectors with lines of twice their length,
+with a square in between them to denote the right angle.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>symmetricLine v <span class="ot">=</span> fromOffsets [<span class="dv">2</span> <span class="op">*^</span> v] <span class="op">#</span> center</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tangentLine <span class="ot">=</span> symmetricLine tangentVector</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>normalLine <span class="ot">=</span> symmetricLine normalVector</span>

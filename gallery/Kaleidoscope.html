@@ -103,7 +103,11 @@ Author: <b><a href="https://www.projects.haskell.org/Diagram Bgrams/">Jeffrey Ro
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    go f t i <span class="ot">=</span> <span class="kw">let</span> t' <span class="ot">=</span> f i t</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>               <span class="kw">in</span>  t' <span class="op">:</span> go f t' (i <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div>
-<p>Take any Diagram and cut out an equilateral triangle of side 1 from the center. This is the triangle inside of the three mirrors that make up a kaleidoscope. The image is created by first repeatedly refecting this triangle and assembling the resulting triagles into a hexagon. Then the image plane is tiled with this hexagon.</p>
+<p>Take any Diagram and cut out an equilateral triangle of side 1 from the center.
+This is the triangle inside of the three mirrors that make up a kaleidoscope.
+The image is created by first repeatedly reflecting this triangle and assembling
+the resulting triagles into a hexagon.
+Then the image plane is tiled with this hexagon.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">kaleidoscope ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>kaleidoscope d <span class="ot">=</span> appends hex hexs</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
@@ -114,18 +118,23 @@ Author: <b><a href="https://www.projects.haskell.org/Diagram Bgrams/">Jeffrey Ro
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    next i <span class="ot">=</span> reflectAbout (<span class="dv">0</span> <span class="op">^&amp;</span> <span class="dv">0</span>) (rotateBy (<span class="op">-</span> <span class="fu">fromIntegral</span> i <span class="op">/</span> <span class="dv">6</span>) xDir)</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">cutTriangle ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cutTriangle <span class="ot">=</span> clipped (triangle <span class="dv">1</span>) <span class="op">#</span> lw none</span></code></pre></div>
-<p>We pass as arguments the number of pieces of confetti <code>n</code> and a random seed <code>r</code>. Between 10 and 100 pieces seem to work nicely.</p>
+<p>We pass as arguments the number of pieces of confetti <code>n</code> and a random seed <code>r</code>.
+Between 10 and 100 pieces seem to work nicely.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">confettiScope ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>confettiScope n r</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> kaleidoscope (mkConfetti n (mkStdGen r))</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">#</span> centerXY <span class="op">&lt;&gt;</span> (circle <span class="fl">2.75</span> <span class="op">#</span> fc black)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">#</span> pad <span class="fl">1.1</span></span></code></pre></div>
-<p>To create an image for use in the kadeidescope we generate a bunch of disks with random location, size, color, and opacity. This is the confetti used as the image. Of course using circles is arbitrary, any shapes and sizes will do.</p>
+<p>To create an image for use in the kadeidescope we generate a bunch of disks with
+random location, size, color, and opacity. This is the confetti used as the image.
+Of course using circles is arbitrary, any shapes and sizes will do.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sizeValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sizeValue <span class="ot">=</span> getRandomR (<span class="fl">0.05</span>, <span class="fl">0.25</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">coordValue ::</span> (<span class="dt">RandomGen</span> g) <span class="ot">=&gt;</span> <span class="dt">Rand</span> g <span class="dt">Double</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>coordValue <span class="ot">=</span> getRandomR (<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)</span></code></pre></div>
-<p>We use monadRandom to hide the plumbing of the many random numbers we need. The colors are choosen from the 330+ <code>webColors</code> defined in the package <code>Data.Colour.Palette.ColorSet</code>.</p>
+<p>We use monadRandom to hide the plumbing of the many random numbers we need.
+The colors are chosen from the 330+ <code>webColors</code> defined in the package
+<code>Data.Colour.Palette.ColorSet</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ot">confetti ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Rand</span> <span class="dt">StdGen</span> (<span class="dt">Diagram</span> <span class="dt">B</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>confetti n <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  ss <span class="ot">&lt;-</span> replicateM n sizeValue   <span class="co">-- radius</span></span>

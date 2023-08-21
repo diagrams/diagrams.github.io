@@ -105,7 +105,10 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                                <span class="op">#</span> scaleY <span class="fl">0.94</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                                <span class="op">#</span> translateX <span class="dv">11</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                                <span class="op">#</span> translateY (<span class="op">-</span><span class="dv">3</span>)</span></code></pre></div>
-<p>A “box” is a diagram (the “innards”) surrounded by a rounded rectangle. First the innards are padded by a fixed amount, then we compute its height and width – that’s the size of the surrounding rectangle.</p>
+<p>A “box” is a diagram (the “innards”) surrounded by a rounded
+rectangle. First the innards are padded by a fixed amount, then we
+compute its height and width – that’s the size of the surrounding
+rectangle.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>box innards padding <span class="ot">=</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> padded <span class="ot">=</span>                  strutY padding</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="op">===</span></span>
@@ -117,7 +120,10 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span> centerXY innards <span class="op">&lt;&gt;</span> roundedRect width height <span class="fl">0.1</span></span></code></pre></div>
 <p>A single string of text.</p>
 <blockquote>
-<p>text’ font s h = (set_envelope . fit_height h . svgText def { textFont = font } $ s) # lw none # fc white Several lines of text stacked vertically.</p>
+<p>text’ font s h
+= (set_envelope . fit_height h . svgText def { textFont = font } $ s)
+# lw none # fc white
+Several lines of text stacked vertically.</p>
 </blockquote>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>centredText font ls n <span class="ot">=</span> vcat' (with <span class="op">&amp;</span> catMethod <span class="op">.~</span> <span class="dt">Distrib</span> <span class="op">&amp;</span> sep <span class="op">.~</span> n)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                     (<span class="fu">map</span> (\l <span class="ot">-&gt;</span> centerX (text' font l n)) ls)</span>
@@ -132,7 +138,8 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>right <span class="ot">=</span> r2 (<span class="dv">15</span>, <span class="dv">0</span>)</span></code></pre></div>
 <p>A box with some interior text and a name.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mybox font s n <span class="ot">=</span> (box (centredText' font s <span class="dv">1</span>) padAmount) <span class="op">#</span> named n</span></code></pre></div>
-<p>The cube is just several boxes superimposed, positioned by adding together some positioning vectors.</p>
+<p>The cube is just several boxes superimposed, positioned by adding
+together some positioning vectors.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sCube ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sCube font <span class="ot">=</span> fc navy <span class="op">$</span> <span class="fu">mconcat</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  [ mybox font <span class="st">&quot;Permutation&quot;</span> <span class="st">&quot;perm&quot;</span></span>
@@ -144,7 +151,8 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Symmetry\ngroup&quot;</span> <span class="st">&quot;symgroup&quot;</span>                         <span class="op">#</span> translate (upright <span class="op">^+^</span> right)</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  , mybox font <span class="st">&quot;Parameterised\nsymmetry\ngroup&quot;</span> <span class="st">&quot;paramsymgroup&quot;</span>     <span class="op">#</span> translate (down <span class="op">^+^</span> right <span class="op">^+^</span> upright)</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>               ]</span></code></pre></div>
-<p>For each pair (a,b) of names, draw an arrow from diagram “a” to diagram “b”.</p>
+<p>For each pair (a,b) of names, draw an arrow from diagram “a” to
+diagram “b”.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ot">drawLines ::</span> <span class="dt">Diagram</span> <span class="dt">B</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>drawLines cube <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">.</span>) <span class="fu">id</span> (<span class="fu">map</span> (<span class="fu">uncurry</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                       (connectOutside' (with</span>

@@ -95,7 +95,9 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Graphics.SVGFonts.ReadFont</span> (<span class="dt">PreparedFont</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Core.Points</span> <span class="co">-- needed to work around bug in GHC 7.4</span></span></code></pre></div>
-<p>Each series is a label and a list of points (x-y pairs). Each series will be drawn as a separate line, with its own combination of colour, dashing pattern and shape.</p>
+<p>Each series is a label and a list of points (x-y pairs). Each series
+will be drawn as a separate line, with its own combination of colour,
+dashing pattern and shape.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Pt</span> <span class="ot">=</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Points</span> <span class="ot">=</span> [<span class="dt">Pt</span>]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -122,8 +124,10 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>h,<span class="ot">w ::</span> <span class="dt">Double</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="dv">7</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="dv">7</span></span></code></pre></div>
-<p>The chart is made of the data series, the outer box, and the horizontal and vertical axes markings.</p>
-<p>“dataToFrac” converts points from the “data” space [0..10] into the [0..1] range.</p>
+<p>The chart is made of the data series, the outer box, and the
+horizontal and vertical axes markings.</p>
+<p>“dataToFrac” converts points from the “data” space [0..10] into the
+[0..1] range.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">chart ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [<span class="dt">Points</span>] <span class="ot">-&gt;</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>chart font series styles xs ys <span class="ot">=</span> <span class="fu">mconcat</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  [ plotMany styles series dataToFrac</span>
@@ -139,7 +143,8 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        yrange <span class="ot">=</span> maxy<span class="op">-</span>miny</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        dataToFrac (x,y) <span class="ot">=</span> ((x<span class="op">-</span>minx)<span class="op">/</span>xrange, (y<span class="op">-</span>miny)<span class="op">/</span>yrange)</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        showFloor <span class="ot">=</span> <span class="fu">show</span> <span class="op">.</span> (<span class="fu">floor</span><span class="ot"> ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)</span></code></pre></div>
-<p>Plot a single data series. A “shape” is drawn at every data point, and straight lines are drawn between points.</p>
+<p>Plot a single data series. A “shape” is drawn at every data point,
+and straight lines are drawn between points.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">plot ::</span> ((<span class="dt">Double</span>, <span class="dt">Double</span>) <span class="ot">-&gt;</span> (<span class="dt">Double</span>, <span class="dt">Double</span>)) <span class="ot">-&gt;</span> <span class="dt">Dia</span> <span class="ot">-&gt;</span> (<span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>) <span class="ot">-&gt;</span> <span class="dt">Points</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plot dataToFrac shape lineStyle ps <span class="ot">=</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> scalify (x,y) <span class="ot">=</span> (x<span class="op">*</span>w,y<span class="op">*</span>h)</span>
@@ -155,7 +160,8 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>text' font s</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> (set_envelope <span class="op">.</span> fit_height <span class="fl">0.4</span> <span class="op">.</span> svgText def { textFont <span class="ot">=</span> font } <span class="op">$</span> s)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">#</span> fc black <span class="op">#</span> lw none</span></code></pre></div>
-<p>The chart’s legend. Each label is drawn next to a little example of how the line looks in the chart.</p>
+<p>The chart’s legend. Each label is drawn next to a little example of
+how the line looks in the chart.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">legend ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [(<span class="dt">Dia</span>, <span class="dt">Dia</span> <span class="ot">-&gt;</span> <span class="dt">Dia</span>)] <span class="ot">-&gt;</span> [<span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Dia</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>legend font styles labels <span class="ot">=</span> centerXY <span class="op">$</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    vcat' with {_sep<span class="ot">=</span><span class="fl">0.15</span>} <span class="op">$</span></span>
@@ -166,7 +172,9 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <p>The outer box is just a rectangle.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">box ::</span> <span class="dt">Dia</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>box <span class="ot">=</span> strokeLoop <span class="op">.</span> closeLine <span class="op">.</span> fromVertices <span class="op">$</span> [ <span class="dv">0</span><span class="op">^&amp;</span><span class="dv">0</span>, <span class="dv">0</span><span class="op">^&amp;</span>h, w<span class="op">^&amp;</span>h, w<span class="op">^&amp;</span><span class="dv">0</span> ]</span></code></pre></div>
-<p>Each tick on the vertical axis has a text part, a solid line on the left, a solid line on the right, and a long dashed line from left to right.</p>
+<p>Each tick on the vertical axis has a text part, a solid line on the
+left, a solid line on the right, and a long dashed line from left to
+right.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ot">vertticks ::</span> <span class="dt">PreparedFont</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> [(<span class="dt">Double</span>, <span class="dt">String</span>)] <span class="ot">-&gt;</span> <span class="dt">Dia</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>vertticks font pairs <span class="ot">=</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> textBits <span class="ot">=</span> <span class="fu">mconcat</span> [ text' font t <span class="op">#</span> alignR <span class="op">#</span> moveTo ((<span class="op">-</span><span class="fl">0.2</span>)<span class="op">^&amp;</span>(y<span class="op">*</span>h)) <span class="op">|</span> (y,t) <span class="ot">&lt;-</span> pairs ]</span>
@@ -182,7 +190,9 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                   <span class="op">&lt;&gt;</span> <span class="fu">mconcat</span> [ fromVertices [ (x<span class="op">*</span>w)<span class="op">^&amp;</span>h, (x<span class="op">*</span>w)<span class="op">^&amp;</span>(h<span class="op">-</span><span class="fl">0.1</span>) ] <span class="op">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                   <span class="op">&lt;&gt;</span> <span class="fu">mconcat</span> [ fromVertices [ (x<span class="op">*</span>w)<span class="op">^&amp;</span><span class="dv">0</span>, (x<span class="op">*</span>w)<span class="op">^&amp;</span>h       ] <span class="op">#</span> lc gray <span class="op">#</span> dashingG [ <span class="fl">0.1</span>, <span class="fl">0.1</span> ] <span class="dv">0</span> <span class="op">|</span> (x,_) <span class="ot">&lt;-</span> pairs ]</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span> textBits <span class="op">&lt;&gt;</span> tickBits</span></code></pre></div>
-<p>A dot style is a shape (any diagram) and a boolean indicating whether the shape should be filled, a line style is a dashing pattern, and a colour style is just a colour. These three combined give a “style”.</p>
+<p>A dot style is a shape (any diagram) and a boolean indicating whether
+the shape should be filled, a line style is a dashing pattern, and a
+colour style is just a colour. These three combined give a “style”.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Fill</span> <span class="ot">=</span> <span class="dt">Fill</span> <span class="dt">Bool</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> <span class="dt">Dia</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">DotStyle</span> <span class="ot">=</span> (<span class="dt">Shape</span>, <span class="dt">Fill</span>)</span>

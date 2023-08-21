@@ -90,12 +90,16 @@ Author: <b><a href="http://www.cmears.id.au/">Chris Mears</a></b>
 <p><span style="font-size: small"><a href="../gallery/PythagoreanTree.lhs">Download raw source code</a></span><br /></p>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Backend.SVG.CmdLine</span></span></code></pre></div>
-<p>This diagram was inspired by the one at <a href="http://projecteuler.net/problem=395">http://projecteuler.net/problem=395</a>, which explains the algorithm for constructing the tree.</p>
+<p>This diagram was inspired by the one at
+<a href="http://projecteuler.net/problem=395">http://projecteuler.net/problem=395</a>,
+which explains the algorithm for constructing the tree.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE NoMonomorphismRestriction #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.Prelude</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Diagrams.TwoD</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Colour</span> (blend)</span></code></pre></div>
-<p>An order \(n\) tree has a square and a right-angled triangle on top, and an order \(n-1\) tree on each short side of the triangle. As the recursion deepens, the limbs get smaller and more transparent.</p>
+<p>An order \(n\) tree has a square and a right-angled triangle on top, and
+an order \(n-1\) tree on each short side of the triangle. As the
+recursion deepens, the limbs get smaller and more transparent.</p>
 <p>For aesthetics, let the leaves have circles instead of squares.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stops <span class="ot">=</span> mkStops [(saddlebrown, <span class="dv">0</span>, <span class="dv">1</span>), (peru, <span class="fl">0.5</span>, <span class="dv">1</span>), (saddlebrown, <span class="dv">1</span>, <span class="dv">1</span>)]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> mkLinearGradient stops ((<span class="op">-</span><span class="fl">0.5</span>) <span class="op">^&amp;</span> <span class="dv">0</span>) (<span class="fl">0.5</span> <span class="op">^&amp;</span> <span class="dv">0</span>) <span class="dt">GradPad</span></span></code></pre></div>
