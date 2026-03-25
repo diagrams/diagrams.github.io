@@ -113,7 +113,8 @@ the list below:</p>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                  ]</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      arc1 <span class="ot">=</span> arc' <span class="fl">0.5</span> (xDir <span class="op">#</span> rotate (<span class="op">-</span><span class="fu">pi</span><span class="op">/</span><span class="dv">3</span> <span class="op">@@</span> rad)) (<span class="dv">2</span><span class="op">*</span><span class="fu">pi</span><span class="op">/</span><span class="dv">3</span> <span class="op">@@</span> rad)</span></code></pre></div>
-<p>In the final tiling, the tiles will be rotated randomly with angles in \(\{0, \frac{2 \pi}{3}, \frac{4 \pi}{3} \}\).</p>
+<p>In the final tiling, the tiles will be rotated randomly with angles in \(\{0,
+\frac{2 \pi}{3}, \frac{4 \pi}{3} \}\).</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">rotateHexagon' ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Diagram</span> <span class="dt">B</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>rotateHexagon' n <span class="ot">=</span> hexagon' <span class="op">#</span> rotate (n'<span class="op">*</span><span class="dv">2</span><span class="op">*</span><span class="fu">pi</span><span class="op">/</span><span class="dv">3</span> <span class="op">@@</span> rad)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>

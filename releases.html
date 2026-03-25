@@ -1359,7 +1359,7 @@ the input vector.</p></li>
 along with the <code>withLength</code> function. Calls to <code>withLength</code> can
 be replaced using</p>
 <p><code>withLength s v = s *^ normalized v</code></p></li>
-<li><p>Add needed constraints <code>(InnerSpace v, OrderedField (Scalar v),     Monoid' m)</code> to the type of the <code>renderDias</code> method in the
+<li><p>Add needed constraints <code>(InnerSpace v, OrderedField (Scalar v), Monoid' m)</code> to the type of the <code>renderDias</code> method in the
 <code>MultiBackend</code> class.</p></li>
 <li><p>Generalized <code>Transformable</code> instances for pairs and tuples</p>
 <pre><code>      Previously, the components of the tuples were required to have
